@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Forms;
+using System.IO;
 
 namespace NewPicasa.view
 {
@@ -29,7 +30,27 @@ namespace NewPicasa.view
         {
             FolderBrowserDialog repPathDest = new FolderBrowserDialog();
             repPathDest.ShowDialog();
-            System.Windows.MessageBox.Show(repPathDest.SelectedPath);
+            txbDestPathPhoto.Text = repPathDest.SelectedPath;
+        }
+
+        private void shaDragDrop_PreviewDrop(object sender, System.Windows.DragEventArgs e)
+        {
+            string[] strFiles = (string[])e.Data.GetData(System.Windows.Forms.DataFormats.FileDrop);
+            for(int intCount = 0;intCount < strFiles.Length;intCount++)
+            {
+                FileStream fleFile = File.Create(strFiles[intCount]);
+                //System.Windows.MessageBox.Show(System.IO.Path.GetFileName(fleFile.Name));
+                if(intCount == 0)
+                {
+                    txbFileToMove.Text = System.IO.Path.GetFileName(fleFile.Name);
+                }
+                else
+                {
+                    txbFileToMove.Text += ", " + System.IO.Path.GetFileName(fleFile.Name);
+                }
+                fleFile.Dispose();
+            }
+            //File.Move(file[0], txbDestPath.Text.ToString() + "/test.pdf");
         }
     }
 }
