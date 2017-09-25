@@ -27,7 +27,9 @@ namespace NewPicasa.view
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //FolderBrowserDialog
+            FolderBrowserDialog repPathDest = new FolderBrowserDialog();
+            repPathDest.ShowDialog();
+            System.Windows.MessageBox.Show(repPathDest.SelectedPath);
         }
     }
 }
