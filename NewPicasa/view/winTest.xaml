@@ -7,6 +7,18 @@
         mc:Ignorable="d"
         Title="Test" Height="350" Width="525">
     <Grid>
-        
+        <Rectangle x:Name="shaDragDropTest" Fill="LightGray" HorizontalAlignment="Left" Height="123" Margin="10,187,0,0" Stroke="#FF3434A0" VerticalAlignment="Top" Width="497" PreviewDragEnter="shaDragDropTest_PreviewDragEnter" AllowDrop="True" PreviewDragLeave="shaDragDropTest_PreviewDragLeave" PreviewDrop="shaDragDropTest_PreviewDrop"/>
+        <TextBox x:Name="txbDestPath" HorizontalAlignment="Left" Height="23" Margin="10,39,0,0" TextWrapping="Wrap" Text="Destination path" VerticalAlignment="Top" Width="478" RenderTransformOrigin="0.5,0.5">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.135"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <Label x:Name="lblFilePath" Content="File path" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="431"/>
+
     </Grid>
 </Window>
