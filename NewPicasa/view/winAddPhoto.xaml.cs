@@ -21,12 +21,13 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winAddPhoto : Window
     {
+        string[] gp_strFiles;
         public winAddPhoto()
         {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog repPathDest = new FolderBrowserDialog();
             repPathDest.ShowDialog();
@@ -35,10 +36,10 @@ namespace NewPicasa.view
 
         private void shaDragDrop_PreviewDrop(object sender, System.Windows.DragEventArgs e)
         {
-            string[] strFiles = (string[])e.Data.GetData(System.Windows.Forms.DataFormats.FileDrop);
-            for(int intCount = 0;intCount < strFiles.Length;intCount++)
+            gp_strFiles = (string[])e.Data.GetData(System.Windows.Forms.DataFormats.FileDrop);
+            for(int intCount = 0;intCount < gp_strFiles.Length;intCount++)
             {
-                FileStream fleFile = File.Create(strFiles[intCount]);
+                FileStream fleFile = File.Create(gp_strFiles[intCount]);
                 //System.Windows.MessageBox.Show(System.IO.Path.GetFileName(fleFile.Name));
                 if(intCount == 0)
                 {
@@ -50,7 +51,17 @@ namespace NewPicasa.view
                 }
                 fleFile.Dispose();
             }
-            //File.Move(file[0], txbDestPath.Text.ToString() + "/test.pdf");
+        }
+
+        private void btnMove_Click(object sender, RoutedEventArgs e)
+        {
+            for (int intCount = 0; intCount < gp_strFiles.Length; intCount++)
+            {
+                FileStream fleFile = File.Create(gp_strFiles[intCount]);
+                // erreur
+                //File.Move(fleFile.Name, txbDestPathPhoto.Text.ToString() + "/" + System.IO.Path.GetFileName(fleFile.Name));
+                fleFile.Dispose();
+            }
         }
     }
 }

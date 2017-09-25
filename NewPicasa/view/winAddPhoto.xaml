@@ -8,9 +8,10 @@
         Title="Add photos" Height="244.536" Width="619.327">
     <Grid>
         <TextBox x:Name="txbDestPathPhoto" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" TextWrapping="Wrap" Text="Path destination" VerticalAlignment="Top" Width="511"/>
-        <Button Content="Browse" HorizontalAlignment="Left" Margin="526,39,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button x:Name="btnBrowse" Content="Browse" HorizontalAlignment="Left" Margin="526,39,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click"/>
         <Rectangle x:Name="shaDragDrop" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="10,105,0,0" Stroke="Black" VerticalAlignment="Top" Width="591" PreviewDrop="shaDragDrop_PreviewDrop" AllowDrop="True"/>
         <TextBox x:Name="txbFileToMove" HorizontalAlignment="Left" Height="23" Margin="10,72,0,0" TextWrapping="Wrap" Text="File(s) to move" VerticalAlignment="Top" Width="511"/>
+        <Button x:Name="btnMove" Content="Move" HorizontalAlignment="Left" Margin="526,72,0,0" VerticalAlignment="Top" Width="75" Click="btnMove_Click"/>
 
     </Grid>
 </Window>
