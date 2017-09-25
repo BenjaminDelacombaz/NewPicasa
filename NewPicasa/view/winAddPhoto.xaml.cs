@@ -58,9 +58,17 @@ namespace NewPicasa.view
             for (int intCount = 0; intCount < gp_strFiles.Length; intCount++)
             {
                 FileStream fleFile = File.Create(gp_strFiles[intCount]);
-                // erreur
-                //File.Move(fleFile.Name, txbDestPathPhoto.Text.ToString() + "/" + System.IO.Path.GetFileName(fleFile.Name));
+                string strSourcePath = fleFile.Name;
+                string strDestPath = txbDestPathPhoto.Text.ToString() + @"\" + System.IO.Path.GetFileName(fleFile.Name);
                 fleFile.Dispose();
+                try
+                {
+                    File.Copy(strSourcePath, strDestPath);
+                }
+                catch(IOException err)
+                {
+                    System.Windows.MessageBox.Show(err.ToString(), "Error");
+                }
             }
         }
     }
