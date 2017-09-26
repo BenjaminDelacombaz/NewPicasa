@@ -30,20 +30,17 @@ namespace NewPicasa
         {
             SolidColorBrush clrFillShape = new SolidColorBrush();
             clrFillShape.Color = (Color)ColorConverter.ConvertFromString("#000000");
-            shaDragDropTest.Fill = clrFillShape;
         }
 
         private void shaDragDropTest_PreviewDragLeave(object sender, DragEventArgs e)
         {
             SolidColorBrush clrFillShape = new SolidColorBrush();
             clrFillShape.Color = (Color)ColorConverter.ConvertFromString("#FFFFFF");
-            shaDragDropTest.Fill = clrFillShape;
         }
 
         private void shaDragDropTest_PreviewDrop(object sender, DragEventArgs e)
         {
             string[] file = (string[])e.Data.GetData(DataFormats.FileDrop);
-            lblFilePath.Content = file[0];
             //MessageBox.Show(file[0]);
             FileStream fleFile = File.Create(file[0]);
             //MessageBox.Show(System.IO.Path.GetFileName(fleFile.Name));

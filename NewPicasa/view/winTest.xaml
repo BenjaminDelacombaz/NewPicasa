@@ -5,21 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewPicasa"
         mc:Ignorable="d"
-        Title="Test" Height="350" Width="525">
-    <Grid>
-        <Rectangle x:Name="shaDragDropTest" Fill="LightGray" HorizontalAlignment="Left" Height="123" Margin="10,187,0,0" Stroke="#FF3434A0" VerticalAlignment="Top" Width="497" PreviewDragEnter="shaDragDropTest_PreviewDragEnter" AllowDrop="True" PreviewDragLeave="shaDragDropTest_PreviewDragLeave" PreviewDrop="shaDragDropTest_PreviewDrop"/>
-        <TextBox x:Name="txbDestPath" HorizontalAlignment="Left" Height="23" Margin="10,39,0,0" TextWrapping="Wrap" Text="Ducon" VerticalAlignment="Top" Width="478" RenderTransformOrigin="0.5,0.5">
-            <TextBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.135"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBox.RenderTransform>
-        </TextBox>
-        <Label x:Name="lblFilePath" Content="File path" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="431"/>
-        <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="134,87,0,0" VerticalAlignment="Top"/>
-
+        Title="NewPicasa" Height="499.267" Width="804" FontFamily="Open Sans">
+    <Grid x:Name="mainContent">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="Test1" Width="Auto"/>
+            <ColumnDefinition x:Name="Test2" />
+        </Grid.ColumnDefinitions>
+        <Rectangle x:Name="Menu" Fill="#eaecee" Height="50" VerticalAlignment="Top" />
+        <Rectangle x:Name="separator" Fill="#4c61ad" Margin="0,50,0,0" Height="4" VerticalAlignment="Top" />
+        <Rectangle x:Name="Filter" Margin="0,54,0,0" Height="77" VerticalAlignment="Top" />
+        <Rectangle x:Name="separator_Copy" Fill="#4c61ad" Margin="0,131,0,0" Height="4" VerticalAlignment="Top" />
+        <Rectangle x:Name="Computer" Fill="Red" Margin="0,135,0,0" HorizontalAlignment="Left" Width="181" />
+        <Rectangle x:Name="Folder" Fill="Blue" Margin="181,135,203,0" />
+        <Rectangle x:Name="Metadata" Fill="Yellow" HorizontalAlignment="Right" Margin="0,135,0,0" Width="203" />
     </Grid>
 </Window>
