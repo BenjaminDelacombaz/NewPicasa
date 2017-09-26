@@ -21,27 +21,101 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winAddPhoto : Window
     {
-        string[] gp_strFiles;
+
+        string[] gw_strFiles;
+        bool gw_booPlaceholderPath = true;
+        string gw_strTextPlaceholderPath = "Chemin du répertoire des photos";
+        string gw_strTextPlaceholderFile = "Fichier(s) à copier";
+
         public winAddPhoto()
         {
             InitializeComponent();
         }
 
-        private void btnBrowse_Click(object sender, RoutedEventArgs e)
+        private void btnBrowsePath_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog repPathDest = new FolderBrowserDialog();
             repPathDest.ShowDialog();
-            txbDestPathPhoto.Text = repPathDest.SelectedPath;
+            
+            // Test if a path is selected
+            if(repPathDest.SelectedPath != "")
+            {
+                txbDestPathPhoto.Text = repPathDest.SelectedPath;
+                gw_booPlaceholderPath = false;
+            }
         }
 
         private void shaDragDrop_PreviewDrop(object sender, System.Windows.DragEventArgs e)
         {
-            gp_strFiles = (string[])e.Data.GetData(System.Windows.Forms.DataFormats.FileDrop);
-            for(int intCount = 0;intCount < gp_strFiles.Length;intCount++)
+            // Get the list of files
+            gw_strFiles = (string[])e.Data.GetData(System.Windows.Forms.DataFormats.FileDrop);
+
+            // if at least one file is drop
+            if (gw_strFiles != null)
             {
-                FileStream fleFile = File.Create(gp_strFiles[intCount]);
-                //System.Windows.MessageBox.Show(System.IO.Path.GetFileName(fleFile.Name));
-                if(intCount == 0)
+                // Write in textbox
+                f_WriteFileNameInTxb(gw_strFiles);
+            }
+        }
+
+        private void btnMove_Click(object sender, RoutedEventArgs e)
+        {
+            // Copy file to destination
+            if(f_CopyFiles(gw_strFiles))
+            {
+                // Reset windows
+                f_ResetWindows();
+            }
+        }
+
+        private void txbDestPathPhoto_GotFocus(object sender, RoutedEventArgs e)
+        {
+            // Test if the text is the placeholder
+            if(gw_booPlaceholderPath == true)
+            {
+                txbDestPathPhoto.Text = "";
+                gw_booPlaceholderPath = false;
+            }
+        }
+
+        private void txbDestPathPhoto_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // Test if the field is empty, rewrite the placeholder 
+            if(txbDestPathPhoto.Text == "")
+            {
+                txbDestPathPhoto.Text = gw_strTextPlaceholderPath;
+                gw_booPlaceholderPath = true;
+            }
+        }
+
+        private void btnBrowseFiles_Click(object sender, RoutedEventArgs e)
+        {
+            // Browse files
+            OpenFileDialog fleFilesToCopy = new OpenFileDialog();
+            fleFilesToCopy.Multiselect = true; 
+            fleFilesToCopy.ShowDialog();
+
+            // Get the list of files
+            gw_strFiles = (string[])fleFilesToCopy.FileNames;
+
+            // if at least one file is selected
+            if (gw_strFiles != null)
+            {
+                // Write in textbox
+                f_WriteFileNameInTxb(gw_strFiles);
+            }
+        }
+
+        private void f_WriteFileNameInTxb(string[] strFiles)
+        {
+            // For all element in gw_strFiles we insert the file name in the textbox txbFileToMove
+            for (int intCount = 0; intCount < strFiles.Length; intCount++)
+            {
+                // Create a file stream
+                FileStream fleFile = File.Create(strFiles[intCount]);
+
+                // If this is the first loop, remove the previous text
+                if (intCount == 0)
                 {
                     txbFileToMove.Text = System.IO.Path.GetFileName(fleFile.Name);
                 }
@@ -49,27 +123,51 @@ namespace NewPicasa.view
                 {
                     txbFileToMove.Text += ", " + System.IO.Path.GetFileName(fleFile.Name);
                 }
+
+                // Destroy the filestream
                 fleFile.Dispose();
             }
         }
 
-        private void btnMove_Click(object sender, RoutedEventArgs e)
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            for (int intCount = 0; intCount < gp_strFiles.Length; intCount++)
+            // Reset windows
+            f_ResetWindows();
+        }
+
+        private void f_ResetWindows()
+        {
+            // Reset value to default
+            txbDestPathPhoto.Text = gw_strTextPlaceholderPath;
+            txbFileToMove.Text = gw_strTextPlaceholderFile;
+            gw_strFiles = null;
+            gw_booPlaceholderPath = true;
+        }
+
+        private bool f_CopyFiles(string[] strFiles)
+        {
+            bool booResult = false;
+
+            // For all element in strFiles we create a filestream and we move the files
+            for (int intCount = 0; intCount < strFiles.Length; intCount++)
             {
-                FileStream fleFile = File.Create(gp_strFiles[intCount]);
+                FileStream fleFile = File.Create(strFiles[intCount]);
                 string strSourcePath = fleFile.Name;
                 string strDestPath = txbDestPathPhoto.Text.ToString() + @"\" + System.IO.Path.GetFileName(fleFile.Name);
                 fleFile.Dispose();
                 try
                 {
-                    File.Copy(strSourcePath, strDestPath);
+                    File.Copy(strSourcePath, strDestPath, false);
+                    booResult = true;
                 }
-                catch(IOException err)
+                catch (IOException err)
                 {
                     System.Windows.MessageBox.Show(err.ToString(), "Error");
+                    booResult = false;
                 }
             }
+
+            return booResult;
         }
     }
 }

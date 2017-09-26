@@ -7,11 +7,13 @@
         mc:Ignorable="d"
         Title="Add photos" Height="244.536" Width="619.327">
     <Grid>
-        <TextBox x:Name="txbDestPathPhoto" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" TextWrapping="Wrap" Text="Path destination" VerticalAlignment="Top" Width="511"/>
-        <Button x:Name="btnBrowse" Content="Browse" HorizontalAlignment="Left" Margin="526,39,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click"/>
-        <Rectangle x:Name="shaDragDrop" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="10,105,0,0" Stroke="Black" VerticalAlignment="Top" Width="591" PreviewDrop="shaDragDrop_PreviewDrop" AllowDrop="True"/>
-        <TextBox x:Name="txbFileToMove" HorizontalAlignment="Left" Height="23" Margin="10,72,0,0" TextWrapping="Wrap" Text="File(s) to move" VerticalAlignment="Top" Width="511"/>
-        <Button x:Name="btnMove" Content="Move" HorizontalAlignment="Left" Margin="526,72,0,0" VerticalAlignment="Top" Width="75" Click="btnMove_Click"/>
+        <TextBox x:Name="txbDestPathPhoto" HorizontalAlignment="Left" Height="23" Margin="10,13,0,0" TextWrapping="Wrap" Text="Chemin du répertoire des photos" VerticalAlignment="Top" Width="511" GotFocus="txbDestPathPhoto_GotFocus" LostFocus="txbDestPathPhoto_LostFocus"/>
+        <Button x:Name="btnBrowsePath" Content="Browse" HorizontalAlignment="Left" Margin="526,14,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowsePath_Click"/>
+        <Rectangle x:Name="shaDragDrop" Fill="#FFF4F4F5" Height="100" Margin="10,78,0,0" Stroke="Black" VerticalAlignment="Top" PreviewDrop="shaDragDrop_PreviewDrop" AllowDrop="True" HorizontalAlignment="Left" Width="591"/>
+        <TextBox x:Name="txbFileToMove" HorizontalAlignment="Left" Height="23" Margin="10,47,0,0" TextWrapping="Wrap" Text="Fichier(s) à copier" VerticalAlignment="Top" Width="511" IsReadOnly="True"/>
+        <Button x:Name="btnMove" Content="Move" HorizontalAlignment="Left" Margin="526,183,0,0" VerticalAlignment="Top" Width="75" Click="btnMove_Click"/>
+        <Button x:Name="btnBrowseFiles" Content="Browse" HorizontalAlignment="Left" Margin="526,48,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseFiles_Click"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="446,183,0,0" VerticalAlignment="Top" Width="75" Click="btnCancel_Click"/>
 
     </Grid>
 </Window>
