@@ -8,7 +8,7 @@
         Title="Test" Height="350" Width="525">
     <Grid>
         <Rectangle x:Name="shaDragDropTest" Fill="LightGray" HorizontalAlignment="Left" Height="123" Margin="10,187,0,0" Stroke="#FF3434A0" VerticalAlignment="Top" Width="497" PreviewDragEnter="shaDragDropTest_PreviewDragEnter" AllowDrop="True" PreviewDragLeave="shaDragDropTest_PreviewDragLeave" PreviewDrop="shaDragDropTest_PreviewDrop"/>
-        <TextBox x:Name="txbDestPath" HorizontalAlignment="Left" Height="23" Margin="10,39,0,0" TextWrapping="Wrap" Text="Nico tu sens pas bon" VerticalAlignment="Top" Width="478" RenderTransformOrigin="0.5,0.5">
+        <TextBox x:Name="txbDestPath" HorizontalAlignment="Left" Height="23" Margin="10,39,0,0" TextWrapping="Wrap" Text="Ducon" VerticalAlignment="Top" Width="478" RenderTransformOrigin="0.5,0.5">
             <TextBox.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
