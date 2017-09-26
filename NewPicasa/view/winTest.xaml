@@ -19,6 +19,7 @@
             </TextBox.RenderTransform>
         </TextBox>
         <Label x:Name="lblFilePath" Content="File path" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="431"/>
+        <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="134,87,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
