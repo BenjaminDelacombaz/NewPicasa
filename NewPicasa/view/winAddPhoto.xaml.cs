@@ -58,13 +58,13 @@ namespace NewPicasa.view
             }
         }
 
-        private void btnMove_Click(object sender, RoutedEventArgs e)
+        private void btnCopyAndRename_Click(object sender, RoutedEventArgs e)
         {
-            // Copy file to destination
-            if(f_CopyFiles(gw_strFiles))
+            // Copy and rename file to destination
+            if(f_CopyFiles(gw_strFiles, true))
             {
-                // Reset windows
-                f_ResetWindows();
+                // Reset window
+                f_ResetWindow();
             }
         }
 
@@ -132,10 +132,10 @@ namespace NewPicasa.view
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             // Reset windows
-            f_ResetWindows();
+            f_ResetWindow();
         }
 
-        private void f_ResetWindows()
+        private void f_ResetWindow()
         {
             // Reset value to default
             txbDestPathPhoto.Text = gw_strTextPlaceholderPath;
@@ -144,16 +144,54 @@ namespace NewPicasa.view
             gw_booPlaceholderPath = true;
         }
 
-        private bool f_CopyFiles(string[] strFiles)
+        private bool f_CopyFiles(string[] strFiles, Boolean booRename)
         {
             bool booResult = false;
+            string strFileName = "";
+            string strDestPath = "";
+            string strSourcePath = "";
+            string strDateShooting = "20171002";
+            int intNbDuplicate = 0;
 
             // For all element in strFiles we create a filestream and we move the files
             for (int intCount = 0; intCount < strFiles.Length; intCount++)
             {
                 FileStream fleFile = File.Create(strFiles[intCount]);
-                string strSourcePath = fleFile.Name;
-                string strDestPath = txbDestPathPhoto.Text.ToString() + @"\" + System.IO.Path.GetFileName(fleFile.Name);
+                strSourcePath = fleFile.Name;
+                strDestPath = txbDestPathPhoto.Text + @"\";
+                if (booRename)
+                {
+                    // Get the file name
+                    strFileName = txbNewFileName.Text + System.IO.Path.GetExtension(fleFile.Name);
+                    
+                    // Insert the date if the checkbox is checked
+                    if (ckbDateShooting.IsChecked.Value)
+                    {
+                        strFileName = strFileName.Insert(0, strDateShooting + "_");
+                    }
+                    intNbDuplicate = f_FindDuplicateFiles(strDestPath, strFileName);
+                    if (intNbDuplicate > 0)
+                    {
+                        // Remake the file name if intNbDuplicate > 0
+                        strFileName = txbNewFileName.Text + "_" + intNbDuplicate + System.IO.Path.GetExtension(fleFile.Name);
+
+                        // Insert the date if the checkbox is checked
+                        if (ckbDateShooting.IsChecked.Value)
+                        {
+                            strFileName = strFileName.Insert(0, strDateShooting + "_");
+                        }
+                    }
+                }
+                else
+                {
+                    strFileName = System.IO.Path.GetFileName(fleFile.Name);
+                    if (f_FindDuplicateFiles(strDestPath, strFileName) > 0)
+                    {
+                        // Erreur
+                        System.Windows.MessageBox.Show("erreur doublon");
+                    }
+                }
+                strDestPath += strFileName;
                 fleFile.Dispose();
                 try
                 {
@@ -168,6 +206,37 @@ namespace NewPicasa.view
             }
 
             return booResult;
+        }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            // Copy file to destination
+            if (f_CopyFiles(gw_strFiles, false))
+            {
+                // Reset windows
+                f_ResetWindow();
+            }
+        }
+
+        private int f_FindDuplicateFiles(string strPath, string strFileName)
+        {
+            // Find if a duplicate file exist
+            int intNbDuplicateFiles = 0;
+            string strFileNameOrigin = strFileName;
+            string[] strFilesDirectory = Directory.GetFiles(strPath);
+
+            for (int intCount = 0; intCount < strFilesDirectory.Length; intCount++)
+            {
+                FileStream fleFile = File.Create(strFilesDirectory[intCount]);
+                if (strFileName == System.IO.Path.GetFileName(fleFile.Name))
+                {
+                    // increment intNbDuplicateFiles and simule the new file name for check if already exist to
+                    intNbDuplicateFiles++;
+                    strFileName = System.IO.Path.GetFileNameWithoutExtension(strFileNameOrigin) + "_" + intNbDuplicateFiles + System.IO.Path.GetExtension(strFileNameOrigin);
+                }
+                fleFile.Dispose();
+            }
+            return intNbDuplicateFiles;
         }
     }
 }
