@@ -5,110 +5,52 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewPicasa"
         mc:Ignorable="d"
-        Title="NewPicasa" Height="499.267" Width="804" FontFamily="Open Sans" Background="#eaecee">
+        Title="NewPicasa" Height="360" Width="640" FontFamily="Open Sans" Background="#eaecee">
 
     <Grid x:Name="mainContent">
 
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="Menu" Height="29" />
-            <RowDefinition x:Name="Filter" Height="57" />
-            <RowDefinition x:Name="WrapContentH" Height="383" />
-            <RowDefinition x:Name="WrapContentH2" Height="0*" />
+            <RowDefinition x:Name="menuRow" Height="21" />
+            <RowDefinition x:Name="filterRow" Height="60" />
+            <RowDefinition x:Name="wrapContentRow" Height="1*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="Computer" Width="Auto" MinWidth="103"/>
-            <ColumnDefinition x:Name="WrapContentV" Width="53*"/>
-            <ColumnDefinition x:Name="Metadata" Width="10*"/>
+            <ColumnDefinition x:Name="computerColumn" Width="Auto" MinWidth="125"/>
+            <ColumnDefinition x:Name="wrapContentColumn" Width="53*"/>
+            <ColumnDefinition x:Name="metadataColumn" Width="25*" MaxWidth="300" MinWidth="125"/>
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="Fichier" Height="29" Panel.ZIndex="10">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Content" Value="Fichier" />
-                    <Setter Property="HorizontalAlignment" Value="Left" />
-                    <Setter Property="VerticalAlignment" Value="Top" />
-                    <Setter Property="Width" Value="103" />
-                    <Setter Property="Grid.Column" Value="0" />
-                    <Setter Property="Background" Value="{x:Null}" />
-                    <Setter Property="BorderBrush" Value="{x:Null}" />
-                    <Style.Triggers>
-                        
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
 
-        <Rectangle Fill="red" Grid.Row=" 0" Grid.Column=" 0" Grid.ColumnSpan=" 3" Stroke="Black" StrokeThickness="3"/>
+        <Menu x:Name="menuContent" Grid.ColumnSpan="2" Background="{x:Null}" >
+            <MenuItem x:Name="menuItemFichier" Header="Fichiers" >
+                <MenuItem x:Name="menuItemOuvrir" Header="Ouvrir">
+                    <MenuItem x:Name="menuItemFile1" Header="File1"/>
+                    <MenuItem x:Name="menuItemFile2" Header="File2"/>
+                    <MenuItem x:Name="menuItemFile3" Header="File3"/>
+                </MenuItem>
+                <MenuItem x:Name="menuItemRecent" Header="Récent"/>
+                <MenuItem x:Name="menuItemQuitter" Header="Quitter"/>
+            </MenuItem>
+            
+            <MenuItem x:Name="menuItemSauvegarder" Header="Sauvegarder" >
+                <MenuItem x:Name="menuItemSauvegarderSur" Header="Sauvegarder sur..."/>
+            </MenuItem>
+            
+            <MenuItem x:Name="menuItemImprimer" Header="Imprimer" />
 
-        <Button x:Name="Save" Height="29">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Content" Value="Sauvegarder" />
-                    <Setter Property="HorizontalAlignment" Value="Left" />
-                    <Setter Property="VerticalAlignment" Value="Top" />
-                    <Setter Property="Width" Value="103" />
-                    <Setter Property="Grid.Column" Value="1" />
-                    <Setter Property="Background" Value="{x:Null}" />
-                    <Setter Property="BorderBrush" Value="{x:Null}" />
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
+            <MenuItem x:Name="menuItemEnvoyer" Header="Envoyer" />
+        </Menu>
+        <Rectangle x:Name="separatorMenu" Height="2" Stroke="black" VerticalAlignment="Bottom" Grid.ColumnSpan="3" />
 
-        <Button x:Name="Imprimer" Height="29" Margin="103,0,0,0">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Content" Value="Imprimer" />
-                    <Setter Property="HorizontalAlignment" Value="Left" />
-                    <Setter Property="VerticalAlignment" Value="Top" />
-                    <Setter Property="Width" Value="103" />
-                    <Setter Property="Grid.Column" Value="1" />
-                    <Setter Property="Background" Value="{x:Null}" />
-                    <Setter Property="BorderBrush" Value="{x:Null}" />
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
+        <TextBox x:Name="txtBoxSearch" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0,16,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="125" MaxWidth="300" Width="125" TextChanged="TextBox_TextChanged" Text=""/>
+        <Rectangle x:Name="separatorContent" Height="2" Stroke="black" VerticalAlignment="Bottom" Grid.ColumnSpan="3" Grid.Row="1" />
 
-        <Button x:Name="Envoyer" Height="29" Margin="206,0,0,0">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Content" Value="Envoyer" />
-                    <Setter Property="HorizontalAlignment" Value="Left" />
-                    <Setter Property="VerticalAlignment" Value="Top" />
-                    <Setter Property="Width" Value="103" />
-                    <Setter Property="Grid.Column" Value="1" />
-                    <Setter Property="Background" Value="{x:Null}" />
-                    <Setter Property="BorderBrush" Value="{x:Null}" />
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
+        <Rectangle x:Name="separatorComputer" Width="2" Stroke="black" Grid.Row="2" HorizontalAlignment="Right" />
 
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
+        <Rectangle x:Name="separatorMetadonnees" Width="2" Stroke="black" Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Left" />
+        
 
-
-        <!---<Rectangle Fill="#ff0000" Grid.Row=" 1" Grid.Column=" 0" Grid.ColumnSpan=" 3" />
-        <Rectangle Fill="#0000ff" Grid.Row=" 2" Grid.Column=" 0" Grid.ColumnSpan=" 1" />
-        <Rectangle Fill="#00ff00" Grid.Row=" 2" Grid.Column=" 1" Grid.ColumnSpan="2" />
-        <Rectangle Fill="#ffff00" Grid.Row=" 2" Grid.Column=" 2" />-->
-
-
-
-        <!--<Button Grid.Row=" 0" Grid.Column=" 0" Content="Hello World" Grid.ColumnSpan="1" />
-        <Button Grid.Row=" 1" Grid.Column=" 0" Content="Tutu est swag" Grid.ColumnSpan="3" />
-        <Button Grid.Row=" 2" Grid.Column=" 2" Content="T'es le meilleur PD" Grid.ColumnSpan="1" />-->
 
     </Grid>
 </Window>
