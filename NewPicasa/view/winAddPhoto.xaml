@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewPicasa.view"
         mc:Ignorable="d"
-        Title="Add photos" Height="333.956" Width="619.327">
+        Title="Ajouter photos" Height="333.956" Width="619.327">
     <Grid>
         <TextBox x:Name="txbDestPathPhoto" HorizontalAlignment="Left" Height="23" Margin="10,13,0,0" TextWrapping="Wrap" Text="Chemin du répertoire des photos" VerticalAlignment="Top" Width="511" GotFocus="txbDestPathPhoto_GotFocus" LostFocus="txbDestPathPhoto_LostFocus"/>
-        <Button x:Name="btnBrowsePath" Content="Browse" HorizontalAlignment="Left" Margin="526,14,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowsePath_Click"/>
+        <Button x:Name="btnBrowsePath" Content="Parcourir..." HorizontalAlignment="Left" Margin="526,14,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowsePath_Click"/>
         <Rectangle x:Name="shaDragDrop" Fill="#FFF4F4F5" Height="100" Margin="10,78,0,0" Stroke="Black" VerticalAlignment="Top" PreviewDrop="shaDragDrop_PreviewDrop" AllowDrop="True" HorizontalAlignment="Left" Width="591"/>
         <TextBox x:Name="txbFileToMove" HorizontalAlignment="Left" Height="23" Margin="10,47,0,0" TextWrapping="Wrap" Text="Fichier(s) à copier" VerticalAlignment="Top" Width="511" IsReadOnly="True"/>
         <Button x:Name="btnCopyAndRename" Content="Copier et Renommer" HorizontalAlignment="Left" Margin="398,0,0,10" VerticalAlignment="Bottom" Width="123" Click="btnCopyAndRename_Click"/>
-        <Button x:Name="btnBrowseFiles" Content="Browse" HorizontalAlignment="Left" Margin="526,48,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseFiles_Click"/>
+        <Button x:Name="btnBrowseFiles" Content="Parcourir..." HorizontalAlignment="Left" Margin="526,48,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseFiles_Click"/>
         <Button x:Name="btnCancel" Content="Annuler" HorizontalAlignment="Left" Margin="318,0,0,10" VerticalAlignment="Bottom" Width="75" Click="btnCancel_Click"/>
         <Label x:Name="lblTitleRenameOption" Content="Options de renommage" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="ckbDateShooting" Content="Date de la prise de vu + " HorizontalAlignment="Left" Margin="33,220,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <TextBox x:Name="txbNewFileName" HorizontalAlignment="Left" Height="23" Margin="180,217,0,0" TextWrapping="Wrap" Text="Entrer un nouveau nom" VerticalAlignment="Top" Width="421"/>
+        <TextBox x:Name="txbNewFileName" HorizontalAlignment="Left" Height="23" Margin="180,217,0,0" TextWrapping="Wrap" Text="Nouveau nom" VerticalAlignment="Top" Width="421" GotFocus="txbNewFileName_GotFocus" LostFocus="txbNewFileName_LostFocus"/>
         <Button x:Name="btnCopy" Content="Copier" HorizontalAlignment="Left" Margin="526,0,0,10" VerticalAlignment="Bottom" Width="75" Click="btnCopy_Click"/>
 
     </Grid>

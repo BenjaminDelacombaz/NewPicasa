@@ -1,8 +1,0 @@
-TODO AddPhoto
-
-Checker si les champs sont vides et y noter des erreurs
-Commenter le code
-Optimiser le code
-Checker les majuscules !!!
-Gerer l'erreur si deux fichiers port le meme nom lors de la copie sans rename
-Gestion des erreurs...
