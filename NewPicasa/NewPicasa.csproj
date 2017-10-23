@@ -59,6 +59,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="view\winTestMetadata.xaml.cs">
+      <DependentUpon>winTestMetadata.xaml</DependentUpon>
+    </Compile>
     <Page Include="view\winAddPhoto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -77,6 +80,10 @@
     <Compile Include="view\winMain.xaml.cs">
       <DependentUpon>winMain.xaml</DependentUpon>
     </Compile>
+    <Page Include="view\winTestMetadata.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
