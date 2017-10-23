@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>image\icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -59,9 +62,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\winTest.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="view\winMain.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -70,9 +73,8 @@
     <Compile Include="view\winAddPhoto.xaml.cs">
       <DependentUpon>winAddPhoto.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\winTest.xaml.cs">
-      <DependentUpon>winTest.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="view\winMain.xaml.cs">
+      <DependentUpon>winMain.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +102,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="image\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
