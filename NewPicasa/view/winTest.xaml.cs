@@ -46,15 +46,5 @@ namespace NewPicasa
             //MessageBox.Show(System.IO.Path.GetFileName(fleFile.Name));
             //File.Move(file[0], txbDestPath.Text.ToString() + "/test.pdf");
         }
-
-        private void Fichier_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
     }
 }

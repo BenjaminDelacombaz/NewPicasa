@@ -1,12 +1,11 @@
-﻿<Window x:Name="winTest" x:Class="NewPicasa.MainWindow"
+﻿<Window x:Class="NewPicasa.view.winMain"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NewPicasa"
+        xmlns:local="clr-namespace:NewPicasa.view"
         mc:Ignorable="d"
         Title="NewPicasa" Height="360" Width="640" FontFamily="Open Sans" Background="#eaecee">
-
     <Grid x:Name="mainContent">
 
         <Grid.RowDefinitions>
@@ -22,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <Menu x:Name="menuContent" Grid.ColumnSpan="2" Background="{x:Null}" >
+        <Menu x:Name="menuContent" Grid.ColumnSpan="3" Background="{x:Null}" >
             <MenuItem x:Name="menuItemFichier" Header="Fichiers" >
                 <MenuItem x:Name="menuItemOuvrir" Header="Ouvrir">
                     <MenuItem x:Name="menuItemFile1" Header="File1"/>
@@ -32,11 +31,11 @@
                 <MenuItem x:Name="menuItemRecent" Header="Récent"/>
                 <MenuItem x:Name="menuItemQuitter" Header="Quitter"/>
             </MenuItem>
-            
+
             <MenuItem x:Name="menuItemSauvegarder" Header="Sauvegarder" >
                 <MenuItem x:Name="menuItemSauvegarderSur" Header="Sauvegarder sur..."/>
             </MenuItem>
-            
+
             <MenuItem x:Name="menuItemImprimer" Header="Imprimer" />
 
             <MenuItem x:Name="menuItemEnvoyer" Header="Envoyer" />
@@ -49,7 +48,7 @@
         <Rectangle x:Name="separatorComputer" Width="2" Stroke="black" Grid.Row="2" HorizontalAlignment="Right" />
 
         <Rectangle x:Name="separatorMetadonnees" Width="2" Stroke="black" Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Left" />
-        
+
 
 
     </Grid>
