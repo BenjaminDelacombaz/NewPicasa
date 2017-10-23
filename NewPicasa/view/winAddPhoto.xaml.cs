@@ -164,6 +164,7 @@ namespace NewPicasa.view
             txbNewFileName.Text = gw_strTextPlaceholderNewName;
             gw_strFiles = null;
             gw_booPlaceholderPath = true;
+            gw_booPlaceholderNewName = true;
         }
 
         private bool f_CopyFiles(string[] strFiles, bool booRename)
@@ -185,6 +186,11 @@ namespace NewPicasa.view
                     strDestPath = txbDestPathPhoto.Text + @"\";
                     // Get the date of shooting
                     strDateShooting = f_GetDateShooting(fleFile);
+                    if(strDateShooting == "")
+                    {
+                        strDateShooting = "19000101000000";
+                        System.Windows.MessageBox.Show("La date du fichier: " + fleFile.Name + "n'a pas pu être récupéré la date suivante sera utilisée: " + strDateShooting, "Avertissement");
+                    }
                     if (booRename)
                     {
                         // Get the file name
@@ -294,7 +300,7 @@ namespace NewPicasa.view
 
             for (int intCount = 0; intCount < strFilesDirectory.Length; intCount++)
             {
-                FileStream fleFile = File.Create(strFilesDirectory[intCount]);
+                FileStream fleFile = File.Open(strFilesDirectory[intCount],FileMode.Open);
                 if (strFileName.ToLower() == System.IO.Path.GetFileName(fleFile.Name).ToLower())
                 {
                     // increment intNbDuplicateFiles and simule the new file name for check if already exist to
@@ -403,15 +409,22 @@ namespace NewPicasa.view
             // Init bitmap
             Bitmap btmFile = new Bitmap(fleFile);
             // Get the metadata date taken
-            System.Drawing.Imaging.PropertyItem pimPropertyDateTaken = btmFile.GetPropertyItem(36867);
-            // Convert the value in utf8
-            strDateShooting = Encoding.UTF8.GetString(pimPropertyDateTaken.Value);
-            // Remove :
-            strDateShooting = strDateShooting.Replace(":", "");
-            // Remove space
-            strDateShooting = strDateShooting.Replace(" ", "");
-            // Remove /0
-            strDateShooting = strDateShooting.Replace("\0", "");
+            try
+            {
+                System.Drawing.Imaging.PropertyItem pimPropertyDateTaken = btmFile.GetPropertyItem(36867);
+                // Convert the value in utf8
+                strDateShooting = Encoding.UTF8.GetString(pimPropertyDateTaken.Value);
+                // Remove :
+                strDateShooting = strDateShooting.Replace(":", "");
+                // Remove space
+                strDateShooting = strDateShooting.Replace(" ", "");
+                // Remove /0
+                strDateShooting = strDateShooting.Replace("\0", "");
+            }
+            catch (ArgumentException err)
+            {
+                strDateShooting = "";
+            }
             // Close the btmFile
             btmFile.Dispose();
             // Return the date

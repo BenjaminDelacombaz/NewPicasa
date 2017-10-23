@@ -1,3 +1,0 @@
-TODO AddPhoto
-
-recuperer la métadoner de la date de la prise de vu
