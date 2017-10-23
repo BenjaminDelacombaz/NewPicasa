@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
 
 namespace NewPicasa.view
 {
@@ -160,6 +161,7 @@ namespace NewPicasa.view
             // Reset value to default
             txbDestPathPhoto.Text = gw_strTextPlaceholderPath;
             txbFileToMove.Text = gw_strTextPlaceholderFile;
+            txbNewFileName.Text = gw_strTextPlaceholderNewName;
             gw_strFiles = null;
             gw_booPlaceholderPath = true;
         }
@@ -170,7 +172,7 @@ namespace NewPicasa.view
             string strFileName = "";
             string strDestPath = "";
             string strSourcePath = "";
-            string strDateShooting = "20171002";
+            string strDateShooting = "";
             int intNbDuplicate = 0;
 
             // For all element in strFiles we create a filestream and we move the files
@@ -181,6 +183,8 @@ namespace NewPicasa.view
                     FileStream fleFile = File.Open(strFiles[intCount],FileMode.Open);
                     strSourcePath = fleFile.Name;
                     strDestPath = txbDestPathPhoto.Text + @"\";
+                    // Get the date of shooting
+                    strDateShooting = f_GetDateShooting(fleFile);
                     if (booRename)
                     {
                         // Get the file name
@@ -230,7 +234,6 @@ namespace NewPicasa.view
                         {
                             File.Copy(strSourcePath, strDestPath, false);
                             booResult = true;
-                            System.Windows.MessageBox.Show("Transfert terminé", "Succès");
                         }
                         catch (IOException err)
                         {
@@ -250,7 +253,7 @@ namespace NewPicasa.view
                     System.Windows.MessageBox.Show(gw_strError, "Erreur");
                 }
             }
-
+            System.Windows.MessageBox.Show("Transfert terminé", "Succès");
             return booResult;
         }
 
@@ -394,11 +397,24 @@ namespace NewPicasa.view
             return booResult;
         }
 
-        private string f_GetDateShooting(string strFile)
+        private string f_GetDateShooting(FileStream fleFile)
         {
             string strDateShooting = "";
-
-
+            // Init bitmap
+            Bitmap btmFile = new Bitmap(fleFile);
+            // Get the metadata date taken
+            System.Drawing.Imaging.PropertyItem pimPropertyDateTaken = btmFile.GetPropertyItem(36867);
+            // Convert the value in utf8
+            strDateShooting = Encoding.UTF8.GetString(pimPropertyDateTaken.Value);
+            // Remove :
+            strDateShooting = strDateShooting.Replace(":", "");
+            // Remove space
+            strDateShooting = strDateShooting.Replace(" ", "");
+            // Remove /0
+            strDateShooting = strDateShooting.Replace("\0", "");
+            // Close the btmFile
+            btmFile.Dispose();
+            // Return the date
             return strDateShooting;
         }
     }
