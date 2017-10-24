@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="class\C_ImageMetadata.cs" />
     <Compile Include="view\winTestMetadata.xaml.cs">
       <DependentUpon>winTestMetadata.xaml</DependentUpon>
     </Compile>

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace NewPicasa.view
 {
@@ -29,15 +30,13 @@ namespace NewPicasa.view
         private void btnGetMetadata_Click(object sender, RoutedEventArgs e)
         {
             string strFile = @"C:\Users\Benjamin.Delacombaz\Desktop\Test\Test.jpg";
-            FileStream fleFile = File.Open(strFile, FileMode.Open);
-            //Bitmap btmFile = new Bitmap(fleFile);
-            BitmapMetadata bmdFile = new BitmapMetadata("jpg");
-            JpegBitmapDecoder decoder = new JpegBitmapDecoder(fleFile, BitmapCreateOptions.None, BitmapCacheOption.None);
-            lblListMetadata.Content = decoder.Metadata.DateTaken.ToString();
-            //System.Drawing.Imaging.PropertyItem propItem = btmFile.GetPropertyItem(36867);
-            //lblListMetadata.Content = Encoding.UTF8.GetString(propItem.Value);
+            FileStream fleFile = File.Open(strFile, FileMode.Open, FileAccess.Read,FileShare.Read);
+            BitmapSource srcFile = BitmapFrame.Create(fleFile);
+            BitmapMetadata mdtFile = (BitmapMetadata)srcFile.Metadata;
+            lblListMetadata.Content = mdtFile.DateTaken;
             fleFile.Dispose();
-            //btmFile.Dispose();
+
+
         }
     }
 }

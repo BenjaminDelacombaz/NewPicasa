@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewPicasa.view"
         mc:Ignorable="d"
-        Title="winTestMetadata" Height="361.301" Width="585.139">
+        Title="winTestMetadata" Height="361.301" Width="585.139" Loaded="winTestMetadata1_Loaded">
     <Grid>
         <Button x:Name="btnGetMetadata" Content="Get metadata" HorizontalAlignment="Left" Margin="238,24,0,0" VerticalAlignment="Top" Width="105" Click="btnGetMetadata_Click"/>
-        <Label x:Name="lblListMetadata" Content="List metadata" HorizontalAlignment="Left" Height="185" Margin="49,107,0,0" VerticalAlignment="Top" Width="478"/>
+        <Label x:Name="lblListMetadata" Content="List metadata" HorizontalAlignment="Left" Margin="49,107,0,0" Width="150" Height="105" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
