@@ -30,8 +30,14 @@ namespace NewPicasa.view
         {
             string strFile = @"C:\Users\Benjamin.Delacombaz\Desktop\Test\Test.jpg";
             FileStream fleFile = File.Open(strFile, FileMode.Open);
-            Bitmap btmFile = new Bitmap(fleFile);
+            //Bitmap btmFile = new Bitmap(fleFile);
+            BitmapMetadata bmdFile = new BitmapMetadata("jpg");
+            JpegBitmapDecoder decoder = new JpegBitmapDecoder(fleFile, BitmapCreateOptions.None, BitmapCacheOption.None);
+            lblListMetadata.Content = decoder.Metadata.DateTaken.ToString();
+            //System.Drawing.Imaging.PropertyItem propItem = btmFile.GetPropertyItem(36867);
+            //lblListMetadata.Content = Encoding.UTF8.GetString(propItem.Value);
             fleFile.Dispose();
+            //btmFile.Dispose();
         }
     }
 }
