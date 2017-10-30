@@ -1,19 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows;
 
 namespace NewPicasa.view
 {
@@ -30,13 +15,29 @@ namespace NewPicasa.view
         private void btnGetMetadata_Click(object sender, RoutedEventArgs e)
         {
             string strFile = @"C:\Users\Benjamin.Delacombaz\Desktop\Test\Test.jpg";
-            FileStream fleFile = File.Open(strFile, FileMode.Open, FileAccess.Read,FileShare.Read);
-            BitmapSource srcFile = BitmapFrame.Create(fleFile);
-            BitmapMetadata mdtFile = (BitmapMetadata)srcFile.Metadata;
-            lblListMetadata.Content = mdtFile.DateTaken;
-            fleFile.Dispose();
+            ImageMetadata objImage = new ImageMetadata(strFile);
+            lblListMetadata.Content = "Prise de vue: ";
+            lblListMetadata.Content += objImage.f_GetMetadataDateTaken() + "\n\n";
+            lblListMetadata.Content += "Auteur(s): \n";
+            foreach (string strAuthor in objImage.f_GetMetadataAuthors())
+            {
+                lblListMetadata.Content += "\t" + strAuthor + "\n";
+            }
+            lblListMetadata.Content += "\n";
+            lblListMetadata.Content += "Commentaires: " + objImage.f_GetMetadataComment() + "\n\n";
+            lblListMetadata.Content += "Tags: \n";
+            foreach (string strTag in objImage.f_GetMetadataTags())
+            {
+                lblListMetadata.Content += "\t" + strTag + "\n";
+            }
+            lblListMetadata.Content += "\n";
+            lblListMetadata.Content += "Note: " + objImage.f_GetMetadataRate() + "\n\n";
+            lblListMetadata.Content += "Copyright: " + objImage.f_GetMetadataCopyright() + "\n\n";
+            lblListMetadata.Content += "Title: " + objImage.f_GetMetadataTitle() + "\n\n";
+            lblListMetadata.Content += "Subject: " + objImage.f_GetMetadataSubject() + "\n\n";
 
-
+            objImage.f_SetDateTaken("12.12.2017 13:13:13");
+            objImage.f_SaveMetadata();
         }
     }
 }

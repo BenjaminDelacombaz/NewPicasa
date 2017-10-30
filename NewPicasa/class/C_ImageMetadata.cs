@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+using System.Windows;
+using System.Drawing;
 
 namespace NewPicasa
 {
@@ -12,11 +13,325 @@ namespace NewPicasa
         private string _strFileExtension;
         private string _strDateCreate;
         private string _strDateEdit;
-        private int _intSize;
+        private long _lngSize;
         private string _strDateTaken;
         private int _intWidth;
         private int _intHeight;
         private string[] _strAuthors;
+        private string _strFilePath;
+        private string _strComment;
+        private string[] _strTags;
+        private int _intRate;
+        private string _strCopyright;
+        private string _strTitle;
+        private string _strSubject;
+
+        // Constructor
+        public ImageMetadata(string strFile)
+        {
+            if(File.Exists(strFile))
+            {
+                FileInfo finFileInfo = new FileInfo(strFile);
+                Image imgFile = Image.FromFile(strFile);
+
+                this._strFileName = Path.GetFileName(strFile);
+                this._strFilePath = Path.GetDirectoryName(strFile) + @"\";
+                this._strFileExtension = Path.GetExtension(strFile);
+                this._strDateCreate = File.GetCreationTime(strFile).ToString();
+                this._strDateEdit = File.GetLastWriteTime(strFile).ToString();
+                this._lngSize = finFileInfo.Length;
+                this._strDateTaken = this.f_GetMetadataDateTaken();
+                this._intWidth = imgFile.Width;
+                this._intHeight = imgFile.Height;
+                this._strAuthors = this.f_GetMetadataAuthors();
+                this._strComment = this.f_GetMetadataComment();
+                this._strTags = this.f_GetMetadataTags();
+                this._intRate = this.f_GetMetadataRate();
+                this._strCopyright = this.f_GetMetadataCopyright();
+                this._strTitle = this.f_GetMetadataTitle();
+                this._strSubject = this.f_GetMetadataSubject();
+
+                finFileInfo = null;
+                imgFile.Dispose();
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Le fichier n'existe pas", "Erreur");
+            }
+        }
+        // Action
+        // Save BitmapImage
+        public Boolean f_SaveMetadata()
+        {
+            Boolean booResult = true;
+            // Date taken
+            if(this._strDateTaken != this.f_GetMetadataDateTaken())
+            {
+                f_SetMetadataDateTaken();
+            }
+            // Authors
+            if (this._strAuthors != this.f_GetMetadataAuthors())
+            {
+
+            }
+            // Comment
+            if (this._strComment != this.f_GetMetadataComment())
+            {
+
+            }
+            // Tags
+            if (this._strTags != this.f_GetMetadataTags())
+            {
+
+            }
+            // Rate
+            if (this._intRate != this.f_GetMetadataRate())
+            {
+
+            }
+            // Copyright
+            if (this._strCopyright != this.f_GetMetadataCopyright())
+            {
+
+            }
+            // Title
+            if (this._strTitle != this.f_GetMetadataTitle())
+            {
+
+            }
+            // Subject
+            if (this._strSubject != this.f_GetMetadataSubject())
+            {
+
+            }
+
+            return booResult;
+        }
+        // Get BitmapMetadata
+        private BitmapMetadata f_GetBitmapMetadata()
+        {
+            BitmapMetadata mdtResult = null;
+            if (f_TestFileExists())
+            {
+                try
+                {
+                    FileStream fleFile = File.Open(this._strFilePath + this._strFileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    //BitmapSource srcFile = BitmapFrame.Create(fleFile);
+                    BitmapDecoder bitmapDecoder = new JpegBitmapDecoder(fleFile, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+                    BitmapFrame bitmapFrame = bitmapDecoder.Frames[0];
+                    mdtResult = (BitmapMetadata)bitmapFrame.Metadata;
+                    fleFile.Dispose();
+                }
+                catch (ArgumentException err)
+                {
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de l'ouverture du fichier.", "Erreur");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Le fichier: " + this._strFilePath + this._strFileName + " n'existe pas", "Erreur");
+            }
+            return mdtResult;
+        }
+        // Get Metadata DateTaken
+        public string f_GetMetadataDateTaken()
+        {
+            string strDateTaken = "";
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if(mdtFile != null)
+            {
+                strDateTaken = mdtFile.DateTaken;
+                if (strDateTaken == null)
+                {
+                    MessageBox.Show("La date de prise de vu n'est pas renseignée dans les métadonnées", "Avertissement");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+            }
+            return strDateTaken;
+        }
+        // Set Metadata DateTaken
+        private Boolean f_SetMetadataDateTaken()
+        {
+            Boolean booResult = true;
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if (mdtFile != null)
+            {
+                // Erreur car pas modifiable
+                mdtFile.DateTaken = this._strDateTaken;
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                booResult = false;
+            }
+            return booResult;
+        }
+        // Get metadata comment
+        public string f_GetMetadataComment()
+        {
+            string strComment = "";
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if (mdtFile != null)
+            {
+                strComment = mdtFile.Comment;
+                if (strComment == null)
+                {
+                    MessageBox.Show("Les commentaires ne sont pas renseignés dans les métadonnées", "Avertissement");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+            }
+            return strComment;
+        }
+        // Get metadata Authors
+        public string[] f_GetMetadataAuthors()
+        {
+            string[] strAuthors = null;
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if (mdtFile != null)
+            {
+                strAuthors = mdtFile.Author.ToArray();
+                if (strAuthors == null)
+                {
+                    MessageBox.Show("Les auteurs ne sont pas renseignés dans les métadonnées", "Avertissement");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+            }
+            return strAuthors;
+        }
+        // Get metadata Tags
+        public string[] f_GetMetadataTags()
+        {
+            string[] strTags = null;
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if (mdtFile != null)
+            {
+                strTags = mdtFile.Keywords.ToArray();
+                if (strTags == null)
+                {
+                    MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+            }
+            return strTags;
+        }
+
+        // Get metadata rate
+        public int f_GetMetadataRate()
+        {
+            int intRate = 0;
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if (mdtFile != null)
+            {
+                intRate = mdtFile.Rating;
+                if (intRate < 0)
+                {
+                    MessageBox.Show("La note n'est pas renseignée dans les métadonnées", "Avertissement");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+            }
+            return intRate;
+        }
+        // Get metadata copyright
+        public string f_GetMetadataCopyright()
+        {
+            string strCopyright = null;
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if (mdtFile != null)
+            {
+                strCopyright = mdtFile.Copyright;
+                if (strCopyright == null)
+                {
+                    MessageBox.Show("Le copyright n'est pas renseigné dans les métadonnées", "Avertissement");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+            }
+            return strCopyright;
+        }
+        // Get metadata title
+        public string f_GetMetadataTitle()
+        {
+            string strTitle = null;
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if (mdtFile != null)
+            {
+                strTitle = mdtFile.Title;
+                if (strTitle == null)
+                {
+                    MessageBox.Show("Le titre n'est pas renseigné dans les métadonnées", "Avertissement");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+            }
+            return strTitle;
+        }
+        // Get metadata object
+        public string f_GetMetadataSubject()
+        {
+            string strSubject = null;
+            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            if (mdtFile != null)
+            {
+                strSubject = mdtFile.Subject;
+                if (strSubject == null)
+                {
+                    MessageBox.Show("L'objet n'est pas renseigné dans les métadonnées", "Avertissement");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+            }
+            return strSubject;
+        }
+
+        private Boolean f_TestFileExists()
+        {
+            Boolean booResult = true;
+            if(this._strFileName != "" && this._strFilePath != "")
+            {
+                if(!File.Exists(this._strFilePath + this._strFileName))
+                {
+                    booResult = false;
+                }
+            }
+            else
+            {
+                booResult = false;
+            }
+            return booResult;
+        }
 
         // Getter
         // Get file name
@@ -40,9 +355,9 @@ namespace NewPicasa
             return this._strDateEdit;
         }
         // Get file size
-        public int f_GetSize()
+        public long f_GetSize()
         {
-            return this._intSize;
+            return this._lngSize;
         }
         // Get date taken
         public string f_GetDateTaken()
@@ -64,52 +379,122 @@ namespace NewPicasa
         {
             return this._strAuthors;
         }
+        // Get file path
+        public string f_GetFilePath()
+        {
+            return this._strFilePath;
+        }
+        // Get comment
+        public string f_GetComment()
+        {
+            return this._strComment;
+        }
+        // Get Tags
+        public string[] f_GetTags()
+        {
+            return this._strTags;
+        }
+        // Get Rate
+        public int f_GetRate()
+        {
+            return this._intRate;
+        }
+        // Get copyright
+        public string f_GetCopyright()
+        {
+            return this._strCopyright;
+        }
+        // Get Title
+        public string f_GetTitle()
+        {
+            return this._strTitle;
+        }
+        // Get Object
+        public string f_GetSubject()
+        {
+            return this._strSubject;
+        }
 
         // Setter
         // Set file name
         public void f_SetFileName(string strFileName)
         {
-            
+            this._strFileName = strFileName;
         }
         // Set file extension
         public void f_SetFileExtension(string strFileExtension)
         {
-            
+            this._strFileExtension = strFileExtension;
         }
         // Set date create
         public void f_SetDatecreate(string strDateCreate)
         {
-            
+            this._strDateCreate = strDateCreate;
         }
         // Set date edit
         public void f_SetDateEdit(string strDateEdit )
         {
-            
+            this._strDateEdit = strDateEdit;
         }
         // Set file size
-        public void f_SetSize(int intSize)
+        public void f_SetSize(long lngSize)
         {
-            
+            this._lngSize = lngSize;
         }
         // Set date taken
         public void f_SetDateTaken(string strDateTaken)
         {
-            
+            this._strDateTaken = strDateTaken;
         }
         // Set Width
         public void f_SetWidth(int intWidth)
         {
-            
+            this._intWidth = intWidth;
         }
         // Set height
         public void f_SetHeight(int intHeight)
         {
-            
+            this._intHeight = intHeight;
         }
         // Set authors
-        public void[] f_SetAuthors(string[] strAuthors)
+        public void f_SetAuthors(string[] strAuthors)
         {
-            
+            this._strAuthors = strAuthors;
+        }
+        // Set file path
+        public void f_SetFilePath(string strFilePath)
+        {
+            this._strFilePath = strFilePath;
+        }
+        // Set Comment
+        public void f_SetComment(string strComment)
+        {
+            this._strComment = strComment;
+        }
+        // Set Comment
+        public void f_SetTags(string[] strTags)
+        {
+            this._strTags = strTags;
+        }
+        // Set Rate
+        public void f_SetRate(int intRate)
+        {
+            this._intRate = intRate;
+        }
+        // Set Copyright
+        public void f_SetCopyright(string strCopyright)
+        {
+            this._strCopyright = strCopyright;
+        }
+        // Set Title
+        public void f_SetTitle(string strTitle)
+        {
+            this._strTitle = strTitle;
+        }
+        // Set Object
+        public void f_SetSubject(string strSubject)
+        {
+            this._strSubject = strSubject;
         }
     }
 }
