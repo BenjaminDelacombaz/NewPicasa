@@ -36,7 +36,7 @@ namespace NewPicasa.view
             lblListMetadata.Content += "Title: " + objImage.f_GetMetadataTitle() + "\n\n";
             lblListMetadata.Content += "Subject: " + objImage.f_GetMetadataSubject() + "\n\n";
 
-            objImage.f_SetDateTaken("12.12.2017 13:13:13");
+            objImage.f_SetComment("Ok");
             objImage.f_SaveMetadata();
         }
     }

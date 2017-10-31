@@ -33,16 +33,18 @@ namespace NewPicasa
             {
                 FileInfo finFileInfo = new FileInfo(strFile);
                 Image imgFile = Image.FromFile(strFile);
+                this._intWidth = imgFile.Width;
+                this._intHeight = imgFile.Height;
+                this._lngSize = finFileInfo.Length;
+                imgFile.Dispose();
+                finFileInfo = null;
 
                 this._strFileName = Path.GetFileName(strFile);
                 this._strFilePath = Path.GetDirectoryName(strFile) + @"\";
                 this._strFileExtension = Path.GetExtension(strFile);
                 this._strDateCreate = File.GetCreationTime(strFile).ToString();
                 this._strDateEdit = File.GetLastWriteTime(strFile).ToString();
-                this._lngSize = finFileInfo.Length;
                 this._strDateTaken = this.f_GetMetadataDateTaken();
-                this._intWidth = imgFile.Width;
-                this._intHeight = imgFile.Height;
                 this._strAuthors = this.f_GetMetadataAuthors();
                 this._strComment = this.f_GetMetadataComment();
                 this._strTags = this.f_GetMetadataTags();
@@ -50,9 +52,6 @@ namespace NewPicasa
                 this._strCopyright = this.f_GetMetadataCopyright();
                 this._strTitle = this.f_GetMetadataTitle();
                 this._strSubject = this.f_GetMetadataSubject();
-
-                finFileInfo = null;
-                imgFile.Dispose();
             }
             else
             {
@@ -65,10 +64,11 @@ namespace NewPicasa
         public Boolean f_SaveMetadata()
         {
             Boolean booResult = true;
+            FileStream fleFile = File.Open(this._strFilePath + this._strFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
             // Date taken
-            if(this._strDateTaken != this.f_GetMetadataDateTaken())
+            if (this._strDateTaken != this.f_GetMetadataDateTaken())
             {
-                f_SetMetadataDateTaken();
+                //f_SetMetadataDateTaken();
             }
             // Authors
             if (this._strAuthors != this.f_GetMetadataAuthors())
@@ -78,7 +78,7 @@ namespace NewPicasa
             // Comment
             if (this._strComment != this.f_GetMetadataComment())
             {
-
+                f_SetMetadataDateTaken(ref fleFile);
             }
             // Tags
             if (this._strTags != this.f_GetMetadataTags())
@@ -105,11 +105,12 @@ namespace NewPicasa
             {
 
             }
-
+            fleFile.Dispose();
+            fleFile.Close();
             return booResult;
         }
-        // Get BitmapMetadata
-        private BitmapMetadata f_GetBitmapMetadata()
+        // Get BitmapMetadata Read
+        private BitmapMetadata f_GetBitmapMetadataRead()
         {
             BitmapMetadata mdtResult = null;
             if (f_TestFileExists())
@@ -122,8 +123,9 @@ namespace NewPicasa
                     BitmapFrame bitmapFrame = bitmapDecoder.Frames[0];
                     mdtResult = (BitmapMetadata)bitmapFrame.Metadata;
                     fleFile.Dispose();
+                    fleFile.Close();
                 }
-                catch (ArgumentException err)
+                catch (IOException err)
                 {
                     // Error
                     MessageBox.Show("Une erreur est survenue lors de l'ouverture du fichier.", "Erreur");
@@ -136,11 +138,41 @@ namespace NewPicasa
             }
             return mdtResult;
         }
+        // Get BitmapMetadata Write
+        private InPlaceBitmapMetadataWriter f_GetBitmapMetadataWrite(ref FileStream fleFile)
+        {
+            InPlaceBitmapMetadataWriter mdtInplaceResult = null;
+            if (f_TestFileExists())
+            {
+                try
+                {
+                    //FileStream fleFile = File.Open(this._strFilePath + this._strFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
+                    //BitmapSource srcFile = BitmapFrame.Create(fleFile);
+                    BitmapDecoder bitmapDecoder = new JpegBitmapDecoder(fleFile, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                    BitmapFrame bitmapFrame = bitmapDecoder.Frames[0];
+
+                    mdtInplaceResult = bitmapFrame.CreateInPlaceBitmapMetadataWriter();
+                    //fleFile.Dispose();
+                    //fleFile.Close();
+                }
+                catch (IOException err)
+                {
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de l'ouverture du fichier.", "Erreur");
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Le fichier: " + this._strFilePath + this._strFileName + " n'existe pas", "Erreur");
+            }
+            return mdtInplaceResult;
+        }
         // Get Metadata DateTaken
         public string f_GetMetadataDateTaken()
         {
             string strDateTaken = "";
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if(mdtFile != null)
             {
                 strDateTaken = mdtFile.DateTaken;
@@ -157,14 +189,18 @@ namespace NewPicasa
             return strDateTaken;
         }
         // Set Metadata DateTaken
-        private Boolean f_SetMetadataDateTaken()
+        private Boolean f_SetMetadataDateTaken(ref FileStream fleFile)
         {
             Boolean booResult = true;
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
-            if (mdtFile != null)
+            InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite(ref fleFile);
+            if (mdtInPlaceFile != null)
             {
                 // Erreur car pas modifiable
-                mdtFile.DateTaken = this._strDateTaken;
+                mdtInPlaceFile.Comment = this._strComment;
+                if (mdtInPlaceFile.TrySave())
+                {
+                    MessageBox.Show("Ok");
+                }
             }
             else
             {
@@ -178,7 +214,7 @@ namespace NewPicasa
         public string f_GetMetadataComment()
         {
             string strComment = "";
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if (mdtFile != null)
             {
                 strComment = mdtFile.Comment;
@@ -198,7 +234,7 @@ namespace NewPicasa
         public string[] f_GetMetadataAuthors()
         {
             string[] strAuthors = null;
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if (mdtFile != null)
             {
                 strAuthors = mdtFile.Author.ToArray();
@@ -218,7 +254,7 @@ namespace NewPicasa
         public string[] f_GetMetadataTags()
         {
             string[] strTags = null;
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if (mdtFile != null)
             {
                 strTags = mdtFile.Keywords.ToArray();
@@ -239,7 +275,7 @@ namespace NewPicasa
         public int f_GetMetadataRate()
         {
             int intRate = 0;
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if (mdtFile != null)
             {
                 intRate = mdtFile.Rating;
@@ -259,7 +295,7 @@ namespace NewPicasa
         public string f_GetMetadataCopyright()
         {
             string strCopyright = null;
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if (mdtFile != null)
             {
                 strCopyright = mdtFile.Copyright;
@@ -279,7 +315,7 @@ namespace NewPicasa
         public string f_GetMetadataTitle()
         {
             string strTitle = null;
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if (mdtFile != null)
             {
                 strTitle = mdtFile.Title;
@@ -299,7 +335,7 @@ namespace NewPicasa
         public string f_GetMetadataSubject()
         {
             string strSubject = null;
-            BitmapMetadata mdtFile = f_GetBitmapMetadata();
+            BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if (mdtFile != null)
             {
                 strSubject = mdtFile.Subject;
