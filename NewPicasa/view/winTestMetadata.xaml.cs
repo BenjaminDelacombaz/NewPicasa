@@ -36,7 +36,14 @@ namespace NewPicasa.view
             lblListMetadata.Content += "Title: " + objImage.f_GetMetadataTitle() + "\n\n";
             lblListMetadata.Content += "Subject: " + objImage.f_GetMetadataSubject() + "\n\n";
 
-            objImage.f_SetComment("Ok");
+            objImage.f_SetComment("C'est bon");
+            objImage.f_SetDateTaken("07.02.2008 11:33:11");
+            string[] strTest = new string[] { "Benjamin Delacombaz", "Pedro Kalof", "Mister Banana" };
+            objImage.f_SetAuthors(strTest);
+            objImage.f_SetRate(2);
+            objImage.f_SetCopyright("ButoxxDev");
+            objImage.f_SetTitle("NewTitle");
+            objImage.f_SetSubject("NewSubject");
             objImage.f_SaveMetadata();
         }
     }

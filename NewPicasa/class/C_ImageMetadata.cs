@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Media.Imaging;
 using System.Windows;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace NewPicasa
 {
@@ -25,6 +26,7 @@ namespace NewPicasa
         private string _strCopyright;
         private string _strTitle;
         private string _strSubject;
+        private FileStream _fleFileStream;
 
         // Constructor
         public ImageMetadata(string strFile)
@@ -64,49 +66,14 @@ namespace NewPicasa
         public Boolean f_SaveMetadata()
         {
             Boolean booResult = true;
-            FileStream fleFile = File.Open(this._strFilePath + this._strFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
-            // Date taken
-            if (this._strDateTaken != this.f_GetMetadataDateTaken())
-            {
-                //f_SetMetadataDateTaken();
-            }
-            // Authors
-            if (this._strAuthors != this.f_GetMetadataAuthors())
-            {
-
-            }
-            // Comment
-            if (this._strComment != this.f_GetMetadataComment())
-            {
-                f_SetMetadataDateTaken(ref fleFile);
-            }
-            // Tags
-            if (this._strTags != this.f_GetMetadataTags())
-            {
-
-            }
-            // Rate
-            if (this._intRate != this.f_GetMetadataRate())
-            {
-
-            }
-            // Copyright
-            if (this._strCopyright != this.f_GetMetadataCopyright())
-            {
-
-            }
-            // Title
-            if (this._strTitle != this.f_GetMetadataTitle())
-            {
-
-            }
-            // Subject
-            if (this._strSubject != this.f_GetMetadataSubject())
-            {
-
-            }
-            fleFile.Dispose();
-            fleFile.Close();
+            //Save comment
+            //f_SetMetadataDateTaken();
+            //f_SetMetadataAuthors();
+            f_SetMetadataComment();
+            f_SetMetadataRate();
+            f_SetMetadataCopyright();
+            f_SetMetadataTitle();
+            f_SetMetadataSubject();
             return booResult;
         }
         // Get BitmapMetadata Read
@@ -118,7 +85,6 @@ namespace NewPicasa
                 try
                 {
                     FileStream fleFile = File.Open(this._strFilePath + this._strFileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    //BitmapSource srcFile = BitmapFrame.Create(fleFile);
                     BitmapDecoder bitmapDecoder = new JpegBitmapDecoder(fleFile, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
                     BitmapFrame bitmapFrame = bitmapDecoder.Frames[0];
                     mdtResult = (BitmapMetadata)bitmapFrame.Metadata;
@@ -139,21 +105,17 @@ namespace NewPicasa
             return mdtResult;
         }
         // Get BitmapMetadata Write
-        private InPlaceBitmapMetadataWriter f_GetBitmapMetadataWrite(ref FileStream fleFile)
+        private InPlaceBitmapMetadataWriter f_GetBitmapMetadataWrite()
         {
             InPlaceBitmapMetadataWriter mdtInplaceResult = null;
             if (f_TestFileExists())
             {
                 try
                 {
-                    //FileStream fleFile = File.Open(this._strFilePath + this._strFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
-                    //BitmapSource srcFile = BitmapFrame.Create(fleFile);
-                    BitmapDecoder bitmapDecoder = new JpegBitmapDecoder(fleFile, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                    this._fleFileStream = File.Open(this._strFilePath + this._strFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    BitmapDecoder bitmapDecoder = new JpegBitmapDecoder(this._fleFileStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
                     BitmapFrame bitmapFrame = bitmapDecoder.Frames[0];
-
                     mdtInplaceResult = bitmapFrame.CreateInPlaceBitmapMetadataWriter();
-                    //fleFile.Dispose();
-                    //fleFile.Close();
                 }
                 catch (IOException err)
                 {
@@ -189,17 +151,19 @@ namespace NewPicasa
             return strDateTaken;
         }
         // Set Metadata DateTaken
-        private Boolean f_SetMetadataDateTaken(ref FileStream fleFile)
+        private Boolean f_SetMetadataDateTaken()
         {
-            Boolean booResult = true;
-            InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite(ref fleFile);
+            Boolean booResult = false;
+            /*InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite();
+
             if (mdtInPlaceFile != null)
             {
-                // Erreur car pas modifiable
-                mdtInPlaceFile.Comment = this._strComment;
-                if (mdtInPlaceFile.TrySave())
+                mdtInPlaceFile.DateTaken = this._strDateTaken;
+                if (!mdtInPlaceFile.TrySave())
                 {
-                    MessageBox.Show("Ok");
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    booResult = false;
                 }
             }
             else
@@ -208,6 +172,8 @@ namespace NewPicasa
                 MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
                 booResult = false;
             }
+            this._fleFileStream.Dispose();
+            this._fleFileStream.Close();*/
             return booResult;
         }
         // Get metadata comment
@@ -230,6 +196,31 @@ namespace NewPicasa
             }
             return strComment;
         }
+        // Set Metadata Comment
+        private Boolean f_SetMetadataComment()
+        {
+            Boolean booResult = true;
+            InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite();
+            if (mdtInPlaceFile != null)
+            {
+                mdtInPlaceFile.Comment = this._strComment;
+                if (!mdtInPlaceFile.TrySave())
+                {
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    booResult = false;
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                booResult = false;
+            }
+            this._fleFileStream.Dispose();
+            this._fleFileStream.Close();
+            return booResult;
+        }
         // Get metadata Authors
         public string[] f_GetMetadataAuthors()
         {
@@ -249,6 +240,32 @@ namespace NewPicasa
                 MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
             }
             return strAuthors;
+        }
+        // Set Metadata Comment
+        private Boolean f_SetMetadataAuthors()
+        {
+            Boolean booResult = false;
+            /*InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite();
+            if (mdtInPlaceFile != null)
+            {
+                List<string> lstList = this._strAuthors.ToList<string>();
+                mdtInPlaceFile.Author = new System.Collections.ObjectModel.ReadOnlyCollection<string>(lstList);
+                if (!mdtInPlaceFile.TrySave())
+                {
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    booResult = false;
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                booResult = false;
+            }
+            this._fleFileStream.Dispose();
+            this._fleFileStream.Close();*/
+            return booResult;
         }
         // Get metadata Tags
         public string[] f_GetMetadataTags()
@@ -291,6 +308,31 @@ namespace NewPicasa
             }
             return intRate;
         }
+        // Set Metadata Rate
+        private Boolean f_SetMetadataRate()
+        {
+            Boolean booResult = true;
+            InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite();
+            if (mdtInPlaceFile != null)
+            {
+                mdtInPlaceFile.Rating = this._intRate;
+                if (!mdtInPlaceFile.TrySave())
+                {
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    booResult = false;
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                booResult = false;
+            }
+            this._fleFileStream.Dispose();
+            this._fleFileStream.Close();
+            return booResult;
+        }
         // Get metadata copyright
         public string f_GetMetadataCopyright()
         {
@@ -310,6 +352,31 @@ namespace NewPicasa
                 MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
             }
             return strCopyright;
+        }
+        // Set Metadata copyright
+        private Boolean f_SetMetadataCopyright()
+        {
+            Boolean booResult = true;
+            InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite();
+            if (mdtInPlaceFile != null)
+            {
+                mdtInPlaceFile.Copyright = this._strCopyright;
+                if (!mdtInPlaceFile.TrySave())
+                {
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    booResult = false;
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                booResult = false;
+            }
+            this._fleFileStream.Dispose();
+            this._fleFileStream.Close();
+            return booResult;
         }
         // Get metadata title
         public string f_GetMetadataTitle()
@@ -331,6 +398,31 @@ namespace NewPicasa
             }
             return strTitle;
         }
+        // Set Metadata Title
+        private Boolean f_SetMetadataTitle()
+        {
+            Boolean booResult = true;
+            InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite();
+            if (mdtInPlaceFile != null)
+            {
+                mdtInPlaceFile.Title = this._strTitle;
+                if (!mdtInPlaceFile.TrySave())
+                {
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    booResult = false;
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                booResult = false;
+            }
+            this._fleFileStream.Dispose();
+            this._fleFileStream.Close();
+            return booResult;
+        }
         // Get metadata object
         public string f_GetMetadataSubject()
         {
@@ -350,6 +442,31 @@ namespace NewPicasa
                 MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
             }
             return strSubject;
+        }
+        // Set Metadata object
+        private Boolean f_SetMetadataSubject()
+        {
+            Boolean booResult = true;
+            InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite();
+            if (mdtInPlaceFile != null)
+            {
+                mdtInPlaceFile.Subject = this._strSubject;
+                if (!mdtInPlaceFile.TrySave())
+                {
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    booResult = false;
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                booResult = false;
+            }
+            this._fleFileStream.Dispose();
+            this._fleFileStream.Close();
+            return booResult;
         }
 
         private Boolean f_TestFileExists()
