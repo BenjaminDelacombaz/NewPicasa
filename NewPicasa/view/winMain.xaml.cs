@@ -29,7 +29,7 @@ namespace NewPicasa.view
         // ----------------------------------------------------------------------------
         private void trvMain_Loaded(object sender, RoutedEventArgs e)
         {
-            f_ListDirectory(trvMain, @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo");
+            f_ListDirectory(trvMain, @"D:\Dev\images");
         }
         // ----------------------------------------------------------------------------
 
@@ -58,6 +58,16 @@ namespace NewPicasa.view
         {
             TreeViewItem item = sender as TreeViewItem;
             MessageBox.Show(item.Header.ToString());
+            f_RefreshListImages(@"D:\Dev\images\images_test");
+        }
+
+        private static void f_RefreshListImages(string strPath)
+        {
+            string[] strFiles = Directory.GetFiles(strPath);
+            foreach(string strFile in strFiles)
+            {
+                MessageBox.Show(strFile);
+            }
         }
         // ----------------------------------------------------------------------------
 
