@@ -49,6 +49,13 @@
 
         <Rectangle x:Name="separatorMetadonnees" Width="2" Stroke="black" Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Left" />
         <TreeView x:Name="trvMain" Grid.Row="2" Margin="0,0,2,0" Loaded="trvMain_Loaded"/>
+        <DataContext>
+            <ObjectDataProvider 
+                ObjectType="{x:Type local:ImageLoader}" 
+                MethodName="LoadImages" 
+                />
+        </DataContext>
+        <ListBox x:Name="lsbImage" Grid.Column="1" HorizontalAlignment="Left" Height="229" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="325" ItemsSource="{Binding}"/>
 
 
 

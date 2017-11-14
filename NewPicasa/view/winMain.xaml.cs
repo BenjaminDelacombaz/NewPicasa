@@ -20,6 +20,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain : Window
     {
+        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
         public winMain()
         {
             InitializeComponent();
@@ -29,7 +30,7 @@ namespace NewPicasa.view
         // ----------------------------------------------------------------------------
         private void trvMain_Loaded(object sender, RoutedEventArgs e)
         {
-            f_ListDirectory(trvMain, @"D:\Dev\images");
+            f_ListDirectory(trvMain, WG_strImagePath);
         }
         // ----------------------------------------------------------------------------
 
@@ -42,7 +43,7 @@ namespace NewPicasa.view
             treeView.Items.Add(f_CreateDirectoryNode(rootDirectoryInfo));
         }
 
-        private static TreeViewItem f_CreateDirectoryNode(DirectoryInfo directoryInfo)
+        private TreeViewItem f_CreateDirectoryNode(DirectoryInfo directoryInfo)
         {
             var directoryNode = new TreeViewItem { Header = directoryInfo.Name };
             directoryNode.MouseLeftButtonUp += DirectoryNode_MouseLeftButtonUp;
@@ -54,22 +55,30 @@ namespace NewPicasa.view
 
         }
 
-        private static void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem item = sender as TreeViewItem;
-            MessageBox.Show(item.Header.ToString());
-            f_RefreshListImages(@"D:\Dev\images\images_test");
-        }
-
-        private static void f_RefreshListImages(string strPath)
-        {
-            string[] strFiles = Directory.GetFiles(strPath);
-            foreach(string strFile in strFiles)
+            if(item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
             {
-                MessageBox.Show(strFile);
+                MessageBox.Show(item.Header.ToString());
+                LoadImages(WG_strImagePath + @"\" + item.Header.ToString());
+
             }
         }
+
+        private static List<BitmapImage> LoadImages(string strPath)
+        {
+            List<BitmapImage> Images = new List<BitmapImage>();
+            DirectoryInfo ImageDir = new DirectoryInfo(strPath);
+            foreach(FileInfo ImageFile in ImageDir.GetFiles("*.jpg"))
+            {
+                Uri uri = new Uri(ImageFile.FullName);
+                Images.Add(new BitmapImage(uri));
+            }
+            return Images;
+        }
         // ----------------------------------------------------------------------------
+        //http://www.c-sharpcorner.com/UploadFile/393ac5/arrangement-of-items-in-list-box-using-wpf/
 
     }
 
