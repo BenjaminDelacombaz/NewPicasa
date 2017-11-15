@@ -61,24 +61,24 @@ namespace NewPicasa.view
             if(item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
             {
                 MessageBox.Show(item.Header.ToString());
-                LoadImages(WG_strImagePath + @"\" + item.Header.ToString());
+                ImageList = ListImage(WG_strImagePath + @"\" + item.Header.ToString());
 
             }
         }
 
-        private static List<BitmapImage> LoadImages(string strPath)
+        private static List<BitmapImage> ListImage(string strPath)
         {
             List<BitmapImage> Images = new List<BitmapImage>();
             DirectoryInfo ImageDir = new DirectoryInfo(strPath);
             foreach(FileInfo ImageFile in ImageDir.GetFiles("*.jpg"))
             {
                 Uri uri = new Uri(ImageFile.FullName);
-                Images.Add(new BitmapImage(uri));
+                BitmapImage bitmapImage = new BitmapImage(uri);
+                Images.Add(bitmapImage);
             }
             return Images;
         }
         // ----------------------------------------------------------------------------
-        //http://www.c-sharpcorner.com/UploadFile/393ac5/arrangement-of-items-in-list-box-using-wpf/
 
     }
 
