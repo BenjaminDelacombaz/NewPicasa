@@ -60,7 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="class\C_ImageMetadata.cs" />
-    <Compile Include="view\ImageDetails.cs" />
+    <Compile Include="class\ImageDetails.cs" />
     <Compile Include="view\winMain_V2.xaml.cs">
       <DependentUpon>winMain_V2.xaml</DependentUpon>
     </Compile>
