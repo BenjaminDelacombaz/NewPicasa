@@ -71,10 +71,13 @@ namespace NewPicasa.view
 
             foreach (var file in files)
             {
+                ImageMetadata imageMetadata = new ImageMetadata(file);
+                MessageBox.Show(imageMetadata.FileName);
+
                 ImageDetails id = new ImageDetails()
                 {
                     Path = file,
-                    FileName = System.IO.Path.GetFileName(file),
+                    //FileName = imageMetadata.f_GetFileName(),
                     Extension = System.IO.Path.GetExtension(file),
                 };
 

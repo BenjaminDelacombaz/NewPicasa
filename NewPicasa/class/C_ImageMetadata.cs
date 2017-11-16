@@ -49,7 +49,7 @@ namespace NewPicasa
                 this._strDateTaken = this.f_GetMetadataDateTaken();
                 this._strAuthors = this.f_GetMetadataAuthors();
                 this._strComment = this.f_GetMetadataComment();
-                this._strTags = this.f_GetMetadataTags();
+                //this._strTags = this.f_GetMetadataTags();
                 this._intRate = this.f_GetMetadataRate();
                 this._strCopyright = this.f_GetMetadataCopyright();
                 this._strTitle = this.f_GetMetadataTitle();
@@ -488,10 +488,7 @@ namespace NewPicasa
 
         // Getter
         // Get file name
-        public string f_GetFileName()
-        {
-            return this._strFileName;
-        }
+        public string FileName { get; set; }
         // Get file extension
         public string f_GetFileExtension()
         {
