@@ -17,24 +17,22 @@ using System.Windows.Shapes;
 namespace NewPicasa.view
 {
     /// <summary>
-    /// Logique d'interaction pour winMain.xaml
+    /// Logique d'interaction pour winMain_V2.xaml
     /// </summary>
-    public partial class winMain : Window
+    public partial class winMain_V2 : Window
     {
         string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
-        public winMain()
+        public winMain_V2()
         {
             InitializeComponent();
         }
 
-        // EVENTS
-        // ----------------------------------------------------------------------------
         private void trvMain_Loaded(object sender, RoutedEventArgs e)
         {
             f_ListDirectory(trvMain, WG_strImagePath);
         }
-        // ----------------------------------------------------------------------------
 
+        // ----------------------------------------------------------------------------
         // FUNCTIONS
         // ----------------------------------------------------------------------------
         private void f_ListDirectory(TreeView treeView, string path)
@@ -55,31 +53,46 @@ namespace NewPicasa.view
             return directoryNode;
 
         }
-
         private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem item = sender as TreeViewItem;
-            if(item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
+            if (item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
             {
-                MessageBox.Show(item.Header.ToString());
-                //ImageList = ListImage(WG_strImagePath + @"\" + item.Header.ToString
+                f_RefreshListImage(System.IO.Path.Combine(WG_strImagePath, item.Header.ToString()));
             }
         }
-
-        private static List<BitmapImage> ListImage(string strPath)
+        private void f_RefreshListImage(string strPath)
         {
-            List<BitmapImage> Images = new List<BitmapImage>();
-            DirectoryInfo ImageDir = new DirectoryInfo(strPath);
-            foreach(FileInfo ImageFile in ImageDir.GetFiles("*.jpg"))
+            string root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string[] supportedExtensions = new[] { ".bmp", ".jpeg", ".jpg", ".png", ".tiff" };
+            var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
+
+            List<ImageDetails> images = new List<ImageDetails>();
+
+            foreach (var file in files)
             {
-                Uri uri = new Uri(ImageFile.FullName);
-                BitmapImage bitmapImage = new BitmapImage(uri);
-                Images.Add(bitmapImage);
+                ImageDetails id = new ImageDetails()
+                {
+                    Path = file,
+                    FileName = System.IO.Path.GetFileName(file),
+                    Extension = System.IO.Path.GetExtension(file),
+                };
+
+                BitmapImage img = new BitmapImage();
+                img.BeginInit();
+                img.CacheOption = BitmapCacheOption.OnLoad;
+                img.UriSource = new Uri(file, UriKind.Absolute);
+                img.EndInit();
+                id.Width = img.PixelWidth;
+                id.Height = img.PixelHeight;
+
+                // I couldn't find file size in BitmapImage
+                FileInfo fi = new FileInfo(file);
+                id.Size = fi.Length;
+                images.Add(id);
             }
-            return Images;
+
+            ImageList.ItemsSource = images;
         }
-        // ----------------------------------------------------------------------------
-
     }
-
 }
