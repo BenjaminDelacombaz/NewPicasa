@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="class\C_ImageMetadata.cs" />
     <Compile Include="view\ImageDetails.cs" />
     <Compile Include="view\winMain_V2.xaml.cs">
       <DependentUpon>winMain_V2.xaml</DependentUpon>
@@ -119,9 +120,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="class\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="image\icon.ico" />
   </ItemGroup>
