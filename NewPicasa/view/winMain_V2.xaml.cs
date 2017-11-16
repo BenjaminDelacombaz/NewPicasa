@@ -71,13 +71,10 @@ namespace NewPicasa.view
 
             foreach (var file in files)
             {
-                ImageMetadata imageMetadata = new ImageMetadata(file);
-                MessageBox.Show(imageMetadata.FileName);
-
                 ImageDetails id = new ImageDetails()
                 {
                     Path = file,
-                    //FileName = imageMetadata.f_GetFileName(),
+                    FileName = System.IO.Path.GetFileName(file),
                     Extension = System.IO.Path.GetExtension(file),
                 };
 
@@ -96,6 +93,11 @@ namespace NewPicasa.view
             }
 
             ImageList.ItemsSource = images;
+        }
+
+        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("test");
         }
     }
 }

@@ -18,7 +18,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <!--image and dimensions-->
                                 <Grid Width="88" Height="55">
-                                    <Image Source="{Binding Path}"/>
+                                    <Image Source="{Binding Path}" MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
                                     <TextBlock Background="#B2000000" Foreground="White" Height="16" TextAlignment="Center" VerticalAlignment="Bottom">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="{}{0}x{1}">

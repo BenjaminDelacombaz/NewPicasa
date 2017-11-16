@@ -488,7 +488,10 @@ namespace NewPicasa
 
         // Getter
         // Get file name
-        public string FileName { get; set; }
+        public string f_GetFileName()
+        {
+            return this._strFileName;
+        }
         // Get file extension
         public string f_GetFileExtension()
         {
