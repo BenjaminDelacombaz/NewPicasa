@@ -59,9 +59,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="class\C_ImageMetadata.cs" />
-    <Compile Include="view\winTestMetadata.xaml.cs">
-      <DependentUpon>winTestMetadata.xaml</DependentUpon>
+    <Compile Include="view\ImageDetails.cs" />
+    <Compile Include="view\winMain_V2.xaml.cs">
+      <DependentUpon>winMain_V2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\winTest.xaml.cs">
+      <DependentUpon>winTest.xaml</DependentUpon>
     </Compile>
     <Page Include="view\winAddPhoto.xaml">
       <SubType>Designer</SubType>
@@ -81,7 +84,11 @@
     <Compile Include="view\winMain.xaml.cs">
       <DependentUpon>winMain.xaml</DependentUpon>
     </Compile>
-    <Page Include="view\winTestMetadata.xaml">
+    <Page Include="view\winMain_V2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\winTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
