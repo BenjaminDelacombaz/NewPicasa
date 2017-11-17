@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewPicasa.view"
         mc:Ignorable="d"
-        Title="winMain_V2" Height="480.364" Width="907.9" Icon="../image/icon.ico" FontFamily="Open Sans">
+        Title="winMain_V2" Height="480.364" Width="923.9" Icon="../image/icon.ico" FontFamily="Open Sans">
     <Grid x:Name="winMain">
         <Grid Width="106" HorizontalAlignment="Left">
             <TreeView x:Name="trvMain" Grid.Row="2" Margin="0,0,2,0" Loaded="trvMain_Loaded"/>
@@ -54,19 +54,21 @@
             </ItemsControl>
             <!--</Grid>-->
         </ScrollViewer>
-        <Grid HorizontalAlignment="Right" Width="228">
-            <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txbName" Height="23" Margin="10,90,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-            <Label x:Name="lblTag" Content="Tags" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txbTags" Height="23" Margin="10,145,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-            <Label x:Name="lblComment" Content="Commentaire" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txbComment" Height="23" Margin="10,201,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-            <Label x:Name="lblDateTaken" Content="Date prise de vue" HorizontalAlignment="Left" Margin="10,228,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txbDateTaken" Height="23" Margin="10,259,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-            <Label x:Name="lblAuthor" Content="Auteurs" HorizontalAlignment="Left" Margin="10,285,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txbAuthor" Height="23" Margin="10,316,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-            <Label x:Name="lblHeightWidth" Content="Largeur x Hauteur" HorizontalAlignment="Left" Margin="10,344,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txbHeightWidth" Height="23" Margin="10,375,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        </Grid>
+        <ScrollViewer Margin="667,0,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid HorizontalAlignment="Right" Width="228">
+                <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbName" Height="23" Margin="10,90,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <Label x:Name="lblTag" Content="Tags" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbTags" Height="23" Margin="10,145,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <Label x:Name="lblComment" Content="Commentaire" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbComment" Height="23" Margin="10,201,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <Label x:Name="lblDateTaken" Content="Date prise de vue" HorizontalAlignment="Left" Margin="10,228,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbDateTaken" Height="23" Margin="10,259,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <Label x:Name="lblAuthor" Content="Auteurs" HorizontalAlignment="Left" Margin="10,285,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbAuthor" Height="23" Margin="10,316,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <Label x:Name="lblHeightWidth" Content="Largeur x Hauteur" HorizontalAlignment="Left" Margin="10,344,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbHeightWidth" Height="23" Margin="10,375,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+            </Grid>   
+        </ScrollViewer>
     </Grid>
 </Window>
