@@ -485,6 +485,26 @@ namespace NewPicasa
             }
             return booResult;
         }
+        public string f_ConvertArrToString(string[] strArray)
+        {
+            string strResult = "";
+            if(strArray != null)
+            {
+                foreach (string strValue in strArray)
+                {
+                    strResult += strValue + ";";
+                }
+                strResult = strResult.Remove(strResult.Length - 1);
+            }
+            return strResult;
+        }
+
+        public string f_ConvertWidthHeightToString()
+        {
+            string strResult = "";
+            strResult = this._intWidth + "x" + this._intHeight;
+            return strResult;
+        }
 
         // Getter
         // Get file name

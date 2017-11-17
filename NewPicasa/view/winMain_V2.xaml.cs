@@ -21,7 +21,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"D:\Dev\images";
+        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
         public winMain_V2()
         {
             InitializeComponent();
@@ -64,7 +64,7 @@ namespace NewPicasa.view
         private void f_RefreshListImage(string strPath)
         {
             string root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string[] supportedExtensions = new[] { ".bmp", ".jpeg", ".jpg", ".png", ".tiff" };
+            string[] supportedExtensions = new[] {".jpeg", ".jpg",".tiff"};
             var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
 
             List<ImageDetails> images = new List<ImageDetails>();
@@ -97,7 +97,15 @@ namespace NewPicasa.view
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("test");
+            Image imgImage = sender as Image;
+            string strImagePath = imgImage.Source.ToString().Replace("file:///", "");
+            ImageMetadata objImageMetadata = new ImageMetadata(strImagePath);
+            txbName.Text = objImageMetadata.f_GetFileName();
+            txbAuthor.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetAuthors());
+            txbComment.Text = objImageMetadata.f_GetComment();
+            txbDateTaken.Text = objImageMetadata.f_GetDateTaken();
+            txbHeightWidth.Text = objImageMetadata.f_ConvertWidthHeightToString();
+            txbTags.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetTags());
         }
     }
 }
