@@ -505,6 +505,15 @@ namespace NewPicasa
             strResult = this._intWidth + "x" + this._intHeight;
             return strResult;
         }
+       /* public static bool ThumbnailCallback()
+        {
+            return false;
+        }*/
+
+        /*public static string f_CreateThumbnail(string strFile)
+        {
+            
+        }*/
 
         // Getter
         // Get file name
