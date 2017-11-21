@@ -39,7 +39,7 @@ namespace NewPicasa.view
             {
                 ImageDetails id = new ImageDetails()
                 {
-                    Path = file,
+                    //Path = file,
                     FileName = System.IO.Path.GetFileName(file),
                     Extension = System.IO.Path.GetExtension(file),
                 };

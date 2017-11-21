@@ -3,16 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace NewPicasa.view
 {
@@ -21,7 +15,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
+        string WG_strImagePath = @"D:\Dev\images";
         public winMain_V2()
         {
             InitializeComponent();
@@ -73,7 +67,8 @@ namespace NewPicasa.view
             {
                 ImageDetails id = new ImageDetails()
                 {
-                    Path = file,
+                    Path =  file,
+                    Image = ImageMetadata.resizeImage(88,55,file),
                     FileName = System.IO.Path.GetFileName(file),
                     Extension = System.IO.Path.GetExtension(file),
                 };
