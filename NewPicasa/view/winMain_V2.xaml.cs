@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -58,7 +59,7 @@ namespace NewPicasa.view
         private void f_RefreshListImage(string strPath)
         {
             string root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string[] supportedExtensions = new[] {".jpeg", ".jpg",".tiff"};
+            string[] supportedExtensions = new[] { ".jpeg", ".jpg", ".tiff" };
             var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
 
             List<ImageDetails> images = new List<ImageDetails>();
@@ -67,8 +68,8 @@ namespace NewPicasa.view
             {
                 ImageDetails id = new ImageDetails()
                 {
-                    Path =  file,
-                    Image = ImageMetadata.resizeImage(88,55,file),
+                    Path = file,
+                    Image = ImageMetadata.resizeImage(88, 55, file),
                     FileName = System.IO.Path.GetFileName(file),
                     Extension = System.IO.Path.GetExtension(file),
                 };
@@ -102,5 +103,7 @@ namespace NewPicasa.view
             txbHeightWidth.Text = objImageMetadata.f_ConvertWidthHeightToString();
             txbTags.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetTags());
         }
+
+        
     }
 }
