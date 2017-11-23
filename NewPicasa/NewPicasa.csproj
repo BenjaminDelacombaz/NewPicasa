@@ -65,9 +65,6 @@
     <Compile Include="view\winMain_V2.xaml.cs">
       <DependentUpon>winMain_V2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\winTest.xaml.cs">
-      <DependentUpon>winTest.xaml</DependentUpon>
-    </Compile>
     <Page Include="view\winAddPhoto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -87,10 +84,6 @@
       <DependentUpon>winMain.xaml</DependentUpon>
     </Compile>
     <Page Include="view\winMain_V2.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="view\winTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -126,6 +119,14 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\img_etoile_b_16.png" />
+    <Resource Include="image\img_etoile_b_24.png" />
+    <Resource Include="image\img_etoile_b_32.png" />
+    <Resource Include="image\img_etoile_j_16.png" />
+    <Resource Include="image\img_etoile_j_24.png" />
+    <Resource Include="image\img_etoile_j_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -63,13 +64,11 @@ namespace NewPicasa.view
             var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
 
             List<ImageDetails> images = new List<ImageDetails>();
-
             foreach (var file in files)
             {
                 ImageDetails id = new ImageDetails()
                 {
                     Path = file,
-                    Image = ImageMetadata.resizeImage(88, 55, file),
                     FileName = System.IO.Path.GetFileName(file),
                     Extension = System.IO.Path.GetExtension(file),
                 };
@@ -102,8 +101,12 @@ namespace NewPicasa.view
             txbDateTaken.Text = objImageMetadata.f_GetDateTaken();
             txbHeightWidth.Text = objImageMetadata.f_ConvertWidthHeightToString();
             txbTags.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetTags());
+            f_RefreshRate(4);
         }
 
-        
+        private void f_RefreshRate(int intRate)
+        {
+           
+        }
     }
 }
