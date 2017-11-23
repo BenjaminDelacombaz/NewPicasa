@@ -11,7 +11,8 @@
     </Window.Resources>
     <Grid x:Name="winMain">
         <Grid Width="106" HorizontalAlignment="Left">
-            <TreeView x:Name="trvMain" Grid.Row="2" Margin="0,0,2,0" Loaded="trvMain_Loaded"/>
+            <TreeView x:Name="trvMain" Margin="0,0,2,42" Loaded="trvMain_Loaded"/>
+            <Button x:Name="btnRename" Content="Rename" HorizontalAlignment="Left" Margin="10,412,0,0" VerticalAlignment="Top" Width="75" Click="btnRename_Click"/>
         </Grid>
         <ScrollViewer Margin="106,0,233,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <!--<Grid Width="539" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left"> -->
@@ -72,11 +73,6 @@
                 <Label x:Name="lblHeightWidth" Content="Largeur x Hauteur" HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbHeightWidth" Height="23" Margin="10,343,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                 <Label x:Name="lblHeightWidth_Copy" Content="Note" HorizontalAlignment="Left" Margin="10,371,0,0" VerticalAlignment="Top"/>
-                <TabControl Name="lstRate" Margin="21,402,0,0" Height="32" VerticalAlignment="Top">
-                    <DataTemplate>
-                        <Image x:Name="imgStarEmpty" HorizontalAlignment="Left" Height="25" Margin="21,402,0,0" VerticalAlignment="Top" Width="25" Source="{Binding ImgPath}"/>
-                    </DataTemplate>
-                </TabControl>
             </Grid>
         </ScrollViewer>
     </Grid>

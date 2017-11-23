@@ -17,7 +17,8 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
+        string WG_strImagePath = @"D:\Dev\images";
+        string wg_strCurrentPath = "";
         public winMain_V2()
         {
             InitializeComponent();
@@ -55,6 +56,7 @@ namespace NewPicasa.view
             if (item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
             {
                 f_RefreshListImage(System.IO.Path.Combine(WG_strImagePath, item.Header.ToString()));
+                wg_strCurrentPath = Path.Combine(WG_strImagePath, item.Header.ToString());
             }
         }
         private void f_RefreshListImage(string strPath)
@@ -101,12 +103,24 @@ namespace NewPicasa.view
             txbDateTaken.Text = objImageMetadata.f_GetDateTaken();
             txbHeightWidth.Text = objImageMetadata.f_ConvertWidthHeightToString();
             txbTags.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetTags());
-            f_RefreshRate(4);
         }
 
-        private void f_RefreshRate(int intRate)
+        private void f_RenameAllFiles(string strPath)
         {
-           
+            if (Directory.Exists(strPath))
+            {
+                string[] strFilesDirectory = Directory.GetFiles(strPath);
+                Utilities.f_CopyFiles(strFilesDirectory, false, strPath);
+            }
+            else
+            {
+                // Error
+            }
+        }
+
+        private void btnRename_Click(object sender, RoutedEventArgs e)
+        {
+            f_RenameAllFiles(wg_strCurrentPath);
         }
     }
 }
