@@ -49,5 +49,8 @@ namespace ImageList.Model
         /// </summary>
         public long Size { get; set; }
 
+        public Image Image { get; set; }
+
+
     }
 }

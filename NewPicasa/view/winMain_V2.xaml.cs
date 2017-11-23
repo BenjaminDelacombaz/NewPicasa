@@ -3,16 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace NewPicasa.view
 {
@@ -21,7 +16,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
+        string WG_strImagePath = @"D:\Dev\images";
         public winMain_V2()
         {
             InitializeComponent();
@@ -64,7 +59,7 @@ namespace NewPicasa.view
         private void f_RefreshListImage(string strPath)
         {
             string root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string[] supportedExtensions = new[] {".jpeg", ".jpg",".tiff"};
+            string[] supportedExtensions = new[] { ".jpeg", ".jpg", ".tiff" };
             var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
 
             List<ImageDetails> images = new List<ImageDetails>();
@@ -74,6 +69,7 @@ namespace NewPicasa.view
                 ImageDetails id = new ImageDetails()
                 {
                     Path = file,
+                    Image = ImageMetadata.resizeImage(88, 55, file),
                     FileName = System.IO.Path.GetFileName(file),
                     Extension = System.IO.Path.GetExtension(file),
                 };
@@ -107,5 +103,7 @@ namespace NewPicasa.view
             txbHeightWidth.Text = objImageMetadata.f_ConvertWidthHeightToString();
             txbTags.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetTags());
         }
+
+        
     }
 }

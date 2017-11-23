@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NewPicasa.view"
+        xmlns:local="clr-namespace:NewPicasa"
         mc:Ignorable="d"
         Title="winMain_V2" Height="480.364" Width="923.9" Icon="../image/icon.ico" FontFamily="Open Sans">
+    <Window.Resources>
+        <local:UriToBitmapConverter x:Key="UriToBitmapConverter" />
+    </Window.Resources>
     <Grid x:Name="winMain">
         <Grid Width="106" HorizontalAlignment="Left">
             <TreeView x:Name="trvMain" Grid.Row="2" Margin="0,0,2,0" Loaded="trvMain_Loaded"/>
@@ -19,7 +22,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <!--image and dimensions-->
                                 <Grid Width="88" Height="55">
-                                    <Image Source="{Binding Path}" MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
+                                    <Image Source="{Binding Path, Converter={StaticResource UriToBitmapConverter}}" MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
                                     <TextBlock Background="#B2000000" Foreground="White" Height="16" TextAlignment="Center" VerticalAlignment="Bottom">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="{}{0}x{1}">
