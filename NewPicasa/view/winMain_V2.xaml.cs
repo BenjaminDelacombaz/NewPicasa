@@ -16,7 +16,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"D:\Dev\images";
+        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
         public winMain_V2()
         {
             InitializeComponent();
