@@ -9,7 +9,7 @@ namespace NewPicasa
     {
         private static string _strError;
 
-        public static bool f_CopyFiles(string[] strFiles, bool booRename, string strDestPathPhoto, string strNewFileName = "")
+        public static bool f_CopyFiles(string[] strFiles, bool booRename, string strDestPathPhoto, bool booCopy, bool booRenameFile, string strNewFileName = "")
         {
             bool booResult = false;
             string strFileName = "";
@@ -35,6 +35,10 @@ namespace NewPicasa
                     }
                     if (booRename)
                     {
+                        if(!booRenameFile)
+                        {
+                            strNewFileName = Path.GetFileNameWithoutExtension(fleFile.Name);
+                        }
                         // Get the file name
                         strFileName = strNewFileName + System.IO.Path.GetExtension(fleFile.Name);
 
@@ -74,7 +78,14 @@ namespace NewPicasa
                     {
                         try
                         {
-                            File.Copy(strSourcePath, strDestPath, false);
+                            if(booCopy)
+                            {
+                                File.Copy(strSourcePath, strDestPath, false);
+                            }
+                            else
+                            {
+                                File.Move(strSourcePath,strDestPath);
+                            }
                             booResult = true;
                         }
                         catch (IOException err)

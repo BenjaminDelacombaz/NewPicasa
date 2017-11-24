@@ -17,7 +17,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"D:\Dev\images";
+        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
         string wg_strCurrentPath = "";
         public winMain_V2()
         {
@@ -110,7 +110,9 @@ namespace NewPicasa.view
             if (Directory.Exists(strPath))
             {
                 string[] strFilesDirectory = Directory.GetFiles(strPath);
-                Utilities.f_CopyFiles(strFilesDirectory, false, strPath);
+                Utilities.f_CopyFiles(strFilesDirectory, true, strPath, false, false);
+                // Refresh list
+                f_RefreshListImage(wg_strCurrentPath);
             }
             else
             {
