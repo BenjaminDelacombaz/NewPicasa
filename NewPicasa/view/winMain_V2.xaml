@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewPicasa"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="winMain_V2" Height="480.364" Width="923.9" Icon="../image/icon.ico" FontFamily="Open Sans">
     <Window.Resources>
@@ -14,6 +15,7 @@
             <TreeView x:Name="trvMain" Margin="0,0,2,42" Loaded="trvMain_Loaded"/>
             <Button x:Name="btnRename" Content="Rename" HorizontalAlignment="Left" Margin="10,412,0,0" VerticalAlignment="Top" Width="75" Click="btnRename_Click"/>
         </Grid>
+        <Image x:Name="imgLoading" gif:ImageBehavior.AnimatedSource="C:\Project\NewPicasa\NewPicasa\image\loading.gif" Width="96" Height="96" Visibility="Hidden" />
         <ScrollViewer Margin="106,0,233,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <!--<Grid Width="539" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left"> -->
             <ItemsControl Name="ImageList" ItemsSource="{Binding ImageList}">

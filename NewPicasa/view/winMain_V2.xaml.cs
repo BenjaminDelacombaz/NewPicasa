@@ -19,6 +19,9 @@ namespace NewPicasa.view
     {
         string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
         string wg_strCurrentPath = "";
+        private Thread myThreadImgList;
+        private List<ImageDetails> wg_images = new List<ImageDetails>();
+
         public winMain_V2()
         {
             InitializeComponent();
@@ -55,8 +58,13 @@ namespace NewPicasa.view
             TreeViewItem item = sender as TreeViewItem;
             if (item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
             {
-                f_RefreshListImage(System.IO.Path.Combine(WG_strImagePath, item.Header.ToString()));
                 wg_strCurrentPath = Path.Combine(WG_strImagePath, item.Header.ToString());
+                myThreadImgList = new Thread(new ThreadStart(ThreadLoop));
+                // Lancement du thread
+                myThreadImgList.Start();
+
+
+                //f_RefreshListImage(System.IO.Path.Combine(WG_strImagePath, item.Header.ToString()));
             }
         }
         private void f_RefreshListImage(string strPath)
@@ -65,7 +73,9 @@ namespace NewPicasa.view
             string[] supportedExtensions = new[] { ".jpeg", ".jpg", ".tiff" };
             var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
 
-            List<ImageDetails> images = new List<ImageDetails>();
+            //List<ImageDetails> images = new List<ImageDetails>();
+            wg_images.Clear();
+
             foreach (var file in files)
             {
                 ImageDetails id = new ImageDetails()
@@ -86,10 +96,10 @@ namespace NewPicasa.view
                 // I couldn't find file size in BitmapImage
                 FileInfo fi = new FileInfo(file);
                 id.Size = fi.Length;
-                images.Add(id);
+                wg_images.Add(id);
             }
 
-            ImageList.ItemsSource = images;
+            //ImageList.ItemsSource = images;
         }
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -122,7 +132,23 @@ namespace NewPicasa.view
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
         {
-            f_RenameAllFiles(wg_strCurrentPath);
+            
+        }
+
+        public void ThreadLoop()
+        {
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                ImageList.ItemsSource = null;
+                imgLoading.Visibility = Visibility.Visible;
+            }));
+            f_RefreshListImage(wg_strCurrentPath);
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                ImageList.ItemsSource = wg_images;
+                imgLoading.Visibility = Visibility.Hidden;
+            }));
+            Thread.CurrentThread.Abort();
         }
     }
 }
