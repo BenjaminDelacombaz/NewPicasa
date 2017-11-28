@@ -25,6 +25,7 @@ namespace NewPicasa.view
         public winMain_V2()
         {
             InitializeComponent();
+            f_RefreshStars();
         }
 
         private void trvMain_Loaded(object sender, RoutedEventArgs e)
@@ -51,7 +52,6 @@ namespace NewPicasa.view
                 directoryNode.Items.Add(f_CreateDirectoryNode(directory));
             }
             return directoryNode;
-
         }
         private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -62,9 +62,6 @@ namespace NewPicasa.view
                 myThreadImgList = new Thread(new ThreadStart(ThreadLoop));
                 // Lancement du thread
                 myThreadImgList.Start();
-
-
-                //f_RefreshListImage(System.IO.Path.Combine(WG_strImagePath, item.Header.ToString()));
             }
         }
         private void f_RefreshListImage(string strPath)
@@ -73,7 +70,6 @@ namespace NewPicasa.view
             string[] supportedExtensions = new[] { ".jpeg", ".jpg", ".tiff" };
             var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
 
-            //List<ImageDetails> images = new List<ImageDetails>();
             wg_images.Clear();
 
             foreach (var file in files)
@@ -98,8 +94,6 @@ namespace NewPicasa.view
                 id.Size = fi.Length;
                 wg_images.Add(id);
             }
-
-            //ImageList.ItemsSource = images;
         }
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -113,6 +107,12 @@ namespace NewPicasa.view
             txbDateTaken.Text = objImageMetadata.f_GetDateTaken();
             txbHeightWidth.Text = objImageMetadata.f_ConvertWidthHeightToString();
             txbTags.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetTags());
+            f_RefreshStars(objImageMetadata.f_GetRate());
+        }
+
+        private void clickStars(object sender, MouseButtonEventArgs e)
+        {
+            f_RefreshStars(StarsList.SelectedIndex + 1);
         }
 
         private void f_RenameAllFiles(string strPath)
@@ -132,7 +132,7 @@ namespace NewPicasa.view
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         public void ThreadLoop()
@@ -149,6 +149,34 @@ namespace NewPicasa.view
                 imgLoading.Visibility = Visibility.Hidden;
             }));
             Thread.CurrentThread.Abort();
+        }
+
+        public void f_RefreshStars(int intNumberStars = 0)
+        {
+            List<ImageDetails> listStars = new List<ImageDetails>();
+            for(int intCount = 1; intCount < 6; intCount++)
+            {
+                string strFile = "";
+                if(intCount <= intNumberStars)
+                {
+                    strFile = @"C:\Project\NewPicasa\NewPicasa\image\img_etoile_j_32.png";
+                }
+                else
+                {
+                    strFile = @"C:\Project\NewPicasa\NewPicasa\image\img_etoile_b_32.png";
+                }
+                ImageDetails id = new ImageDetails()
+                {
+                    Path = strFile
+                };
+                listStars.Add(id);
+            }
+            StarsList.ItemsSource = listStars;
+        }
+
+        private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
