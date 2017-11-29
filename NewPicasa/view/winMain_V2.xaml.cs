@@ -21,6 +21,7 @@ namespace NewPicasa.view
         string wg_strCurrentPath = "";
         private Thread myThreadImgList;
         private List<ImageDetails> wg_images = new List<ImageDetails>();
+        private bool wg_booActiveThread = false;
 
         public winMain_V2()
         {
@@ -58,10 +59,14 @@ namespace NewPicasa.view
             TreeViewItem item = sender as TreeViewItem;
             if (item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
             {
-                wg_strCurrentPath = Path.Combine(WG_strImagePath, item.Header.ToString());
-                myThreadImgList = new Thread(new ThreadStart(ThreadLoop));
-                // Lancement du thread
-                myThreadImgList.Start();
+                if(!wg_booActiveThread)
+                {
+                    wg_strCurrentPath = Path.Combine(WG_strImagePath, item.Header.ToString());
+
+                    myThreadImgList = new Thread(new ThreadStart(ThreadImage));
+                    // Lancement du thread
+                    myThreadImgList.Start();
+                }
             }
         }
         private void f_RefreshListImage(string strPath)
@@ -135,8 +140,9 @@ namespace NewPicasa.view
 
         }
 
-        public void ThreadLoop()
+        public void ThreadImage()
         {
+            wg_booActiveThread = true;
             this.Dispatcher.Invoke((Action)(() =>
             {
                 ImageList.ItemsSource = null;
@@ -148,6 +154,7 @@ namespace NewPicasa.view
                 ImageList.ItemsSource = wg_images;
                 imgLoading.Visibility = Visibility.Hidden;
             }));
+            wg_booActiveThread = false;
             Thread.CurrentThread.Abort();
         }
 
@@ -172,11 +179,6 @@ namespace NewPicasa.view
                 listStars.Add(id);
             }
             StarsList.ItemsSource = listStars;
-        }
-
-        private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
         }
     }
 }
