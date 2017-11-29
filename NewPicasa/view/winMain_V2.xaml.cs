@@ -19,6 +19,7 @@ namespace NewPicasa.view
     {
         string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
         string wg_strCurrentPath = "";
+        string wg_strImageCurrentPath = "";
         private Thread myThreadImgList;
         private List<ImageDetails> wg_images = new List<ImageDetails>();
         private bool wg_booActiveThread = false;
@@ -105,6 +106,7 @@ namespace NewPicasa.view
         {
             Image imgImage = sender as Image;
             string strImagePath = imgImage.Source.ToString().Replace("file:///", "");
+            wg_strImageCurrentPath = strImagePath;
             ImageMetadata objImageMetadata = new ImageMetadata(strImagePath);
             txbName.Text = objImageMetadata.f_GetFileName();
             txbAuthor.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetAuthors());
@@ -113,6 +115,9 @@ namespace NewPicasa.view
             txbHeightWidth.Text = objImageMetadata.f_ConvertWidthHeightToString();
             txbTags.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetTags());
             f_RefreshStars(objImageMetadata.f_GetRate());
+
+            imgImage = null;
+            objImageMetadata = null;
         }
 
         private void clickStars(object sender, MouseButtonEventArgs e)
@@ -137,7 +142,7 @@ namespace NewPicasa.view
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
         {
-
+            f_SaveMetadata(wg_strImageCurrentPath);
         }
 
         public void ThreadImage()
@@ -179,6 +184,14 @@ namespace NewPicasa.view
                 listStars.Add(id);
             }
             StarsList.ItemsSource = listStars;
+        }
+
+        public void f_SaveMetadata(string strPathFile)
+        {
+            ImageMetadata objImageMetadata = new ImageMetadata(strPathFile);
+            objImageMetadata.f_SetComment(txbComment.Text.ToString());
+            objImageMetadata.f_SetRate();
+            objImageMetadata.f_SaveMetadata();
         }
     }
 }

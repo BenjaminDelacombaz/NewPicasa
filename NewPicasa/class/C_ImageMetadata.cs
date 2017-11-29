@@ -71,9 +71,9 @@ namespace NewPicasa
             //f_SetMetadataAuthors();
             f_SetMetadataComment();
             f_SetMetadataRate();
-            f_SetMetadataCopyright();
-            f_SetMetadataTitle();
-            f_SetMetadataSubject();
+            //f_SetMetadataCopyright();
+            //f_SetMetadataTitle();
+            //f_SetMetadataSubject();
             return booResult;
         }
         // Get BitmapMetadata Read

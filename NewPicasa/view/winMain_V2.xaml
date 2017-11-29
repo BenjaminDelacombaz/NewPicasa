@@ -67,7 +67,7 @@
                 <Label x:Name="lblTag" Content="Tags" HorizontalAlignment="Left" Margin="10,82,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbTags" Height="23" Margin="10,113,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                 <Label x:Name="lblComment" Content="Commentaire" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txbComment" Height="23" Margin="10,169,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbComment" Height="23" Margin="10,169,27,0" TextWrapping="Wrap" VerticalAlignment="Top" KeyUp="txbComment_KeyUp"/>
                 <Label x:Name="lblDateTaken" Content="Date prise de vue" HorizontalAlignment="Left" Margin="10,196,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbDateTaken" Height="23" Margin="10,227,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
                 <Label x:Name="lblAuthor" Content="Auteurs" HorizontalAlignment="Left" Margin="10,253,0,0" VerticalAlignment="Top"/>
