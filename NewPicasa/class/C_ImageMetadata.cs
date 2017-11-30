@@ -49,7 +49,7 @@ namespace NewPicasa
                 this._strDateTaken = this.f_GetMetadataDateTaken();
                 this._strAuthors = this.f_GetMetadataAuthors();
                 this._strComment = this.f_GetMetadataComment();
-                //this._strTags = this.f_GetMetadataTags();
+                this._strTags = this.f_GetMetadataTags();
                 this._intRate = this.f_GetMetadataRate();
                 this._strCopyright = this.f_GetMetadataCopyright();
                 this._strTitle = this.f_GetMetadataTitle();
@@ -69,8 +69,9 @@ namespace NewPicasa
             //Save comment
             //f_SetMetadataDateTaken();
             //f_SetMetadataAuthors();
-            f_SetMetadataComment();
-            f_SetMetadataRate();
+            //f_SetMetadataComment();
+            //f_SetMetadataRate();
+            f_SetMetadataTags();
             //f_SetMetadataCopyright();
             //f_SetMetadataTitle();
             //f_SetMetadataSubject();
@@ -241,7 +242,7 @@ namespace NewPicasa
             }
             return strAuthors;
         }
-        // Set Metadata Comment
+        // Set Metadata Authors
         private Boolean f_SetMetadataAuthors()
         {
             Boolean booResult = false;
@@ -274,9 +275,17 @@ namespace NewPicasa
             BitmapMetadata mdtFile = f_GetBitmapMetadataRead();
             if (mdtFile != null)
             {
-                strTags = mdtFile.Keywords.ToArray();
-                if (strTags == null)
+                if(mdtFile.Keywords != null)
                 {
+                    strTags = mdtFile.Keywords.ToArray();
+                    if (strTags == null)
+                    {
+                        MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
+                    }
+                }
+                else
+                {
+                    // Error
                     MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
                 }
             }
@@ -286,6 +295,35 @@ namespace NewPicasa
                 MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
             }
             return strTags;
+        }
+        // Set Metadata Tags
+        private Boolean f_SetMetadataTags()
+        {
+            Boolean booResult = false;
+            InPlaceBitmapMetadataWriter mdtInPlaceFile = f_GetBitmapMetadataWrite();
+            if (mdtInPlaceFile != null)
+            {
+                List<string> lstList = this._strTags.ToList<string>();
+                mdtInPlaceFile.Keywords = new System.Collections.ObjectModel.ReadOnlyCollection<string>(lstList);
+                if (!mdtInPlaceFile.TrySave())
+                {
+                    this._fleFileStream.Dispose();
+                    this._fleFileStream.Close();
+                    this.SetUpMetadataOnImage(Path.Combine(this._strFilePath,this._strFileName), this._strTags);
+                    // Error
+                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    booResult = false;
+                }
+            }
+            else
+            {
+                // Error
+                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                booResult = false;
+            }
+            this._fleFileStream.Dispose();
+            this._fleFileStream.Close();
+            return booResult;
         }
 
         // Get metadata rate
@@ -499,12 +537,66 @@ namespace NewPicasa
             return strResult;
         }
 
+        public static string[] f_ConvertStringToArr(string strString)
+        {
+            string[] strResult = null;
+            if (strString != null)
+            {
+                strResult = strString.Split(';');
+            }
+            return strResult;
+        }
+
         public string f_ConvertWidthHeightToString()
         {
             string strResult = "";
             strResult = this._intWidth + "x" + this._intHeight;
             return strResult;
         }
+
+        // set up metadata
+        private void SetUpMetadataOnImage(string filename, string[] tags)
+        {
+            // padding amount, using 2Kb.  don't need much here; metadata is rather small
+            uint paddingAmount = 2048;
+
+            // open image file to read
+            using (Stream file = File.Open(filename, FileMode.Open, FileAccess.Read))
+            {
+                // create the decoder for the original file.  The BitmapCreateOptions and BitmapCacheOption denote
+                // a lossless transocde.  We want to preserve the pixels and cache it on load.  Otherwise, we will lose
+                // quality or even not have the file ready when we save, resulting in 0b of data written
+                BitmapDecoder original = BitmapDecoder.Create(file, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.None);
+                // create an encoder for the output file
+                JpegBitmapEncoder output = new JpegBitmapEncoder();
+
+                // add padding and tags to the file, as well as clone the data to another object
+                if (original.Frames[0] != null && original.Frames[0].Metadata != null)
+                {
+                    // Because the file is in use, the BitmapMetadata object is frozen.
+                    // So, we clone the object and add in the padding.
+                    BitmapFrame frameCopy = (BitmapFrame)original.Frames[0].Clone();
+                    BitmapMetadata metadata = original.Frames[0].Metadata.Clone() as BitmapMetadata;
+
+                    // we use the same method described in AddTags() as saving tags to save an amount of padding
+                    metadata.SetQuery("/app1/ifd/PaddingSchema:Padding", paddingAmount);
+                    metadata.SetQuery("/app1/ifd/exif/PaddingSchema:Padding", paddingAmount);
+                    metadata.SetQuery("/xmp/PaddingSchema:Padding", paddingAmount);
+                    // we add the tags we want as well.  Again, using the same method described above
+                    metadata.SetQuery("System.Keywords", tags);
+
+                    // finally, we create a new frame that has all of this new metadata, along with the data that was in the original message
+                    output.Frames.Add(BitmapFrame.Create(frameCopy, frameCopy.Thumbnail, metadata, frameCopy.ColorContexts));
+                    file.Close();  // close the file to ready for overwrite
+                }
+                // finally, save the new file over the old file
+                using (Stream outputFile = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    output.Save(outputFile);
+                }
+            }
+        }
+
 
         // Getter
         // Get file name

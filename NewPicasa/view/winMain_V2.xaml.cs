@@ -23,6 +23,7 @@ namespace NewPicasa.view
         private Thread myThreadImgList;
         private List<ImageDetails> wg_images = new List<ImageDetails>();
         private bool wg_booActiveThread = false;
+        private ImageMetadata wg_objImageMetadata = null;
 
         public winMain_V2()
         {
@@ -107,22 +108,21 @@ namespace NewPicasa.view
             Image imgImage = sender as Image;
             string strImagePath = imgImage.Source.ToString().Replace("file:///", "");
             wg_strImageCurrentPath = strImagePath;
-            ImageMetadata objImageMetadata = new ImageMetadata(strImagePath);
-            txbName.Text = objImageMetadata.f_GetFileName();
-            txbAuthor.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetAuthors());
-            txbComment.Text = objImageMetadata.f_GetComment();
-            txbDateTaken.Text = objImageMetadata.f_GetDateTaken();
-            txbHeightWidth.Text = objImageMetadata.f_ConvertWidthHeightToString();
-            txbTags.Text = objImageMetadata.f_ConvertArrToString(objImageMetadata.f_GetTags());
-            f_RefreshStars(objImageMetadata.f_GetRate());
-
-            imgImage = null;
-            objImageMetadata = null;
+            wg_objImageMetadata = new ImageMetadata(strImagePath);
+            txbName.Text = wg_objImageMetadata.f_GetFileName();
+            txbAuthor.Text = wg_objImageMetadata.f_ConvertArrToString(wg_objImageMetadata.f_GetAuthors());
+            txbComment.Text = wg_objImageMetadata.f_GetComment();
+            txbDateTaken.Text = wg_objImageMetadata.f_GetDateTaken();
+            txbHeightWidth.Text = wg_objImageMetadata.f_ConvertWidthHeightToString();
+            txbTags.Text = wg_objImageMetadata.f_ConvertArrToString(wg_objImageMetadata.f_GetTags());
+            f_RefreshStars(wg_objImageMetadata.f_GetRate());
         }
 
         private void clickStars(object sender, MouseButtonEventArgs e)
         {
-            f_RefreshStars(StarsList.SelectedIndex + 1);
+            int intNbStars = StarsList.SelectedIndex + 1;
+            f_RefreshStars(intNbStars);
+            wg_objImageMetadata.f_SetRate(intNbStars);
         }
 
         private void f_RenameAllFiles(string strPath)
@@ -188,10 +188,19 @@ namespace NewPicasa.view
 
         public void f_SaveMetadata(string strPathFile)
         {
-            ImageMetadata objImageMetadata = new ImageMetadata(strPathFile);
-            objImageMetadata.f_SetComment(txbComment.Text.ToString());
-            objImageMetadata.f_SetRate();
-            objImageMetadata.f_SaveMetadata();
+            wg_objImageMetadata.f_SaveMetadata();
+        }
+
+        private void txbComment_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            wg_objImageMetadata.f_SetComment(textBox.Text.ToString());
+        }
+
+        private void txbTags_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            wg_objImageMetadata.f_SetTags(ImageMetadata.f_ConvertStringToArr(textBox.Text.ToString()));
         }
     }
 }
