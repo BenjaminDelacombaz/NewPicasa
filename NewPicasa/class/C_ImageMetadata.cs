@@ -590,7 +590,8 @@ namespace NewPicasa
                     file.Close();  // close the file to ready for overwrite
                 }
                 // finally, save the new file over the old file
-                using (Stream outputFile = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                // Essayer de créer un nouveau fichier puis supprimer l'autre !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                using (Stream outputFile = File.Open(filename, FileMode.Create, FileAccess.Write))
                 {
                     output.Save(outputFile);
                 }
