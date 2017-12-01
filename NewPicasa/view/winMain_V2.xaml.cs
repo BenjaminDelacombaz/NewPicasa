@@ -71,35 +71,75 @@ namespace NewPicasa.view
                 }
             }
         }
-        private void f_RefreshListImage(string strPath)
+        private void f_RefreshListImage(string strPath, string strSearch)
         {
             string root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string[] supportedExtensions = new[] { ".jpeg", ".jpg", ".tiff" };
             var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
-
             wg_images.Clear();
 
-            foreach (var file in files)
+            // Test
+            string pathLog = @"C:\Users\Benjamin.Delacombaz\Desktop\logNewPicasa.txt";
+            using (var tw = new StreamWriter(pathLog, true))
             {
-                ImageDetails id = new ImageDetails()
+                tw.WriteLine("Début Chargement image");
+                DateTime dateStartFull = DateTime.Now;
+                foreach (var file in files)
                 {
-                    Path = file,
-                    FileName = System.IO.Path.GetFileName(file),
-                    Extension = System.IO.Path.GetExtension(file),
-                };
+                    bool booView = true;
+                    tw.Write(Path.GetFileName(file));
+                    DateTime dateStart = DateTime.Now;
+                    if (strSearch.Trim() != "")
+                    {
+                        booView = false;
+                    
+                        ImageMetadata imageMetadata = new ImageMetadata(file);
+                        string strComment = imageMetadata.f_GetComment();
+                        if(strComment != null)
+                        {
+                            if(strComment.Trim() != "")
+                            {
+                                if (strComment.Contains(strSearch))
+                                {
+                                    booView = true;
+                                }
+                            }
+                        }
+                        imageMetadata = null;
+                    }
+                    if(booView)
+                    {
+                        ImageDetails id = new ImageDetails()
+                        {
+                            Path = file,
+                            FileName = System.IO.Path.GetFileName(file),
+                            Extension = System.IO.Path.GetExtension(file),
+                        };
 
-                BitmapImage img = new BitmapImage();
-                img.BeginInit();
-                img.CacheOption = BitmapCacheOption.OnLoad;
-                img.UriSource = new Uri(file, UriKind.Absolute);
-                img.EndInit();
-                id.Width = img.PixelWidth;
-                id.Height = img.PixelHeight;
+                        BitmapImage img = new BitmapImage();
+                        img.BeginInit();
+                        img.CacheOption = BitmapCacheOption.OnLoad;
+                        img.UriSource = new Uri(file, UriKind.Absolute);
+                        img.EndInit();
+                        id.Width = img.PixelWidth;
+                        id.Height = img.PixelHeight;
 
-                // I couldn't find file size in BitmapImage
-                FileInfo fi = new FileInfo(file);
-                id.Size = fi.Length;
-                wg_images.Add(id);
+                        // I couldn't find file size in BitmapImage
+                        FileInfo fi = new FileInfo(file);
+                        id.Size = fi.Length;
+                        wg_images.Add(id);
+                    }
+                    DateTime dateEnd = DateTime.Now;
+                    tw.WriteLine(" \t\t\t Time: " + (dateEnd - dateStart).TotalSeconds);
+                }
+                DateTime dateEndFull = DateTime.Now;
+                tw.WriteLine("Fin du chargement durée total: " + (dateEndFull - dateStartFull).TotalSeconds);
+                tw.WriteLine("");
+                tw.WriteLine("");
+                tw.WriteLine("");
+                tw.WriteLine("");
+                // test
+                tw.Close();
             }
         }
 
@@ -132,7 +172,7 @@ namespace NewPicasa.view
                 string[] strFilesDirectory = Directory.GetFiles(strPath);
                 Utilities.f_CopyFiles(strFilesDirectory, true, strPath, false, false);
                 // Refresh list
-                f_RefreshListImage(wg_strCurrentPath);
+                //f_RefreshListImage(wg_strCurrentPath);
             }
             else
             {
@@ -142,18 +182,27 @@ namespace NewPicasa.view
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
         {
-            f_SaveMetadata(wg_strImageCurrentPath);
+            //f_SaveMetadata(wg_strImageCurrentPath);
+            if (!wg_booActiveThread)
+            {
+
+                myThreadImgList = new Thread(new ThreadStart(ThreadImage));
+                // Lancement du thread
+                myThreadImgList.Start();
+            }
         }
 
         public void ThreadImage()
         {
+            string strSearch = "";
             wg_booActiveThread = true;
             this.Dispatcher.Invoke((Action)(() =>
             {
                 ImageList.ItemsSource = null;
                 imgLoading.Visibility = Visibility.Visible;
+                strSearch = txbSearch.Text.ToString();
             }));
-            f_RefreshListImage(wg_strCurrentPath);
+            f_RefreshListImage(wg_strCurrentPath,strSearch);
             this.Dispatcher.Invoke((Action)(() =>
             {
                 ImageList.ItemsSource = wg_images;

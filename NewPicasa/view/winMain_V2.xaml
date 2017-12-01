@@ -16,7 +16,7 @@
             <Button x:Name="btnRename" Content="Rename" HorizontalAlignment="Left" Margin="10,412,0,0" VerticalAlignment="Top" Width="75" Click="btnRename_Click"/>
         </Grid>
         <Image x:Name="imgLoading" gif:ImageBehavior.AnimatedSource="C:\Project\NewPicasa\NewPicasa\image\loading.gif" Width="96" Height="96" Visibility="Hidden" />
-        <ScrollViewer Margin="106,0,233,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Margin="106,80,233,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <!--<Grid Width="539" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left"> -->
             <ItemsControl Name="ImageList" ItemsSource="{Binding ImageList}">
                 <ItemsControl.ItemTemplate>
@@ -93,5 +93,6 @@
                 </ListBox>
             </Grid>
         </ScrollViewer>
+        <TextBox x:Name="txbSearch" HorizontalAlignment="Left" Height="22" Margin="230,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154"/>
     </Grid>
 </Window>

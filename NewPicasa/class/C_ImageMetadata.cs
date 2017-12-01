@@ -141,7 +141,7 @@ namespace NewPicasa
                 strDateTaken = mdtFile.DateTaken;
                 if (strDateTaken == null)
                 {
-                    MessageBox.Show("La date de prise de vu n'est pas renseignée dans les métadonnées", "Avertissement");
+                    //MessageBox.Show("La date de prise de vu n'est pas renseignée dans les métadonnées", "Avertissement");
                 }
             }
             else
@@ -187,7 +187,7 @@ namespace NewPicasa
                 strComment = mdtFile.Comment;
                 if (strComment == null)
                 {
-                    MessageBox.Show("Les commentaires ne sont pas renseignés dans les métadonnées", "Avertissement");
+                    //MessageBox.Show("Les commentaires ne sont pas renseignés dans les métadonnées", "Avertissement");
                 }
             }
             else
@@ -232,7 +232,7 @@ namespace NewPicasa
                 strAuthors = mdtFile.Author.ToArray();
                 if (strAuthors == null)
                 {
-                    MessageBox.Show("Les auteurs ne sont pas renseignés dans les métadonnées", "Avertissement");
+                    //MessageBox.Show("Les auteurs ne sont pas renseignés dans les métadonnées", "Avertissement");
                 }
             }
             else
@@ -280,13 +280,13 @@ namespace NewPicasa
                     strTags = mdtFile.Keywords.ToArray();
                     if (strTags == null)
                     {
-                        MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
+                       // MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
                     }
                 }
                 else
                 {
                     // Error
-                    MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
+                   // MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
                 }
             }
             else
@@ -336,7 +336,7 @@ namespace NewPicasa
                 intRate = mdtFile.Rating;
                 if (intRate < 0)
                 {
-                    MessageBox.Show("La note n'est pas renseignée dans les métadonnées", "Avertissement");
+                    //MessageBox.Show("La note n'est pas renseignée dans les métadonnées", "Avertissement");
                 }
             }
             else
@@ -381,7 +381,7 @@ namespace NewPicasa
                 strCopyright = mdtFile.Copyright;
                 if (strCopyright == null)
                 {
-                    MessageBox.Show("Le copyright n'est pas renseigné dans les métadonnées", "Avertissement");
+                    //MessageBox.Show("Le copyright n'est pas renseigné dans les métadonnées", "Avertissement");
                 }
             }
             else
@@ -426,7 +426,7 @@ namespace NewPicasa
                 strTitle = mdtFile.Title;
                 if (strTitle == null)
                 {
-                    MessageBox.Show("Le titre n'est pas renseigné dans les métadonnées", "Avertissement");
+                    //MessageBox.Show("Le titre n'est pas renseigné dans les métadonnées", "Avertissement");
                 }
             }
             else
@@ -471,7 +471,7 @@ namespace NewPicasa
                 strSubject = mdtFile.Subject;
                 if (strSubject == null)
                 {
-                    MessageBox.Show("L'objet n'est pas renseigné dans les métadonnées", "Avertissement");
+                    //MessageBox.Show("L'objet n'est pas renseigné dans les métadonnées", "Avertissement");
                 }
             }
             else
