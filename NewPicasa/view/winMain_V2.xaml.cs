@@ -150,6 +150,7 @@ namespace NewPicasa.view
                                 }
                             }
                         }
+                        // Test if search in author
                         if (strAuthors != null)
                         {
                             if (strAuthors.Trim() != "")
