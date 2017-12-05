@@ -95,11 +95,22 @@ namespace NewPicasa.view
                     
                         ImageMetadata imageMetadata = new ImageMetadata(file);
                         string strComment = imageMetadata.f_GetComment();
+                        string strFileName = imageMetadata.f_GetFileName();
                         if(strComment != null)
                         {
                             if(strComment.Trim() != "")
                             {
                                 if (strComment.Contains(strSearch))
+                                {
+                                    booView = true;
+                                }
+                            }
+                        }
+                        if (strFileName != null)
+                        {
+                            if (strFileName.Trim() != "")
+                            {
+                                if (strFileName.Contains(strSearch))
                                 {
                                     booView = true;
                                 }
