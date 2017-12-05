@@ -523,14 +523,14 @@ namespace NewPicasa
             }
             return booResult;
         }
-        public string f_ConvertArrToString(string[] strArray)
+        public string f_ConvertArrToString(string[] strArray, char chrSeparator = ';')
         {
             string strResult = "";
             if(strArray != null)
             {
                 foreach (string strValue in strArray)
                 {
-                    strResult += strValue + ";";
+                    strResult += strValue + chrSeparator;
                 }
                 strResult = strResult.Remove(strResult.Length - 1);
             }

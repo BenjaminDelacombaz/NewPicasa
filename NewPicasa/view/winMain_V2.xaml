@@ -15,7 +15,7 @@
             <TreeView x:Name="trvMain" Margin="0,0,2,42" Loaded="trvMain_Loaded"/>
             <Button x:Name="btnRename" Content="Rename" HorizontalAlignment="Left" Margin="10,412,0,0" VerticalAlignment="Top" Width="75" Click="btnRename_Click"/>
         </Grid>
-        <Image x:Name="imgLoading" gif:ImageBehavior.AnimatedSource="C:\Project\NewPicasa\NewPicasa\image\loading.gif" Width="96" Height="96" Visibility="Hidden" />
+        <Image x:Name="imgLoading" gif:ImageBehavior.AnimatedSource="..\image\loading.gif" Width="96" Height="96" Visibility="Hidden" />
         <ScrollViewer Margin="106,80,233,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <!--<Grid Width="539" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left"> -->
             <ItemsControl Name="ImageList" ItemsSource="{Binding ImageList}">
@@ -84,7 +84,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Grid Width="32" Height="32" MouseLeftButtonUp="clickStars">
+                                <Grid Width="24" Height="24" MouseLeftButtonUp="clickStars">
                                     <Image Source="{Binding Path}" />
                                 </Grid>
                             </StackPanel>

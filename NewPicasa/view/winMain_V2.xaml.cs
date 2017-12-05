@@ -17,7 +17,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
+        string WG_strImagePath = @"D:\Dev\images";
         string wg_strCurrentPath = "";
         string wg_strImageCurrentPath = "";
         private Thread myThreadImgList;
@@ -79,7 +79,7 @@ namespace NewPicasa.view
             wg_images.Clear();
 
             // Test
-            string pathLog = @"C:\Users\Benjamin.Delacombaz\Desktop\logNewPicasa.txt";
+            string pathLog = @"C:\Users\bende\Desktop\logNewPicasa.txt";
             using (var tw = new StreamWriter(pathLog, true))
             {
                 tw.WriteLine("Début Chargement image");
@@ -96,7 +96,11 @@ namespace NewPicasa.view
                         ImageMetadata imageMetadata = new ImageMetadata(file);
                         string strComment = imageMetadata.f_GetComment();
                         string strFileName = imageMetadata.f_GetFileName();
-                        if(strComment != null)
+                        string strSubject = imageMetadata.f_GetSubject();
+                        string strTitle = imageMetadata.f_GetTitle();
+                        string strTags = imageMetadata.f_ConvertArrToString(imageMetadata.f_GetTags(),' ');
+                        string strAuthors = imageMetadata.f_ConvertArrToString(imageMetadata.f_GetAuthors(), ' ');
+                        if (strComment != null)
                         {
                             if(strComment.Trim() != "")
                             {
@@ -111,6 +115,46 @@ namespace NewPicasa.view
                             if (strFileName.Trim() != "")
                             {
                                 if (strFileName.Contains(strSearch))
+                                {
+                                    booView = true;
+                                }
+                            }
+                        }
+                        if (strSubject != null)
+                        {
+                            if (strSubject.Trim() != "")
+                            {
+                                if (strSubject.Contains(strSearch))
+                                {
+                                    booView = true;
+                                }
+                            }
+                        }
+                        if (strTitle != null)
+                        {
+                            if (strTitle.Trim() != "")
+                            {
+                                if (strTitle.Contains(strSearch))
+                                {
+                                    booView = true;
+                                }
+                            }
+                        }
+                        if (strTags != null)
+                        {
+                            if (strTags.Trim() != "")
+                            {
+                                if (strTags.Contains(strSearch))
+                                {
+                                    booView = true;
+                                }
+                            }
+                        }
+                        if (strAuthors != null)
+                        {
+                            if (strAuthors.Trim() != "")
+                            {
+                                if (strAuthors.Contains(strSearch))
                                 {
                                     booView = true;
                                 }
@@ -231,11 +275,11 @@ namespace NewPicasa.view
                 string strFile = "";
                 if(intCount <= intNumberStars)
                 {
-                    strFile = @"C:\Project\NewPicasa\NewPicasa\image\img_etoile_j_32.png";
+                    strFile = @"..\image\img_etoile_j_24.png";
                 }
                 else
                 {
-                    strFile = @"C:\Project\NewPicasa\NewPicasa\image\img_etoile_b_32.png";
+                    strFile = @"..\image\img_etoile_b_24.png";
                 }
                 ImageDetails id = new ImageDetails()
                 {
