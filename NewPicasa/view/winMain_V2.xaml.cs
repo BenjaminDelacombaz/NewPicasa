@@ -45,6 +45,7 @@ namespace NewPicasa.view
             treeView.Items.Clear();
             var rootDirectoryInfo = new DirectoryInfo(path);
             treeView.Items.Add(f_CreateDirectoryNode(rootDirectoryInfo));
+
         }
 
         private TreeViewItem f_CreateDirectoryNode(DirectoryInfo directoryInfo)
@@ -59,17 +60,13 @@ namespace NewPicasa.view
         }
         private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            TreeViewItem item = sender as TreeViewItem;
-
-            // test
-            // Test if la list est plus grand que 1
-            listEventClickNode.Add(item.Header.ToString());
-
-            if (item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
+            TreeViewItem item = e.Source as TreeViewItem;
+            listEventClickNode.Add(Directory.GetParent(WG_strImagePath).ToString() + getPathFromNode(item));
+            if(listEventClickNode.Count == 1)
             {
-                if(!wg_booActiveThread)
+                if (!wg_booActiveThread)
                 {
-                    wg_strCurrentPath = Path.Combine(WG_strImagePath, listEventClickNode[0]);
+                    wg_strCurrentPath = listEventClickNode[0];
 
                     myThreadImgList = new Thread(new ThreadStart(ThreadImage));
                     // Lancement du thread
@@ -269,6 +266,7 @@ namespace NewPicasa.view
                 imgLoading.Visibility = Visibility.Hidden;
             }));
             wg_booActiveThread = false;
+            listEventClickNode.Clear();
             Thread.CurrentThread.Abort();
         }
 
@@ -295,10 +293,20 @@ namespace NewPicasa.view
             StarsList.ItemsSource = listStars;
         }
 
-        public void f_SaveMetadata(string strPathFile)
+        private string getPathFromNode(TreeViewItem item)
         {
-            wg_objImageMetadata.f_SaveMetadata();
+            string result = @"\" + item.Header.ToString();
+            TreeViewItem itemParent = item.Parent as TreeViewItem;
+            while (itemParent != null)
+            {
+                result = result.Insert(0, @"\" + itemParent.Header.ToString());
+                itemParent = itemParent.Parent as TreeViewItem;
+            }
+
+            return result;
         }
+
+
 
         private void txbComment_LostFocus(object sender, RoutedEventArgs e)
         {

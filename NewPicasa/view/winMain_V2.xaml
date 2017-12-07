@@ -46,7 +46,7 @@
                                 </Grid>
                                 <!--name, type and size-->
                                 <StackPanel Orientation="Vertical" Margin="5,0,0,0" VerticalAlignment="Center">
-                                    <!--<TextBlock Name="ImageName" Margin="1" Foreground="#FF787878" Text="{Binding FileName}"/>-->
+                                    <TextBlock Name="ImageName" Margin="1" Foreground="#FF787878" Text="{Binding FileName}"/>
                                     <TextBlock Name="ImageType" Margin="1" Foreground="#FF787878">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="Type: {0}">
