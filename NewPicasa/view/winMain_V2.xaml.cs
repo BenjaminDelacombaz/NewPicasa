@@ -24,6 +24,7 @@ namespace NewPicasa.view
         private List<ImageDetails> wg_images = new List<ImageDetails>();
         private bool wg_booActiveThread = false;
         private ImageMetadata wg_objImageMetadata = null;
+        private List<string> listEventClickNode = new List<string>();
 
         public winMain_V2()
         {
@@ -59,11 +60,16 @@ namespace NewPicasa.view
         private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem item = sender as TreeViewItem;
+
+            // test
+            // Test if la list est plus grand que 1
+            listEventClickNode.Add(item.Header.ToString());
+
             if (item.Header.ToString() != System.IO.Path.GetFileName(WG_strImagePath))
             {
                 if(!wg_booActiveThread)
                 {
-                    wg_strCurrentPath = Path.Combine(WG_strImagePath, item.Header.ToString());
+                    wg_strCurrentPath = Path.Combine(WG_strImagePath, listEventClickNode[0]);
 
                     myThreadImgList = new Thread(new ThreadStart(ThreadImage));
                     // Lancement du thread
@@ -79,15 +85,15 @@ namespace NewPicasa.view
             wg_images.Clear();
 
             // Test
-            string pathLog = @"C:\Users\Benjamin.Delacombaz\Desktop\log_newpicasa.txt";
-            using (var tw = new StreamWriter(pathLog, true))
-            {
-                tw.WriteLine("Début Chargement image");
+            //string pathLog = @"C:\Users\Benjamin.Delacombaz\Desktop\log_newpicasa.txt";
+            //using (var tw = new StreamWriter(pathLog, true))
+            //{
+                //tw.WriteLine("Début Chargement image");
                 DateTime dateStartFull = DateTime.Now;
                 foreach (var file in files)
                 {
                     bool booView = true;
-                    tw.Write(Path.GetFileName(file));
+                    //tw.Write(Path.GetFileName(file));
                     DateTime dateStart = DateTime.Now;
                     if (strSearch.Trim() != "")
                     {
@@ -185,17 +191,17 @@ namespace NewPicasa.view
                         wg_images.Add(id);
                     }
                     DateTime dateEnd = DateTime.Now;
-                    tw.WriteLine(" \t\t\t Time: " + (dateEnd - dateStart).TotalSeconds);
+                   // tw.WriteLine(" \t\t\t Time: " + (dateEnd - dateStart).TotalSeconds);
                 }
                 DateTime dateEndFull = DateTime.Now;
-                tw.WriteLine("Fin du chargement durée total: " + (dateEndFull - dateStartFull).TotalSeconds);
-                tw.WriteLine("");
-                tw.WriteLine("");
-                tw.WriteLine("");
-                tw.WriteLine("");
+               // tw.WriteLine("Fin du chargement durée total: " + (dateEndFull - dateStartFull).TotalSeconds);
+               // tw.WriteLine("");
+               // tw.WriteLine("");
+                //tw.WriteLine("");
+                //tw.WriteLine("");
                 // test
-                tw.Close();
-            }
+                //tw.Close();
+            //}
         }
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

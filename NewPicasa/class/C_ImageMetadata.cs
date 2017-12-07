@@ -309,7 +309,8 @@ namespace NewPicasa
                 {
                     this._fleFileStream.Dispose();
                     this._fleFileStream.Close();
-                    this.SetUpMetadataOnImage(Path.Combine(this._strFilePath,this._strFileName), this._strTags);
+                    // Doesn't work
+                    //this.SetUpMetadataOnImage(Path.Combine(this._strFilePath,this._strFileName), this._strTags);
                     // Error
                     MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
                     booResult = false;
