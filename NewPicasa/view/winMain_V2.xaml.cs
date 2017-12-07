@@ -97,12 +97,12 @@ namespace NewPicasa.view
                         booView = false;
                     
                         ImageMetadata imageMetadata = new ImageMetadata(file);
-                        string strComment = imageMetadata.f_GetComment();
-                        string strFileName = imageMetadata.f_GetFileName();
-                        string strSubject = imageMetadata.f_GetSubject();
-                        string strTitle = imageMetadata.f_GetTitle();
-                        string strTags = imageMetadata.f_ConvertArrToString(imageMetadata.f_GetTags(),' ');
-                        string strAuthors = imageMetadata.f_ConvertArrToString(imageMetadata.f_GetAuthors(), ' ');
+                        string strComment = imageMetadata.getComment();
+                        string strFileName = imageMetadata.getFileName();
+                        string strSubject = imageMetadata.getSubject();
+                        string strTitle = imageMetadata.getTitle();
+                        string strTags = imageMetadata.convertArrToString(imageMetadata.getTags(),' ');
+                        string strAuthors = imageMetadata.convertArrToString(imageMetadata.getAuthors(), ' ');
                         if (strComment != null)
                         {
                             if(strComment.Trim() != "")
@@ -207,19 +207,19 @@ namespace NewPicasa.view
             string strImagePath = imgImage.Source.ToString().Replace("file:///", "");
             wg_strImageCurrentPath = strImagePath;
             wg_objImageMetadata = new ImageMetadata(strImagePath);
-            txbName.Text = wg_objImageMetadata.f_GetFileName();
-            txbAuthor.Text = wg_objImageMetadata.f_ConvertArrToString(wg_objImageMetadata.f_GetAuthors());
-            txbComment.Text = wg_objImageMetadata.f_GetComment();
-            txbDateTaken.Text = wg_objImageMetadata.f_GetDateTaken();
-            txbTags.Text = wg_objImageMetadata.f_ConvertArrToString(wg_objImageMetadata.f_GetTags());
-            f_RefreshStars(wg_objImageMetadata.f_GetRate());
+            txbName.Text = wg_objImageMetadata.getFileName();
+            txbAuthor.Text = wg_objImageMetadata.convertArrToString(wg_objImageMetadata.getAuthors());
+            txbComment.Text = wg_objImageMetadata.getComment();
+            txbDateTaken.Text = wg_objImageMetadata.getDateTaken();
+            txbTags.Text = wg_objImageMetadata.convertArrToString(wg_objImageMetadata.getTags());
+            f_RefreshStars(wg_objImageMetadata.getRate());
         }
 
         private void clickStars(object sender, MouseButtonEventArgs e)
         {
             int intNbStars = StarsList.SelectedIndex + 1;
             f_RefreshStars(intNbStars);
-            wg_objImageMetadata.f_SetRate(intNbStars);
+            wg_objImageMetadata.setRate(intNbStars);
         }
 
         private void f_RenameAllFiles(string strPath)
@@ -227,7 +227,7 @@ namespace NewPicasa.view
             if (Directory.Exists(strPath))
             {
                 string[] strFilesDirectory = Directory.GetFiles(strPath);
-                Utilities.f_CopyFiles(strFilesDirectory, true, strPath, false, false);
+                Utilities.copyFiles(strFilesDirectory, true, strPath, false, false);
                 // Refresh list
                 //f_RefreshListImage(wg_strCurrentPath);
             }
@@ -311,18 +311,18 @@ namespace NewPicasa.view
         private void txbComment_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            wg_objImageMetadata.f_SetComment(textBox.Text.ToString());
+            wg_objImageMetadata.setComment(textBox.Text.ToString());
         }
 
         private void txbTags_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            wg_objImageMetadata.f_SetTags(ImageMetadata.f_ConvertStringToArr(textBox.Text.ToString()));
+            wg_objImageMetadata.setTags(ImageMetadata.convertStringToArr(textBox.Text.ToString()));
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            wg_objImageMetadata.f_SaveMetadata();
+            wg_objImageMetadata.saveMetadata();
         }
 
         private void menuImport_Click(object sender, RoutedEventArgs e)
