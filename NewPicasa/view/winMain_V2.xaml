@@ -11,12 +11,22 @@
         <local:UriToBitmapConverter x:Key="UriToBitmapConverter" />
     </Window.Resources>
     <Grid x:Name="winMain">
-        <Grid Width="106" HorizontalAlignment="Left">
+        <Menu x:Name="menuContent" Height="22" VerticalAlignment="Top" Panel.ZIndex="10">
+            <MenuItem x:Name="menuFichier" Header="Fichier">
+                <!-- Submenu -->
+                <MenuItem x:Name="menuImporter" Header="Importer..." Click="menuImport_Click"></MenuItem>
+                <MenuItem x:Name="menuQuitter" Header="Quitter" Click="menuQuitter_Click"></MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="menuEnregistrer" Header="Enregistrer"></MenuItem>
+            <MenuItem x:Name="menuImprimer" Header="Imprimer"></MenuItem>
+            <MenuItem x:Name="menuEnvoyer" Header="Envoyer"></MenuItem>
+        </Menu>
+        <Grid Width="106" HorizontalAlignment="Left" Margin="0,27,0,0">
             <TreeView x:Name="trvMain" Margin="0,0,2,42" Loaded="trvMain_Loaded"/>
             <Button x:Name="btnRename" Content="Rename" HorizontalAlignment="Left" Margin="10,0,0,10" Width="75" Click="btnRename_Click" Height="22" VerticalAlignment="Bottom"/>
         </Grid>
         <Image x:Name="imgLoading" gif:ImageBehavior.AnimatedSource="..\image\loading.gif" Width="96" Height="96" Visibility="Hidden" />
-        <ScrollViewer Margin="106,80,423,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Margin="106,27,423,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ItemsControl Name="ImageList" ItemsSource="{Binding ImageList}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -58,20 +68,20 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <ScrollViewer Margin="667,0,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Margin="667,54,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid HorizontalAlignment="Right" Width="406" Height="461">
-                <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txbName" Height="23" Margin="10,58,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
-                <Label x:Name="lblTag" Content="Tags" HorizontalAlignment="Left" Margin="10,82,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txbTags" Height="23" Margin="10,113,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbTags_LostFocus"/>
-                <Label x:Name="lblComment" Content="Commentaire" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txbComment" Height="23" Margin="10,169,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbComment_LostFocus"/>
-                <Label x:Name="lblDateTaken" Content="Date prise de vue" HorizontalAlignment="Left" Margin="10,196,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txbDateTaken" Height="23" Margin="10,227,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
-                <Label x:Name="lblAuthor" Content="Auteurs" HorizontalAlignment="Left" Margin="10,253,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txbAuthor" Height="23" Margin="10,284,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
-                <Label x:Name="lblHeightWidth_Copy" Content="Note" HorizontalAlignment="Left" Margin="10,327,0,0" VerticalAlignment="Top"/>
-                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="10,353,10,69" Name="StarsList" BorderThickness="0">
+                <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbName" Height="23" Margin="10,40,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
+                <Label x:Name="lblTag" Content="Tags" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbTags" Height="23" Margin="10,98,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbTags_LostFocus"/>
+                <Label x:Name="lblComment" Content="Commentaire" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbComment" Height="23" Margin="10,156,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbComment_LostFocus"/>
+                <Label x:Name="lblDateTaken" Content="Date prise de vue" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbDateTaken" Height="23" Margin="10,214,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
+                <Label x:Name="lblAuthor" Content="Auteurs" HorizontalAlignment="Left" Margin="10,241,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbAuthor" Height="23" Margin="10,272,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
+                <Label x:Name="lblHeightWidth_Copy" Content="Note" HorizontalAlignment="Left" Margin="10,299,0,0" VerticalAlignment="Top"/>
+                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="10,325,10,97" Name="StarsList" BorderThickness="0">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel IsItemsHost="True" />
@@ -87,9 +97,9 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <Button x:Name="btnSave" Content="Sauvegarder" HorizontalAlignment="Left" Margin="10,397,0,40" Width="87" Click="btnSave_Click"/>
+                <Button x:Name="btnSave" Content="Sauvegarder" HorizontalAlignment="Left" Margin="10,369,0,68" Width="87" Click="btnSave_Click"/>
             </Grid>
         </ScrollViewer>
-        <TextBox x:Name="txbSearch" HorizontalAlignment="Left" Height="22" Margin="230,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154"/>
+        <TextBox x:Name="txbSearch" HorizontalAlignment="Left" Height="22" Margin="835,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154"/>
     </Grid>
 </Window>

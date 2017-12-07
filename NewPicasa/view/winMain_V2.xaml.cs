@@ -310,5 +310,16 @@ namespace NewPicasa.view
         {
             wg_objImageMetadata.f_SaveMetadata();
         }
+
+        private void menuImport_Click(object sender, RoutedEventArgs e)
+        {
+            winAddPhoto addPhoto = new winAddPhoto();
+            addPhoto.ShowDialog();
+        }
+
+        private void menuQuitter_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
