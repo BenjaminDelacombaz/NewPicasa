@@ -69,8 +69,8 @@ namespace NewPicasa
             //Save comment
             //f_SetMetadataDateTaken();
             //f_SetMetadataAuthors();
-            //f_SetMetadataComment();
-            //f_SetMetadataRate();
+            f_SetMetadataComment();
+            f_SetMetadataRate();
             f_SetMetadataTags();
             //f_SetMetadataCopyright();
             //f_SetMetadataTitle();

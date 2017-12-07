@@ -17,7 +17,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"D:\Dev\images";
+        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
         string wg_strCurrentPath = "";
         string wg_strImageCurrentPath = "";
         private Thread myThreadImgList;
@@ -79,7 +79,7 @@ namespace NewPicasa.view
             wg_images.Clear();
 
             // Test
-            string pathLog = @"C:\Users\bende\Desktop\logNewPicasa.txt";
+            string pathLog = @"C:\Users\Benjamin.Delacombaz\Desktop\log_newpicasa.txt";
             using (var tw = new StreamWriter(pathLog, true))
             {
                 tw.WriteLine("Début Chargement image");
@@ -150,7 +150,6 @@ namespace NewPicasa.view
                                 }
                             }
                         }
-                        // Test if search in author
                         if (strAuthors != null)
                         {
                             if (strAuthors.Trim() != "")
@@ -209,7 +208,6 @@ namespace NewPicasa.view
             txbAuthor.Text = wg_objImageMetadata.f_ConvertArrToString(wg_objImageMetadata.f_GetAuthors());
             txbComment.Text = wg_objImageMetadata.f_GetComment();
             txbDateTaken.Text = wg_objImageMetadata.f_GetDateTaken();
-            txbHeightWidth.Text = wg_objImageMetadata.f_ConvertWidthHeightToString();
             txbTags.Text = wg_objImageMetadata.f_ConvertArrToString(wg_objImageMetadata.f_GetTags());
             f_RefreshStars(wg_objImageMetadata.f_GetRate());
         }
@@ -306,6 +304,11 @@ namespace NewPicasa.view
         {
             TextBox textBox = sender as TextBox;
             wg_objImageMetadata.f_SetTags(ImageMetadata.f_ConvertStringToArr(textBox.Text.ToString()));
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            wg_objImageMetadata.f_SaveMetadata();
         }
     }
 }
