@@ -48,8 +48,48 @@
         <Rectangle x:Name="separatorComputer" Width="2" Stroke="black" Grid.Row="2" HorizontalAlignment="Right" />
 
         <Rectangle x:Name="separatorMetadonnees" Width="2" Stroke="black" Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Left" />
-
-
-
+        <TreeView x:Name="trvMain" Grid.Row="2" Margin="0,0,2,0" Loaded="trvMain_Loaded"/>
+        <Grid Grid.Column="1" Margin="10,10,210,218" Grid.Row="2">
+            <ItemsControl Name="ImageList" ItemsSource="{Binding ImageList}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="#FFD0D1D7" Padding="5" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <!--image and dimensions-->
+                                <Grid Width="88" Height="55">
+                                    <Image Source="{Binding Path}"/>
+                                    <TextBlock Background="#B2000000" Foreground="White" Height="16" TextAlignment="Center" VerticalAlignment="Bottom">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0}x{1}">
+                                                <Binding Path="Height"/>
+                                                <Binding Path="Width"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
+                                <!--name, type and size-->
+                                <StackPanel Orientation="Vertical" Margin="5,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Name="ImageName" Margin="1" Foreground="#FF787878" Text="{Binding FileName}"/>
+                                    <TextBlock Name="ImageType" Margin="1" Foreground="#FF787878">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Type: {0}">
+                                                <Binding Path="Extension"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Name="ImageSize" Margin="1" Foreground="#FF787878">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Size: {0} Bytes">
+                                                <Binding Path="Size"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
     </Grid>
 </Window>

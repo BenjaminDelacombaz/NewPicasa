@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>image\icon.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -53,12 +53,22 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=1.4.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.1.4.15\lib\net\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="class\C_ImageMetadata.cs" />
+    <Compile Include="class\C_Utilities.cs" />
+    <Compile Include="class\ImageDetails.cs" />
+    <Compile Include="class\UriToBitmapConverter.cs" />
+    <Compile Include="view\winMain_V2.xaml.cs">
+      <DependentUpon>winMain_V2.xaml</DependentUpon>
+    </Compile>
     <Page Include="view\winAddPhoto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -77,6 +87,10 @@
     <Compile Include="view\winMain.xaml.cs">
       <DependentUpon>winMain.xaml</DependentUpon>
     </Compile>
+    <Page Include="view\winMain_V2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -96,6 +110,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -104,9 +119,22 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="image\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\img_etoile_b_16.png" />
+    <Resource Include="image\img_etoile_b_24.png" />
+    <Resource Include="image\img_etoile_b_32.png" />
+    <Resource Include="image\img_etoile_j_16.png" />
+    <Resource Include="image\img_etoile_j_24.png" />
+    <Resource Include="image\img_etoile_j_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\loading.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

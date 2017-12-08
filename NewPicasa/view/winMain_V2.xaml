@@ -1,0 +1,105 @@
+﻿<Window x:Class="NewPicasa.view.winMain_V2"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NewPicasa"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        mc:Ignorable="d"
+        Title="winMain_V2" Height="569.364" Width="1097.9" Icon="../image/icon.ico" FontFamily="Open Sans">
+    <Window.Resources>
+        <local:UriToBitmapConverter x:Key="UriToBitmapConverter" />
+    </Window.Resources>
+    <Grid x:Name="winMain">
+        <Menu x:Name="menuContent" Height="22" VerticalAlignment="Top" Panel.ZIndex="10">
+            <MenuItem x:Name="menuFichier" Header="Fichier">
+                <!-- Submenu -->
+                <MenuItem x:Name="menuImporter" Header="Importer..." Click="menuImport_Click"></MenuItem>
+                <MenuItem x:Name="menuQuitter" Header="Quitter" Click="menuQuitter_Click"></MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="menuEnregistrer" Header="Enregistrer"></MenuItem>
+            <MenuItem x:Name="menuImprimer" Header="Imprimer"></MenuItem>
+            <MenuItem x:Name="menuEnvoyer" Header="Envoyer"></MenuItem>
+        </Menu>
+        <Grid Width="106" HorizontalAlignment="Left" Margin="0,27,0,0">
+            <TreeView x:Name="trvMain" Margin="0,0,2,42" Loaded="trvMain_Loaded"/>
+            <Button x:Name="btnRename" Content="Rename" HorizontalAlignment="Left" Margin="10,0,0,10" Width="75" Click="btnRename_Click" Height="22" VerticalAlignment="Bottom"/>
+        </Grid>
+        <Image x:Name="imgLoading" gif:ImageBehavior.AnimatedSource="..\image\loading.gif" Width="96" Height="96" Visibility="Hidden" />
+        <ScrollViewer Margin="106,27,423,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ItemsControl Name="ImageList" ItemsSource="{Binding ImageList}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="#FFD0D1D7" Padding="5" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <!--image and dimensions-->
+                                <Grid Width="88" Height="55">
+                                    <Image Source="{Binding Path, Converter={StaticResource UriToBitmapConverter}}" MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
+                                    <TextBlock Background="#B2000000" Foreground="White" Height="16" TextAlignment="Center" VerticalAlignment="Bottom">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0}x{1}">
+                                                <Binding Path="Height"/>
+                                                <Binding Path="Width"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
+                                <!--name, type and size-->
+                                <StackPanel Orientation="Vertical" Margin="5,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Name="ImageName" Margin="1" Foreground="#FF787878" Text="{Binding FileName}"/>
+                                    <TextBlock Name="ImageType" Margin="1" Foreground="#FF787878">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Type: {0}">
+                                                <Binding Path="Extension"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Name="ImageSize" Margin="1" Foreground="#FF787878">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Size: {0} Bytes">
+                                                <Binding Path="Size"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <ScrollViewer Margin="667,54,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid HorizontalAlignment="Right" Width="406" Height="461">
+                <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbName" Height="23" Margin="10,40,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
+                <Label x:Name="lblTag" Content="Tags" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbTags" Height="23" Margin="10,98,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbTags_LostFocus"/>
+                <Label x:Name="lblComment" Content="Commentaire" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbComment" Height="23" Margin="10,156,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbComment_LostFocus"/>
+                <Label x:Name="lblDateTaken" Content="Date prise de vue" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbDateTaken" Height="23" Margin="10,214,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
+                <Label x:Name="lblAuthor" Content="Auteurs" HorizontalAlignment="Left" Margin="10,241,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txbAuthor" Height="23" Margin="10,272,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
+                <Label x:Name="lblHeightWidth_Copy" Content="Note" HorizontalAlignment="Left" Margin="10,299,0,0" VerticalAlignment="Top"/>
+                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="10,325,10,97" Name="StarsList" BorderThickness="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Grid Width="24" Height="24" MouseLeftButtonUp="clickStars">
+                                    <Image Source="{Binding Path}" />
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button x:Name="btnSave" Content="Sauvegarder" HorizontalAlignment="Left" Margin="10,369,0,68" Width="87" Click="btnSave_Click"/>
+            </Grid>
+        </ScrollViewer>
+        <TextBox x:Name="txbSearch" HorizontalAlignment="Left" Height="22" Margin="835,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154"/>
+    </Grid>
+</Window>
