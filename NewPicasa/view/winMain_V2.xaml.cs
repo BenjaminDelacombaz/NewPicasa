@@ -338,5 +338,11 @@ namespace NewPicasa.view
                 }
             }
         }
+
+        private void menuParameter_Click(object sender, RoutedEventArgs e)
+        {
+            winParameter winParameter = new winParameter();
+            winParameter.ShowDialog();
+        }
     }
 }

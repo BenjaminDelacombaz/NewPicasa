@@ -69,6 +69,9 @@
     <Compile Include="view\winMain_V2.xaml.cs">
       <DependentUpon>winMain_V2.xaml</DependentUpon>
     </Compile>
+    <Compile Include="view\winParameter.xaml.cs">
+      <DependentUpon>winParameter.xaml</DependentUpon>
+    </Compile>
     <Page Include="view\winAddPhoto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -88,6 +91,10 @@
       <DependentUpon>winMain.xaml</DependentUpon>
     </Compile>
     <Page Include="view\winMain_V2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\winParameter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
