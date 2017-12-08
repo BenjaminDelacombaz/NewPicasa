@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -17,68 +16,53 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string WG_strImagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
-        string wg_strCurrentPath = "";
-        string wg_strImageCurrentPath = "";
-        private Thread myThreadImgList;
+        string wg_imagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
+        string wg_currentPath = "";
+        string wg_imageCurrentPath = "";
+        private Thread threadImgList;
         private List<ImageDetails> wg_images = new List<ImageDetails>();
-        private bool wg_booActiveThread = false;
-        private ImageMetadata wg_objImageMetadata = null;
+        private bool wg_activeThread = false;
+        private ImageMetadata wg_imageMetadata = null;
         private List<string> listEventClickNode = new List<string>();
 
         public winMain_V2()
         {
             InitializeComponent();
-            f_RefreshStars();
+            refreshStars();
         }
 
         private void trvMain_Loaded(object sender, RoutedEventArgs e)
         {
-            f_ListDirectory(trvMain, WG_strImagePath);
+            listDirectory(trvMain, wg_imagePath);
         }
 
         // ----------------------------------------------------------------------------
         // FUNCTIONS
         // ----------------------------------------------------------------------------
-        private void f_ListDirectory(TreeView treeView, string path)
+        private void listDirectory(TreeView treeView, string path)
         {
             treeView.Items.Clear();
             var rootDirectoryInfo = new DirectoryInfo(path);
-            treeView.Items.Add(f_CreateDirectoryNode(rootDirectoryInfo));
+            treeView.Items.Add(createDirectoryNode(rootDirectoryInfo));
 
         }
 
-        private TreeViewItem f_CreateDirectoryNode(DirectoryInfo directoryInfo)
+        private TreeViewItem createDirectoryNode(DirectoryInfo directoryInfo)
         {
             var directoryNode = new TreeViewItem { Header = directoryInfo.Name };
             directoryNode.MouseLeftButtonUp += DirectoryNode_MouseLeftButtonUp;
             foreach (var directory in directoryInfo.GetDirectories())
             {
-                directoryNode.Items.Add(f_CreateDirectoryNode(directory));
+                directoryNode.Items.Add(createDirectoryNode(directory));
             }
             return directoryNode;
         }
-        private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        
+        private void refreshListImage(string path, string search)
         {
-            TreeViewItem item = e.Source as TreeViewItem;
-            listEventClickNode.Add(Directory.GetParent(WG_strImagePath).ToString() + getPathFromNode(item));
-            if(listEventClickNode.Count == 1)
-            {
-                if (!wg_booActiveThread)
-                {
-                    wg_strCurrentPath = listEventClickNode[0];
-
-                    myThreadImgList = new Thread(new ThreadStart(ThreadImage));
-                    // Lancement du thread
-                    myThreadImgList.Start();
-                }
-            }
-        }
-        private void f_RefreshListImage(string strPath, string strSearch)
-        {
-            string root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string root = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string[] supportedExtensions = new[] { ".jpeg", ".jpg", ".tiff" };
-            var files = Directory.GetFiles(strPath, "*.*").Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower()));
+            var files = Directory.GetFiles(path, "*.*").Where(s => supportedExtensions.Contains(Path.GetExtension(s).ToLower()));
             wg_images.Clear();
 
             // Test
@@ -89,83 +73,83 @@ namespace NewPicasa.view
                 DateTime dateStartFull = DateTime.Now;
                 foreach (var file in files)
                 {
-                    bool booView = true;
+                    bool view = true;
                     //tw.Write(Path.GetFileName(file));
                     DateTime dateStart = DateTime.Now;
-                    if (strSearch.Trim() != "")
+                    if (search.Trim() != "")
                     {
-                        booView = false;
+                        view = false;
                     
                         ImageMetadata imageMetadata = new ImageMetadata(file);
-                        string strComment = imageMetadata.getComment();
-                        string strFileName = imageMetadata.getFileName();
-                        string strSubject = imageMetadata.getSubject();
-                        string strTitle = imageMetadata.getTitle();
-                        string strTags = imageMetadata.convertArrToString(imageMetadata.getTags(),' ');
-                        string strAuthors = imageMetadata.convertArrToString(imageMetadata.getAuthors(), ' ');
-                        if (strComment != null)
+                        string comment = imageMetadata.getComment();
+                        string fileName = imageMetadata.getFileName();
+                        string subject = imageMetadata.getSubject();
+                        string title = imageMetadata.getTitle();
+                        string tags = imageMetadata.convertArrToString(imageMetadata.getTags(),' ');
+                        string authors = imageMetadata.convertArrToString(imageMetadata.getAuthors(), ' ');
+                        if (comment != null)
                         {
-                            if(strComment.Trim() != "")
+                            if(comment.Trim() != "")
                             {
-                                if (strComment.Contains(strSearch))
+                                if (comment.Contains(search))
                                 {
-                                    booView = true;
+                                    view = true;
                                 }
                             }
                         }
-                        if (strFileName != null)
+                        if (fileName != null)
                         {
-                            if (strFileName.Trim() != "")
+                            if (fileName.Trim() != "")
                             {
-                                if (strFileName.Contains(strSearch))
+                                if (fileName.Contains(search))
                                 {
-                                    booView = true;
+                                    view = true;
                                 }
                             }
                         }
-                        if (strSubject != null)
+                        if (subject != null)
                         {
-                            if (strSubject.Trim() != "")
+                            if (subject.Trim() != "")
                             {
-                                if (strSubject.Contains(strSearch))
+                                if (subject.Contains(search))
                                 {
-                                    booView = true;
+                                    view = true;
                                 }
                             }
                         }
-                        if (strTitle != null)
+                        if (title != null)
                         {
-                            if (strTitle.Trim() != "")
+                            if (title.Trim() != "")
                             {
-                                if (strTitle.Contains(strSearch))
+                                if (title.Contains(search))
                                 {
-                                    booView = true;
+                                    view = true;
                                 }
                             }
                         }
-                        if (strTags != null)
+                        if (tags != null)
                         {
-                            if (strTags.Trim() != "")
+                            if (tags.Trim() != "")
                             {
-                                if (strTags.Contains(strSearch))
+                                if (tags.Contains(search))
                                 {
-                                    booView = true;
+                                    view = true;
                                 }
                             }
                         }
-                        if (strAuthors != null)
+                        if (authors != null)
                         {
-                            if (strAuthors.Trim() != "")
+                            if (authors.Trim() != "")
                             {
-                                if (strAuthors.Contains(strSearch))
+                                if (authors.Contains(search))
                                 {
-                                    booView = true;
+                                    view = true;
                                 }
                             }
                         }
                         imageMetadata = null;
                     }
-                    if(booView)
+                    if(view)
                     {
                         ImageDetails id = new ImageDetails()
                         {
@@ -201,33 +185,12 @@ namespace NewPicasa.view
             //}
         }
 
-        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void renameAllFiles(string path)
         {
-            Image imgImage = sender as Image;
-            string strImagePath = imgImage.Source.ToString().Replace("file:///", "");
-            wg_strImageCurrentPath = strImagePath;
-            wg_objImageMetadata = new ImageMetadata(strImagePath);
-            txbName.Text = wg_objImageMetadata.getFileName();
-            txbAuthor.Text = wg_objImageMetadata.convertArrToString(wg_objImageMetadata.getAuthors());
-            txbComment.Text = wg_objImageMetadata.getComment();
-            txbDateTaken.Text = wg_objImageMetadata.getDateTaken();
-            txbTags.Text = wg_objImageMetadata.convertArrToString(wg_objImageMetadata.getTags());
-            f_RefreshStars(wg_objImageMetadata.getRate());
-        }
-
-        private void clickStars(object sender, MouseButtonEventArgs e)
-        {
-            int intNbStars = StarsList.SelectedIndex + 1;
-            f_RefreshStars(intNbStars);
-            wg_objImageMetadata.setRate(intNbStars);
-        }
-
-        private void f_RenameAllFiles(string strPath)
-        {
-            if (Directory.Exists(strPath))
+            if (Directory.Exists(path))
             {
-                string[] strFilesDirectory = Directory.GetFiles(strPath);
-                Utilities.copyFiles(strFilesDirectory, true, strPath, false, false);
+                string[] filesDirectory = Directory.GetFiles(path);
+                Utilities.copyFiles(filesDirectory, true, path, false, false);
                 // Refresh list
                 //f_RefreshListImage(wg_strCurrentPath);
             }
@@ -237,56 +200,44 @@ namespace NewPicasa.view
             }
         }
 
-        private void btnRename_Click(object sender, RoutedEventArgs e)
-        {
-            //f_SaveMetadata(wg_strImageCurrentPath);
-            if (!wg_booActiveThread)
-            {
-
-                myThreadImgList = new Thread(new ThreadStart(ThreadImage));
-                // Lancement du thread
-                myThreadImgList.Start();
-            }
-        }
-
         public void ThreadImage()
         {
-            string strSearch = "";
-            wg_booActiveThread = true;
+            string search = "";
+            wg_activeThread = true;
             this.Dispatcher.Invoke((Action)(() =>
             {
                 ImageList.ItemsSource = null;
                 imgLoading.Visibility = Visibility.Visible;
-                strSearch = txbSearch.Text.ToString();
+                search = txbSearch.Text.ToString();
             }));
-            f_RefreshListImage(wg_strCurrentPath,strSearch);
+            refreshListImage(wg_currentPath,search);
             this.Dispatcher.Invoke((Action)(() =>
             {
                 ImageList.ItemsSource = wg_images;
                 imgLoading.Visibility = Visibility.Hidden;
             }));
-            wg_booActiveThread = false;
+            wg_activeThread = false;
             listEventClickNode.Clear();
             Thread.CurrentThread.Abort();
         }
 
-        public void f_RefreshStars(int intNumberStars = 0)
+        public void refreshStars(int numberStars = 0)
         {
             List<ImageDetails> listStars = new List<ImageDetails>();
-            for(int intCount = 1; intCount < 6; intCount++)
+            for(int count = 1; count < 6; count++)
             {
-                string strFile = "";
-                if(intCount <= intNumberStars)
+                string file = "";
+                if(count <= numberStars)
                 {
-                    strFile = @"..\image\img_etoile_j_24.png";
+                    file = @"..\image\img_etoile_j_24.png";
                 }
                 else
                 {
-                    strFile = @"..\image\img_etoile_b_24.png";
+                    file = @"..\image\img_etoile_b_24.png";
                 }
                 ImageDetails id = new ImageDetails()
                 {
-                    Path = strFile
+                    Path = file
                 };
                 listStars.Add(id);
             }
@@ -306,23 +257,25 @@ namespace NewPicasa.view
             return result;
         }
 
-
+        // ----------------------------------------------------------------------------
+        // ENVENTS
+        // ----------------------------------------------------------------------------
 
         private void txbComment_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            wg_objImageMetadata.setComment(textBox.Text.ToString());
+            wg_imageMetadata.setComment(textBox.Text.ToString());
         }
 
         private void txbTags_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            wg_objImageMetadata.setTags(ImageMetadata.convertStringToArr(textBox.Text.ToString()));
+            wg_imageMetadata.setTags(ImageMetadata.convertStringToArr(textBox.Text.ToString()));
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            wg_objImageMetadata.saveMetadata();
+            wg_imageMetadata.saveMetadata();
         }
 
         private void menuImport_Click(object sender, RoutedEventArgs e)
@@ -334,6 +287,56 @@ namespace NewPicasa.view
         private void menuQuitter_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void clickStars(object sender, MouseButtonEventArgs e)
+        {
+            int nbStars = StarsList.SelectedIndex + 1;
+            refreshStars(nbStars);
+            wg_imageMetadata.setRate(nbStars);
+        }
+
+        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Image imgImage = sender as Image;
+            string imagePath = imgImage.Source.ToString().Replace("file:///", "");
+            wg_imageCurrentPath = imagePath;
+            wg_imageMetadata = new ImageMetadata(imagePath);
+            txbName.Text = wg_imageMetadata.getFileName();
+            txbAuthor.Text = wg_imageMetadata.convertArrToString(wg_imageMetadata.getAuthors());
+            txbComment.Text = wg_imageMetadata.getComment();
+            txbDateTaken.Text = wg_imageMetadata.getDateTaken();
+            txbTags.Text = wg_imageMetadata.convertArrToString(wg_imageMetadata.getTags());
+            refreshStars(wg_imageMetadata.getRate());
+        }
+
+        private void btnRename_Click(object sender, RoutedEventArgs e)
+        {
+            //f_SaveMetadata(wg_strImageCurrentPath);
+            if (!wg_activeThread)
+            {
+
+                threadImgList = new Thread(new ThreadStart(ThreadImage));
+                // Lancement du thread
+                threadImgList.Start();
+            }
+        }
+
+        private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem item = e.Source as TreeViewItem;
+            listEventClickNode.Add(Directory.GetParent(wg_imagePath).ToString() + getPathFromNode(item));
+            if (listEventClickNode.Count == 1)
+            {
+                if (!wg_activeThread)
+                {
+                    wg_currentPath = listEventClickNode[0];
+
+                    threadImgList = new Thread(new ThreadStart(ThreadImage));
+                    // Lancement du thread
+                    threadImgList.Start();
+                }
+            }
         }
     }
 }
