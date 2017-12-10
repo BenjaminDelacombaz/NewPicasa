@@ -1,0 +1,16 @@
+﻿<Window x:Class="NewPicasa.view.winParameter"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NewPicasa.view"
+        mc:Ignorable="d"
+        Title="Paramètres" Height="165.768" Width="672.777" Loaded="Window_Loaded">
+    <Grid>
+        <TextBox x:Name="txbImagePath" Height="23" Margin="159,32,113,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Label x:Name="lblImagePath" Content="Répertoire des images:" HorizontalAlignment="Left" Margin="10,29,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnBrowsePath" Content="Parcourir..." Margin="573,33,17,0" VerticalAlignment="Top" Click="btnBrowsePath_Click"/>
+        <Button x:Name="btnSave" Content="Enregistrer" HorizontalAlignment="Left" Margin="573,0,0,10" Width="75" Click="btnSave_Click" Height="21" VerticalAlignment="Bottom"/>
+
+    </Grid>
+</Window>

@@ -16,7 +16,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
-        string wg_imagePath = @"C:\Users\Benjamin.Delacombaz\Desktop\lst_photo";
+        string wg_imagePath = Utilities.getRegistryKeyValue();
         string wg_currentPath = "";
         string wg_imageCurrentPath = "";
         private Thread threadImgList;
@@ -337,6 +337,12 @@ namespace NewPicasa.view
                     threadImgList.Start();
                 }
             }
+        }
+
+        private void menuParameter_Click(object sender, RoutedEventArgs e)
+        {
+            winParameter winParameter = new winParameter();
+            winParameter.ShowDialog();
         }
     }
 }
