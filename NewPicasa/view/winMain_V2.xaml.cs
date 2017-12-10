@@ -344,5 +344,11 @@ namespace NewPicasa.view
             winParameter winParameter = new winParameter();
             winParameter.ShowDialog();
         }
+
+        private void menuSave_Click(object sender, RoutedEventArgs e)
+        {
+            winSaveImage winSaveImage = new winSaveImage();
+            winSaveImage.ShowDialog();
+        }
     }
 }

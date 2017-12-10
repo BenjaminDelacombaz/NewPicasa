@@ -18,7 +18,7 @@
                 <MenuItem x:Name="menuParameter" Header="Paramètres" Click="menuParameter_Click"></MenuItem>
                 <MenuItem x:Name="menuQuitter" Header="Quitter" Click="menuQuitter_Click"></MenuItem>
             </MenuItem>
-            <MenuItem x:Name="menuEnregistrer" Header="Enregistrer"></MenuItem>
+            <MenuItem x:Name="menuSave" Header="Sauvegarder" Click="menuSave_Click"></MenuItem>
             <MenuItem x:Name="menuImprimer" Header="Imprimer"></MenuItem>
             <MenuItem x:Name="menuEnvoyer" Header="Envoyer"></MenuItem>
         </Menu>
