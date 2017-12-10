@@ -8,6 +8,8 @@ namespace NewPicasa
     class Utilities
     {
         private static string _error;
+        private static string _nameKeyPath = "pathImage";
+        private static string _pathRegistryKeys = @"SOFTWARE\NewPicasa\";
 
         public static bool copyFiles(string[] files, bool rename, string destPathPhoto, bool copy, bool renameFile, string newFileName = "")
         {
@@ -194,5 +196,36 @@ namespace NewPicasa
 
             return result;
         }
+
+        // Get registry key value
+        public static string getRegistryKeyValue()
+        {
+            string result = "";
+            try
+            {
+                Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(_pathRegistryKeys, true);
+                result = registryKey.GetValue(Utilities._nameKeyPath).ToString();
+                if(!testFilePathExists(false, result))
+                {
+                    setRegistryKeyValue(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+                    result = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                }
+                return result;
+            }
+            catch (System.NullReferenceException err)
+            {
+                // error
+                setRegistryKeyValue(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+                return Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            }
+        }
+
+        // Write registry key value
+        public static void setRegistryKeyValue(string value)
+        {
+            Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(_pathRegistryKeys, true);
+            registryKey.SetValue(_nameKeyPath, value);
+        }
+
     }
 }
