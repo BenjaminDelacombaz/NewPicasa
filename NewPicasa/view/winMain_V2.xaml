@@ -73,7 +73,7 @@
             <Grid HorizontalAlignment="Right" Width="406" Height="461">
                 <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbName" Height="23" Margin="10,40,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
-                <Label x:Name="lblTag" Content="Tags" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="lblTag" Content="Tags (séparé par des ';')" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="369"/>
                 <TextBox x:Name="txbTags" Height="23" Margin="10,98,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbTags_LostFocus"/>
                 <Label x:Name="lblComment" Content="Commentaire" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbComment" Height="23" Margin="10,156,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbComment_LostFocus"/>
