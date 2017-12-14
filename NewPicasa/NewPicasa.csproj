@@ -72,6 +72,9 @@
     <Compile Include="view\winParameter.xaml.cs">
       <DependentUpon>winParameter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="view\winSaveImage.xaml.cs">
+      <DependentUpon>winSaveImage.xaml</DependentUpon>
+    </Compile>
     <Page Include="view\winAddPhoto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -95,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="view\winParameter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\winSaveImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
