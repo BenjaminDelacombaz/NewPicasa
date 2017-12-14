@@ -308,6 +308,23 @@ namespace NewPicasa.view
             txbDateTaken.Text = wg_imageMetadata.getDateTaken();
             txbTags.Text = wg_imageMetadata.convertArrToString(wg_imageMetadata.getTags());
             refreshStars(wg_imageMetadata.getRate());
+            // Display error
+            if (wg_imageMetadata.getError().Trim() != "")
+            {
+                MessageBox.Show(wg_imageMetadata.getError(), "Erreur");
+            }
+            else
+            {
+                // if no error display warning and info
+                if(wg_imageMetadata.getWarning().Trim() != "")
+                {
+                    MessageBox.Show(wg_imageMetadata.getWarning(), "Avertissement");
+                }
+                if (wg_imageMetadata.getInfo().Trim() != "")
+                {
+                    MessageBox.Show(wg_imageMetadata.getInfo(), "Informations");
+                }
+            }
         }
 
         private void btnRename_Click(object sender, RoutedEventArgs e)

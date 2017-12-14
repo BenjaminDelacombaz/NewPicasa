@@ -27,6 +27,9 @@ namespace NewPicasa
         private string _title;
         private string _subject;
         private FileStream _fileStream;
+        private string _error = "";
+        private string _warning = "";
+        private string _info = "";
 
         // Constructor test
         public ImageMetadata(string file)
@@ -95,13 +98,13 @@ namespace NewPicasa
                 catch (IOException err)
                 {
                     // Error
-                    MessageBox.Show("Une erreur est survenue lors de l'ouverture du fichier.", "Erreur");
+                    this.addError("Une erreur est survenue lors de l'ouverture du fichier.");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Le fichier: " + this._filePath + this._fileName + " n'existe pas", "Erreur");
+                this.addError("Le fichier: " + this._filePath + this._fileName + " n'existe pas");
             }
             return result;
         }
@@ -141,13 +144,13 @@ namespace NewPicasa
                 dateTaken = mdtFile.DateTaken;
                 if (dateTaken == null)
                 {
-                    //MessageBox.Show("La date de prise de vu n'est pas renseignée dans les métadonnées", "Avertissement");
+                    this.addWarning("La date de prise de vu n'est pas renseignée dans les métadonnées");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
             }
             return dateTaken;
         }
@@ -229,16 +232,19 @@ namespace NewPicasa
             BitmapMetadata mdtFile = getBitmapMetadataRead();
             if (mdtFile != null)
             {
-                authors = mdtFile.Author.ToArray();
-                if (authors == null)
+                if(mdtFile.Author != null)
                 {
-                    //MessageBox.Show("Les auteurs ne sont pas renseignés dans les métadonnées", "Avertissement");
+                    authors = mdtFile.Author.ToArray();
+                }
+                else
+                {
+                    this.addWarning("Les auteurs ne sont pas renseignés dans les métadonnées");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
             }
             return authors;
         }
@@ -681,6 +687,21 @@ namespace NewPicasa
         {
             return this._subject;
         }
+        // Get error
+        public string getError()
+        {
+            return this._error;
+        }
+        // Get warning
+        public string getWarning()
+        {
+            return this._warning;
+        }
+        // Get info
+        public string getInfo()
+        {
+            return this._info;
+        }
 
         // Setter
         // Set file name
@@ -762,6 +783,48 @@ namespace NewPicasa
         public void setSubject(string subject)
         {
             this._subject = subject;
+        }
+        // Set error
+        public void setError(string error)
+        {
+            this._error = error;
+        }
+        // Set warning
+        public void setWarning(string warning)
+        {
+            this._warning = warning;
+        }
+        // Set info
+        public void setInfo(string info)
+        {
+            this._info = info;
+        }
+        // Add error
+        public void addError(string error)
+        {
+            if(this._error.Trim() != "")
+            {
+                this._error += "\n";
+            }
+            this._error += error;
+        }
+        // Add warning
+        public void addWarning(string warning)
+        {
+            if (this._warning.Trim() != "")
+            {
+                this._warning += "\n";
+            }
+            this._warning += warning;
+        }
+        // Add info
+        public void addInfo(string info)
+        {
+            if (this._info.Trim() != "")
+            {
+                this._info += "\n";
+            }
+            this._info += info;
         }
     }
 }
