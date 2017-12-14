@@ -13,11 +13,10 @@
         <TextBox x:Name="txbFileToMove" HorizontalAlignment="Left" Height="23" Margin="10,47,0,0" TextWrapping="Wrap" Text="Fichier(s) à copier" VerticalAlignment="Top" Width="511" IsReadOnly="True"/>
         <Button x:Name="btnCopyAndRename" Content="Copier et Renommer" HorizontalAlignment="Left" Margin="398,0,0,10" VerticalAlignment="Bottom" Width="123" Click="btnCopyAndRename_Click"/>
         <Button x:Name="btnBrowseFiles" Content="Parcourir..." HorizontalAlignment="Left" Margin="526,48,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseFiles_Click"/>
-        <Button x:Name="btnCancel" Content="Annuler" HorizontalAlignment="Left" Margin="318,0,0,10" VerticalAlignment="Bottom" Width="75" Click="btnCancel_Click"/>
         <Label x:Name="lblTitleRenameOption" Content="Options de renommage" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="ckbDateShooting" Content="Date de la prise de vu + " HorizontalAlignment="Left" Margin="33,220,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <TextBox x:Name="txbNewFileName" HorizontalAlignment="Left" Height="23" Margin="180,217,0,0" TextWrapping="Wrap" Text="Nouveau nom" VerticalAlignment="Top" Width="421" GotFocus="txbNewFileName_GotFocus" LostFocus="txbNewFileName_LostFocus"/>
+        <TextBox x:Name="txbNewFileName" HorizontalAlignment="Left" Height="23" Margin="10,217,0,0" TextWrapping="Wrap" Text="Nouveau nom" VerticalAlignment="Top" Width="591" GotFocus="txbNewFileName_GotFocus" LostFocus="txbNewFileName_LostFocus"/>
         <Button x:Name="btnCopy" Content="Copier" HorizontalAlignment="Left" Margin="526,0,0,10" VerticalAlignment="Bottom" Width="75" Click="btnCopy_Click"/>
+        <Label x:Name="lblDragAndDrop" Content="Drag and Drop" HorizontalAlignment="Left" Margin="251,116,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

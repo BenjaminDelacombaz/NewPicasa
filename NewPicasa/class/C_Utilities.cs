@@ -7,10 +7,15 @@ namespace NewPicasa
 {
     class Utilities
     {
-        private static string _error;
+        private static string _error = "";
+        private static string _warning = "";
+        private static string _info = "";
         private static string _nameKeyPath = "pathImage";
         private static string _pathRegistryKeys = @"SOFTWARE\NewPicasa\";
 
+        //------------------------------------------------------------
+        // FUNCTIONS
+        //------------------------------------------------------------
         public static bool copyFiles(string[] files, bool rename, string destPathPhoto, bool copy, bool renameFile, string newFileName = "")
         {
             bool result = false;
@@ -33,7 +38,7 @@ namespace NewPicasa
                     if (dateShooting == "")
                     {
                         dateShooting = "19000101000000";
-                        System.Windows.MessageBox.Show("La date du fichier: " + file.Name + "n'a pas pu être récupéré la date suivante sera utilisée: " + dateShooting, "Avertissement");
+                        Utilities.setWarning("La date du fichier: " + file.Name + " n'a pas pu être récupéré la date suivante sera utilisée: " + dateShooting);
                     }
                     if (rename)
                     {
@@ -92,26 +97,16 @@ namespace NewPicasa
                         }
                         catch (IOException err)
                         {
-                            System.Windows.MessageBox.Show(err.ToString(), "Erreur");
+                            Utilities.AddError(err.ToString());
                             result = false;
                         }
                     }
-                    else
-                    {
-                        // Error extension
-                        System.Windows.MessageBox.Show(_error, "Erreur");
-                    }
-                }
-                else
-                {
-                    // Error
-                    System.Windows.MessageBox.Show(_error, "Erreur");
                 }
             }
-            System.Windows.MessageBox.Show("Transfert terminé", "Succès");
+            Utilities.setInfo("Transfert terminé");
             return result;
         }
-        private static bool testFilePathExists(bool file, string pathOrFile)
+        public static bool testFilePathExists(bool file, string pathOrFile)
         {
             bool result = true;
             if (file)
@@ -196,7 +191,6 @@ namespace NewPicasa
 
             return result;
         }
-
         // Get registry key value
         public static string getRegistryKeyValue()
         {
@@ -219,14 +213,12 @@ namespace NewPicasa
                 return Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             }
         }
-
         // Write registry key value
         public static void setRegistryKeyValue(string value)
         {
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(_pathRegistryKeys, true);
             registryKey.SetValue(_nameKeyPath, value);
         }
-
         public static bool copyDirectories(string sourceDirName, string destDirName, bool copySubDirs)
         {
             bool result = false;
@@ -267,6 +259,51 @@ namespace NewPicasa
             }
             return result;
         }
+        //------------------------------------------------------------
 
+        //------------------------------------------------------------
+        // GETTER
+        //------------------------------------------------------------
+        // Get error
+        public static string getError()
+        {
+            return Utilities._error;
+        }
+        // Get warning
+        public static string getWarning()
+        {
+            return Utilities._warning;
+        }
+        // Get info
+        public static string getInfo()
+        {
+            return Utilities._info;
+        }
+        //------------------------------------------------------------
+
+        //------------------------------------------------------------
+        // SETTER
+        //------------------------------------------------------------
+        // Set error
+        public static void setError(string error)
+        {
+            Utilities._error = error;
+        }
+        // Set error
+        public static void AddError(string error)
+        {
+            Utilities._error += "\n" + error;
+        }
+        // Set error
+        public static void setWarning(string warning)
+        {
+            Utilities._warning = warning;
+        }
+        // Set error
+        public static void setInfo(string info)
+        {
+            Utilities._info = info;
+        }
+        //------------------------------------------------------------
     }
 }
