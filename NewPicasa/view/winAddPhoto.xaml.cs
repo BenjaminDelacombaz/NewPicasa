@@ -27,6 +27,10 @@ namespace NewPicasa.view
             InitializeComponent();
         }
 
+        //-----------------------------------------------------------------------------
+        // EVENTS
+        //-----------------------------------------------------------------------------
+
         private void btnBrowsePath_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog pathDest = new FolderBrowserDialog();
@@ -55,28 +59,29 @@ namespace NewPicasa.view
 
         private void btnCopyAndRename_Click(object sender, RoutedEventArgs e)
         {
+            // Empty error, warning, info utilities
+            Utilities.setError("");
+            Utilities.setWarning("");
+            Utilities.setInfo("");
             if (testEmptyFile(true))
             {
                 // Test if folder exists
-                if (testFilePathExists(false, txbDestPathPhoto.Text))
+                if (Utilities.testFilePathExists(false, txbDestPathPhoto.Text))
                 {
-                    // Copy and rename file to destination
-                    if (copyFiles(gw_files, true))
-                    {
-                        // Reset window
-                        resetWindow();
-                    }
+                    Utilities.copyFiles(gw_files, true, txbDestPathPhoto.Text, true, true, txbNewFileName.Text);
+                    // Reset window
+                    resetWindow();
                 }
                 else
                 {
                     // Error
-                    System.Windows.MessageBox.Show(gw_error, "Error");
+                    System.Windows.MessageBox.Show(Utilities.getError(), "Erreur");
                 }
             }
             else
             {
                 // Error
-                System.Windows.MessageBox.Show(gw_error, "Error");
+                System.Windows.MessageBox.Show(gw_error, "Erreur");
             }
         }
 
@@ -141,165 +146,96 @@ namespace NewPicasa.view
             }
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void resetWindow()
-        {
-            // Reset value to default
-            txbDestPathPhoto.Text = gw_textPlaceholderPath;
-            txbFileToMove.Text = gw_textPlaceholderFile;
-            txbNewFileName.Text = gw_textPlaceholderNewName;
-            gw_files = null;
-            gw_placeholderPath = true;
-            gw_placeholderNewName = true;
-        }
-
-        private bool copyFiles(string[] files, bool rename)
-        {
-            bool result = false;
-            string fileName = "";
-            string destPath = "";
-            string sourcePath = "";
-            string dateShooting = "";
-            int nbDuplicate = 0;
-
-            // For all element in strFiles we create a filestream and we move the files
-            for (int count = 0; count < files.Length; count++)
-            {
-                if (testFilePathExists(true, files[count]))
-                {
-                    FileStream file = File.Open(files[count],FileMode.Open);
-                    sourcePath = file.Name;
-                    destPath = txbDestPathPhoto.Text + @"\";
-                    // Get the date of shooting
-                    dateShooting = getDateShooting(file);
-                    if(dateShooting == "")
-                    {
-                        dateShooting = "19000101000000";
-                        System.Windows.MessageBox.Show("La date du fichier: " + file.Name + "n'a pas pu être récupéré la date suivante sera utilisée: " + dateShooting, "Avertissement");
-                    }
-                    if (rename)
-                    {
-                        // Get the file name
-                        fileName = txbNewFileName.Text + System.IO.Path.GetExtension(file.Name);
-
-                        // Insert the date if the checkbox is checked
-                        if (ckbDateShooting.IsChecked.Value)
-                        {
-                            fileName = fileName.Insert(0, dateShooting + "_");
-                        }
-                        // Count nb duplicate file
-                        nbDuplicate = findDuplicateFiles(destPath, fileName);
-                        if (nbDuplicate > 0)
-                        {
-                            // Remake the file name if intNbDuplicate > 0
-                            fileName = txbNewFileName.Text + "_" + nbDuplicate + System.IO.Path.GetExtension(file.Name);
-
-                            // Insert the date if the checkbox is checked
-                            if (ckbDateShooting.IsChecked.Value)
-                            {
-                                fileName = fileName.Insert(0, dateShooting + "_");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Get the file name
-                        fileName = System.IO.Path.GetFileName(file.Name);
-
-                        // Count nb duplicate file
-                        nbDuplicate = findDuplicateFiles(destPath, fileName);
-
-                        if (nbDuplicate > 0)
-                        {
-                            // Remake the file name if intNbDuplicate > 0
-                            fileName = System.IO.Path.GetFileNameWithoutExtension(file.Name) + "_" + nbDuplicate + System.IO.Path.GetExtension(file.Name);
-                        }
-                    }
-                    // Add the file name to the destination
-                    destPath += fileName;
-                    // Close the file
-                    file.Dispose();
-                    // Copy the file
-                    if (testExtFile(destPath))
-                    {
-                        try
-                        {
-                            File.Copy(sourcePath, destPath, false);
-                            result = true;
-                        }
-                        catch (IOException err)
-                        {
-                            System.Windows.MessageBox.Show(err.ToString(), "Erreur");
-                            result = false;
-                        }
-                    }
-                    else
-                    {
-                        // Error extension
-                        System.Windows.MessageBox.Show(gw_error, "Erreur");
-                    }
-                }
-                else
-                {
-                    // Error
-                    System.Windows.MessageBox.Show(gw_error, "Erreur");
-                }
-            }
-            System.Windows.MessageBox.Show("Transfert terminé", "Succès");
-            return result;
-        }
-
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
+            // Empty error, warning, info utilities
+            Utilities.setError("");
+            Utilities.setWarning("");
+            Utilities.setInfo("");
             // Test if field are empty
             if (testEmptyFile(false))
             {
                 // Test if folder exists
-                if(testFilePathExists(false,txbDestPathPhoto.Text))
+                if (Utilities.testFilePathExists(false, txbDestPathPhoto.Text))
                 {
-                    // Copy file to destination
-                    if (copyFiles(gw_files, false))
+                    if(Utilities.copyFiles(gw_files, true, txbDestPathPhoto.Text, true, false, txbNewFileName.Text))
                     {
-                        // Reset windows
+                        // Test if warning is not empty and display warning
+                        if (Utilities.getWarning().Trim() != "")
+                        {
+                            System.Windows.MessageBox.Show(Utilities.getWarning(), "Avertissement");
+                        }
+                        if (Utilities.getInfo().Trim() != "")
+                        {
+                            System.Windows.MessageBox.Show(Utilities.getInfo(), "Informations");
+                        }
+                        // Reset window
                         resetWindow();
+                    }
+                    else
+                    {
+                        // Error
+                        System.Windows.MessageBox.Show(Utilities.getError(), "Erreur");
                     }
                 }
                 else
                 {
                     // Error
-                    System.Windows.MessageBox.Show(gw_error,"Error");
+                    System.Windows.MessageBox.Show(Utilities.getError(), "Erreur");
                 }
             }
             else
             {
                 // Error
-                System.Windows.MessageBox.Show(gw_error,"Error");
+                System.Windows.MessageBox.Show(gw_error, "Erreur");
             }
         }
 
-        private int findDuplicateFiles(string path, string fileName)
+        private void txbNewFileName_GotFocus(object sender, RoutedEventArgs e)
         {
-            // Find if a duplicate file exist
-            int nbDuplicateFiles = 0;
-            string fileNameOrigin = fileName;
-            string[] filesDirectory = Directory.GetFiles(path);
-
-            for (int count = 0; count < filesDirectory.Length; count++)
+            // Test if the text is the placeholder
+            if (gw_placeholderNewName == true)
             {
-                FileStream fleFile = File.Open(filesDirectory[count],FileMode.Open);
-                if (fileName.ToLower() == System.IO.Path.GetFileName(fleFile.Name).ToLower())
-                {
-                    // increment intNbDuplicateFiles and simule the new file name for check if already exist to
-                    nbDuplicateFiles++;
-                    fileName = System.IO.Path.GetFileNameWithoutExtension(fileNameOrigin) + "_" + nbDuplicateFiles + System.IO.Path.GetExtension(fileNameOrigin);
-                }
-                fleFile.Dispose();
+                txbNewFileName.Text = "";
+                gw_placeholderNewName = false;
             }
-            return nbDuplicateFiles;
+        }
+
+        private void txbNewFileName_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // Test if the field is empty, rewrite the placeholder 
+            if (txbNewFileName.Text.Trim() == "")
+            {
+                txbNewFileName.Text = gw_textPlaceholderNewName;
+                gw_placeholderNewName = true;
+            }
+        }
+        //-----------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------
+        // FUNCTIONS
+        //-----------------------------------------------------------------------------
+        private bool testFilePathExists(bool file, string pathOrFile)
+        {
+            bool result = true;
+            if (file)
+            {
+                if (!File.Exists(pathOrFile))
+                {
+                    gw_error += "Le fichier '" + pathOrFile + "' n'existe pas";
+                    result = false;
+                }
+            }
+            else
+            {
+                if (!Directory.Exists(pathOrFile))
+                {
+                    gw_error += "Le dossier '" + pathOrFile + "' n'existe pas";
+                    result = false;
+                }
+            }
+            // Return value of result
+            return result;
         }
 
         private bool testEmptyFile(bool rename)
@@ -322,9 +258,9 @@ namespace NewPicasa.view
             }
 
             // Test if field new name have default value or is empty
-            if(rename)
+            if (rename)
             {
-                if(txbNewFileName.Text == gw_textPlaceholderNewName || txbNewFileName.Text.Trim() == "")
+                if (txbNewFileName.Text == gw_textPlaceholderNewName || txbNewFileName.Text.Trim() == "")
                 {
                     gw_error += "Le champs du nouveau nom n'est pas valide. \n";
                     result = false;
@@ -335,90 +271,16 @@ namespace NewPicasa.view
             return result;
         }
 
-        private bool testFilePathExists(bool file, string pathOrFile)
+        private void resetWindow()
         {
-            bool result = true;
-            if(file)
-            {
-                if(!File.Exists(pathOrFile))
-                {
-                    gw_error += "Le fichier '" + pathOrFile + "' n'existe pas";
-                    result = false;
-                }
-            }
-            else
-            {
-                if(!Directory.Exists(pathOrFile))
-                {
-                    gw_error += "Le dossier '" + pathOrFile + "' n'existe pas";
-                    result = false;
-                }
-            }
-            // Return value of result
-            return result;
+            // Reset value to default
+            txbDestPathPhoto.Text = gw_textPlaceholderPath;
+            txbFileToMove.Text = gw_textPlaceholderFile;
+            txbNewFileName.Text = gw_textPlaceholderNewName;
+            gw_files = null;
+            gw_placeholderPath = true;
+            gw_placeholderNewName = true;
         }
-
-        private void txbNewFileName_GotFocus(object sender, RoutedEventArgs e)
-        {
-            // Test if the text is the placeholder
-            if (gw_placeholderNewName == true)
-            {
-                txbNewFileName.Text = "";
-                gw_placeholderNewName = false;
-            }
-        }
-
-        private void txbNewFileName_LostFocus(object sender, RoutedEventArgs e)
-        {
-            // Test if the field is empty, rewrite the placeholder 
-            if (txbNewFileName.Text.Trim() == "")
-            {
-                txbNewFileName.Text = gw_textPlaceholderNewName;
-                gw_placeholderNewName = true;
-            }
-        }
-
-        private bool testExtFile(string file)
-        {
-            bool result = true;
-
-            gw_error = "";
-            // Test if extension is diferent to jgp
-            if(System.IO.Path.GetExtension(file) != ".jpg" && System.IO.Path.GetExtension(file) != ".jpeg")
-            {
-                result = false;
-                gw_error += "Le fichier '" + file + "' n'est pas un fichier jpg/jpeg, il ne sera pas pris en compte.";
-            }
-
-            return result;
-        }
-
-        private string getDateShooting(FileStream file)
-        {
-            string dateShooting = "";
-            // Init bitmap
-            Bitmap btmFile = new Bitmap(file);
-            // Get the metadata date taken
-            try
-            {
-                System.Drawing.Imaging.PropertyItem pimPropertyDateTaken = btmFile.GetPropertyItem(36867);
-                // Convert the value in utf8
-                dateShooting = Encoding.UTF8.GetString(pimPropertyDateTaken.Value);
-                // Remove :
-                dateShooting = dateShooting.Replace(":", "");
-                // Remove space
-                dateShooting = dateShooting.Replace(" ", "");
-                // Remove /0
-                dateShooting = dateShooting.Replace("\0", "");
-            }
-            catch (ArgumentException err)
-            {
-                dateShooting = "";
-            }
-            // Close the btmFile
-            btmFile.Dispose();
-            // Return the date
-            return dateShooting;
-        }
+        //-----------------------------------------------------------------------------
     }
 }
