@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NewPicasa"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="winMain_V2" Height="569.364" Width="1097.9" Icon="../image/icon.ico" FontFamily="Open Sans">
+        Title="Accueil" Height="569.364" Width="1097.9" Icon="../image/icon.ico" FontFamily="Open Sans">
     <Window.Resources>
         <local:UriToBitmapConverter x:Key="UriToBitmapConverter" />
     </Window.Resources>
@@ -19,12 +19,13 @@
                 <MenuItem x:Name="menuQuitter" Header="Quitter" Click="menuQuitter_Click"></MenuItem>
             </MenuItem>
             <MenuItem x:Name="menuSave" Header="Sauvegarder" Click="menuSave_Click"></MenuItem>
-            <MenuItem x:Name="menuImprimer" Header="Imprimer"></MenuItem>
-            <MenuItem x:Name="menuEnvoyer" Header="Envoyer"></MenuItem>
+            <MenuItem x:Name="menuRename" Header="Renomer">
+                <MenuItem x:Name="menuRenameCurRep" Header="Répertoire actuel" Click="menuRenameCurRep_Click"></MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="menuRefresh" Header="Rafraichir" Click="menuRefresh_Click"></MenuItem>
         </Menu>
         <Grid Width="106" HorizontalAlignment="Left" Margin="0,27,0,0">
-            <TreeView x:Name="trvMain" Margin="0,0,2,42" Loaded="trvMain_Loaded"/>
-            <Button x:Name="btnRename" Content="Rename" HorizontalAlignment="Left" Margin="10,0,0,10" Width="75" Click="btnRename_Click" Height="22" VerticalAlignment="Bottom"/>
+            <TreeView x:Name="trvMain" Margin="0,0,2,0" Loaded="trvMain_Loaded"/>
         </Grid>
         <Image x:Name="imgLoading" gif:ImageBehavior.AnimatedSource="..\image\loading.gif" Width="96" Height="96" Visibility="Hidden" />
         <ScrollViewer Margin="106,27,423,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -73,7 +74,7 @@
             <Grid HorizontalAlignment="Right" Width="406" Height="461">
                 <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbName" Height="23" Margin="10,40,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
-                <Label x:Name="lblTag" Content="Tags (séparé par des ';')" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="369"/>
+                <Label x:Name="lblTag" Content="Tags (séparez par des ';')" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="369"/>
                 <TextBox x:Name="txbTags" Height="23" Margin="10,98,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbTags_LostFocus"/>
                 <Label x:Name="lblComment" Content="Commentaire" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbComment" Height="23" Margin="10,156,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbComment_LostFocus"/>
@@ -101,6 +102,7 @@
                 <Button x:Name="btnSave" Content="Sauvegarder" HorizontalAlignment="Left" Margin="10,369,0,68" Width="87" Click="btnSave_Click"/>
             </Grid>
         </ScrollViewer>
-        <TextBox x:Name="txbSearch" HorizontalAlignment="Left" Height="22" Margin="835,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154"/>
+        <TextBox x:Name="txbSearch" Height="22" Margin="0,27,108,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="283" KeyUp="txbSearch_KeyUp"/>
+        <Button x:Name="btnSearch" Content="Rechercher" HorizontalAlignment="Left" Height="22" Margin="987,27,0,0" VerticalAlignment="Top" Width="69" Click="btnSearch_Click"/>
     </Grid>
 </Window>

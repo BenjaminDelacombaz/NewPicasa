@@ -36,40 +36,42 @@ namespace NewPicasa
         {
             if (File.Exists(file))
             {
-                FileInfo fileInfo = new FileInfo(file);
-                Image imgFile = Image.FromFile(file);
-                this._width = imgFile.Width;
-                this._height = imgFile.Height;
-                this._size = fileInfo.Length;
-                imgFile.Dispose();
-                fileInfo = null;
+                //FileInfo fileInfo = new FileInfo(file);
+                //Image imgFile = Image.FromFile(file);
+                //this._width = imgFile.Width;
+                //this._height = imgFile.Height;
+                //this._size = fileInfo.Length;
+                //imgFile.Dispose();
+                //fileInfo = null;
 
                 this._fileName = Path.GetFileName(file);
                 this._filePath = Path.GetDirectoryName(file) + @"\";
                 this._fileExtension = Path.GetExtension(file);
-                this._dateCreate = File.GetCreationTime(file).ToString();
-                this._dateEdit = File.GetLastWriteTime(file).ToString();
+                //this._dateCreate = File.GetCreationTime(file).ToString();
+                //this._dateEdit = File.GetLastWriteTime(file).ToString();
                 this._dateTaken = this.getMetadataDateTaken();
                 this._authors = this.getMetadataAuthors();
                 this._comment = this.getMetadataComment();
                 this._tags = this.getMetadataTags();
                 this._rate = this.getMetadataRate();
-                this._copyright = this.getMetadataCopyright();
-                this._title = this.getMetadataTitle();
-                this._subject = this.getMetadataSubject();
+                //this._copyright = this.getMetadataCopyright();
+                //this._title = this.getMetadataTitle();
+                //this._subject = this.getMetadataSubject();
             }
             else
             {
                 // Error
-                MessageBox.Show("Le fichier n'existe pas", "Erreur");
+                this.addError("Le fichier n'existe pas");
             }
         }
         // Action
         // Save BitmapImage
-        public Boolean saveMetadata()
+        public void saveMetadata()
         {
-            Boolean booResult = true;
             //Save comment
+            this.setError("");
+            this.setWarning("");
+            this.setInfo("");
             //f_SetMetadataDateTaken();
             //f_SetMetadataAuthors();
             setMetadataComment();
@@ -78,7 +80,7 @@ namespace NewPicasa
             //f_SetMetadataCopyright();
             //f_SetMetadataTitle();
             //f_SetMetadataSubject();
-            return booResult;
+            this.addInfo("Sauvegarde des données effectuée.");
         }
         // Get BitmapMetadata Read
         private BitmapMetadata getBitmapMetadataRead()
@@ -124,13 +126,13 @@ namespace NewPicasa
                 catch (IOException err)
                 {
                     // Error
-                    MessageBox.Show("Une erreur est survenue lors de l'ouverture du fichier.", "Erreur");
+                    this.addError("Une erreur est survenue lors de l'ouverture du fichier.");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Le fichier: " + this._filePath + this._fileName + " n'existe pas", "Erreur");
+                this.addError("Le fichier: " + this._filePath + this._fileName + " n'existe pas");
             }
             return mdtInplaceResult;
         }
@@ -190,13 +192,13 @@ namespace NewPicasa
                 comment = mdtFile.Comment;
                 if (comment == null)
                 {
-                    //MessageBox.Show("Les commentaires ne sont pas renseignés dans les métadonnées", "Avertissement");
+                    this.addWarning("Les commentaires ne sont pas renseignés dans les métadonnées");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
             }
             return comment;
         }
@@ -207,18 +209,21 @@ namespace NewPicasa
             InPlaceBitmapMetadataWriter mdtInPlaceFile = getBitmapMetadataWrite();
             if (mdtInPlaceFile != null)
             {
-                mdtInPlaceFile.Comment = this._comment;
-                if (!mdtInPlaceFile.TrySave())
+                if (this._comment != null)
                 {
-                    // Error
-                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
-                    result = false;
+                    mdtInPlaceFile.Comment = this._comment;
+                    if (!mdtInPlaceFile.TrySave())
+                    {
+                        // Error
+                        this.addError("Une erreur est survenue lors de la modifications du commentaires");
+                        result = false;
+                    }
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
                 result = false;
             }
             this._fileStream.Dispose();
@@ -286,19 +291,19 @@ namespace NewPicasa
                     tags = mdtFile.Keywords.ToArray();
                     if (tags == null)
                     {
-                       // MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
+                        this.addWarning("Les tags ne sont pas renseignés dans les métadonnées");
                     }
                 }
                 else
                 {
                     // Error
-                   // MessageBox.Show("Les tags ne sont pas renseignés dans les métadonnées", "Avertissement");
+                    this.addWarning("Les tags ne sont pas renseignés dans les métadonnées");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
             }
             return tags;
         }
@@ -309,23 +314,26 @@ namespace NewPicasa
             InPlaceBitmapMetadataWriter mdtInPlaceFile = getBitmapMetadataWrite();
             if (mdtInPlaceFile != null)
             {
-                List<string> list = this._tags.ToList<string>();
-                mdtInPlaceFile.Keywords = new System.Collections.ObjectModel.ReadOnlyCollection<string>(list);
-                if (!mdtInPlaceFile.TrySave())
+                if (this._tags != null)
                 {
-                    this._fileStream.Dispose();
-                    this._fileStream.Close();
-                    // Doesn't work
-                    //this.SetUpMetadataOnImage(Path.Combine(this._strFilePath,this._fileName), this._strTags);
-                    // Error
-                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
-                    result = false;
+                    List<string> list = this._tags.ToList<string>();
+                    mdtInPlaceFile.Keywords = new System.Collections.ObjectModel.ReadOnlyCollection<string>(list);
+                    if (!mdtInPlaceFile.TrySave())
+                    {
+                        this._fileStream.Dispose();
+                        this._fileStream.Close();
+                        // Doesn't work
+                        //this.SetUpMetadataOnImage(Path.Combine(this._strFilePath,this._fileName), this._strTags);
+                        // Error
+                        this.addError("Une erreur est survenue lors de la modifications des tags");
+                        result = false;
+                    }
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
                 result = false;
             }
             this._fileStream.Dispose();
@@ -343,13 +351,13 @@ namespace NewPicasa
                 rate = mdtFile.Rating;
                 if (rate < 0)
                 {
-                    //MessageBox.Show("La note n'est pas renseignée dans les métadonnées", "Avertissement");
+                    this.addWarning("La note n'est pas renseignée dans les métadonnées");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
             }
             return rate;
         }
@@ -360,18 +368,21 @@ namespace NewPicasa
             InPlaceBitmapMetadataWriter mdtInPlaceFile = getBitmapMetadataWrite();
             if (mdtInPlaceFile != null)
             {
-                mdtInPlaceFile.Rating = this._rate;
-                if (!mdtInPlaceFile.TrySave())
+                if (this._rate != 0)
                 {
-                    // Error
-                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
-                    result = false;
+                    mdtInPlaceFile.Rating = this._rate;
+                    if (!mdtInPlaceFile.TrySave())
+                    {
+                        // Error
+                        this.addError("Une erreur est survenue lors de la modifications de la note");
+                        result = false;
+                    }
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
                 result = false;
             }
             this._fileStream.Dispose();
@@ -388,13 +399,13 @@ namespace NewPicasa
                 copyright = mdtFile.Copyright;
                 if (copyright == null)
                 {
-                    //MessageBox.Show("Le copyright n'est pas renseigné dans les métadonnées", "Avertissement");
+                    this.addWarning("Le copyright n'est pas renseigné dans les métadonnées");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
             }
             return copyright;
         }
@@ -409,14 +420,14 @@ namespace NewPicasa
                 if (!mdtInPlaceFile.TrySave())
                 {
                     // Error
-                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    this.addError("Une erreur est survenue lors de la modifications des métadonnées");
                     result = false;
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
                 result = false;
             }
             this._fileStream.Dispose();
@@ -433,13 +444,13 @@ namespace NewPicasa
                 title = mdtFile.Title;
                 if (title == null)
                 {
-                    //MessageBox.Show("Le titre n'est pas renseigné dans les métadonnées", "Avertissement");
+                    this.addWarning("Le titre n'est pas renseigné dans les métadonnées");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
             }
             return title;
         }
@@ -454,14 +465,14 @@ namespace NewPicasa
                 if (!mdtInPlaceFile.TrySave())
                 {
                     // Error
-                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    this.addError("Une erreur est survenue lors de la modifications des métadonnées");
                     result = false;
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
                 result = false;
             }
             this._fileStream.Dispose();
@@ -478,13 +489,13 @@ namespace NewPicasa
                 subject = mdtFile.Subject;
                 if (subject == null)
                 {
-                    //MessageBox.Show("L'objet n'est pas renseigné dans les métadonnées", "Avertissement");
+                    this.addWarning("L'objet n'est pas renseigné dans les métadonnées");
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
             }
             return subject;
         }
@@ -499,14 +510,14 @@ namespace NewPicasa
                 if (!mdtInPlaceFile.TrySave())
                 {
                     // Error
-                    MessageBox.Show("Une erreur est survenue lors de la modifications des métadonnées", "Erreur");
+                    this.addError("Une erreur est survenue lors de la modifications des métadonnées");
                     result = false;
                 }
             }
             else
             {
                 // Error
-                MessageBox.Show("Une erreur est survenue lors de la lecture des métadonnées", "Erreur");
+                this.addError("Une erreur est survenue lors de la lecture des métadonnées");
                 result = false;
             }
             this._fileStream.Dispose();
