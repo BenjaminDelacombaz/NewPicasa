@@ -36,6 +36,7 @@ namespace NewPicasa.view
                 threadImgList.Start();
             }
             refreshStars();
+            refreshStarsFilter();
         }
 
         private void trvMain_Loaded(object sender, RoutedEventArgs e)
@@ -83,7 +84,7 @@ namespace NewPicasa.view
                     bool view = true;
                     search = search.ToLower();
                     //tw.Write(Path.GetFileName(file));
-                    DateTime dateStart = DateTime.Now;
+                    //DateTime dateStart = DateTime.Now;
                     if (search.Trim() != "")
                     {
                         view = false;
@@ -97,7 +98,7 @@ namespace NewPicasa.view
                         string authors = imageMetadata.convertArrToString(imageMetadata.getAuthors(), ' ');
                         if (comment != null)
                         {
-                            if(comment.Trim() != "")
+                            if (comment.Trim() != "")
                             {
                                 if (comment.ToLower().Contains(search))
                                 {
@@ -179,10 +180,10 @@ namespace NewPicasa.view
                         id.Size = fi.Length;
                         wg_images.Add(id);
                     }
-                    DateTime dateEnd = DateTime.Now;
+                    //DateTime dateEnd = DateTime.Now;
                     //tw.WriteLine(" \t\t\t Time: " + (dateEnd - dateStart).TotalSeconds);
                 }
-                DateTime dateEndFull = DateTime.Now;
+                //DateTime dateEndFull = DateTime.Now;
                 //tw.WriteLine("Fin du chargement durée total: " + (dateEndFull - dateStartFull).TotalSeconds);
                 //tw.WriteLine("");
                 //tw.WriteLine("");
@@ -281,6 +282,28 @@ namespace NewPicasa.view
             }
             StarsList.ItemsSource = listStars;
         }
+        public void refreshStarsFilter(int numberStars = 0)
+        {
+            List<ImageDetails> listStarsFilter = new List<ImageDetails>();
+            for (int count = 1; count < 6; count++)
+            {
+                string file = "";
+                if (count <= numberStars)
+                {
+                    file = @"..\image\img_etoile_j_16.png";
+                }
+                else
+                {
+                    file = @"..\image\img_etoile_b_16.png";
+                }
+                ImageDetails id = new ImageDetails()
+                {
+                    Path = file
+                };
+                listStarsFilter.Add(id);
+            }
+            StarsListFilter.ItemsSource = listStarsFilter;
+        }
 
         private string getPathFromNode(TreeViewItem item)
         {
@@ -301,33 +324,56 @@ namespace NewPicasa.view
 
         private void txbComment_LostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
-            wg_imageMetadata.setComment(textBox.Text.ToString());
+            if(wg_imageMetadata != null)
+            {
+                TextBox textBox = sender as TextBox;
+                wg_imageMetadata.setComment(textBox.Text.ToString());
+            }
+            else
+            {
+                MessageBox.Show("Veuillez sélectionner une image.", "Information");
+            }
+            
         }
 
         private void txbTags_LostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
-            wg_imageMetadata.setTags(ImageMetadata.convertStringToArr(textBox.Text.ToString()));
+            if(wg_imageMetadata != null)
+            {
+                TextBox textBox = sender as TextBox;
+                wg_imageMetadata.setTags(ImageMetadata.convertStringToArr(textBox.Text.ToString()));
+            }
+            else
+            {
+                MessageBox.Show("Veuillez sélectionner une image.", "Information");
+            }
+            
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            wg_imageMetadata.saveMetadata();
-            if(wg_imageMetadata.getError() != "")
+            if (wg_imageMetadata != null)
             {
-                MessageBox.Show(wg_imageMetadata.getError(), "Erreur");
+                wg_imageMetadata.saveMetadata();
+                if (wg_imageMetadata.getError() != "")
+                {
+                    MessageBox.Show(wg_imageMetadata.getError(), "Erreur");
+                }
+                else
+                {
+                    if (wg_imageMetadata.getWarning() != "")
+                    {
+                        MessageBox.Show(wg_imageMetadata.getWarning(), "Avertissement");
+                    }
+                    if (wg_imageMetadata.getInfo() != "")
+                    {
+                        MessageBox.Show(wg_imageMetadata.getInfo(), "Information");
+                    }
+                }
             }
             else
             {
-                if (wg_imageMetadata.getWarning() != "")
-                {
-                    MessageBox.Show(wg_imageMetadata.getWarning(), "Avertissement");
-                }
-                if (wg_imageMetadata.getInfo() != "")
-                {
-                    MessageBox.Show(wg_imageMetadata.getInfo(), "Information");
-                }
+                MessageBox.Show("Veuillez sélectionner une image.", "Information");
             }
         }
 
@@ -344,9 +390,33 @@ namespace NewPicasa.view
 
         private void clickStars(object sender, MouseButtonEventArgs e)
         {
-            int nbStars = StarsList.SelectedIndex + 1;
-            refreshStars(nbStars);
-            wg_imageMetadata.setRate(nbStars);
+            if(wg_imageMetadata != null)
+            {
+                int nbStars = StarsList.SelectedIndex + 1;
+                refreshStars(nbStars);
+                wg_imageMetadata.setRate(nbStars);
+            }
+            else
+            {
+                MessageBox.Show("Veuillez sélectionner une image.", "Information");
+            }
+        }
+
+        private void clickStarsFilter(object sender, MouseButtonEventArgs e)
+        {
+            int nbStars = StarsListFilter.SelectedIndex + 1;
+            ImageDetails imageDetails = StarsListFilter.SelectedValue as ImageDetails;
+            StarsListFilter.SelectedIndex = nbStars;
+            ImageDetails imageDetailNext = StarsListFilter.SelectedValue as ImageDetails;
+            if (imageDetails.Path == @"..\image\img_etoile_j_16.png" && imageDetailNext.Path == @"..\image\img_etoile_b_16.png")
+            {
+                refreshStarsFilter(0);
+            }
+            else
+            {
+                refreshStarsFilter(nbStars);
+            }
+            StarsListFilter.SelectedIndex = nbStars - 1;
         }
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

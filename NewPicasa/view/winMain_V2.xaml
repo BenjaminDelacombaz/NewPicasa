@@ -102,7 +102,23 @@
                 <Button x:Name="btnSave" Content="Sauvegarder" HorizontalAlignment="Left" Margin="10,369,0,68" Width="87" Click="btnSave_Click"/>
             </Grid>
         </ScrollViewer>
-        <TextBox x:Name="txbSearch" Height="22" Margin="0,27,108,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="283" KeyUp="txbSearch_KeyUp"/>
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="672,27,239,473" Name="StarsListFilter" BorderThickness="0">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="16" Height="16" MouseLeftButtonUp="clickStarsFilter">
+                            <Image Source="{Binding Path}" />
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBox x:Name="txbSearch" Height="22" Margin="0,27,108,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="126" KeyUp="txbSearch_KeyUp"/>
         <Button x:Name="btnSearch" Content="Rechercher" HorizontalAlignment="Left" Height="22" Margin="987,27,0,0" VerticalAlignment="Top" Width="69" Click="btnSearch_Click"/>
     </Grid>
 </Window>
