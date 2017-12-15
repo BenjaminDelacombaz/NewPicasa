@@ -24,6 +24,7 @@ namespace NewPicasa
             string sourcePath = "";
             string dateShooting = "";
             int nbDuplicate = 0;
+            bool insertDate = true;
 
             // For all element in strFiles we create a filestream and we move the files
             for (int count = 0; count < files.Length; count++)
@@ -40,6 +41,11 @@ namespace NewPicasa
                         dateShooting = "19000101000000";
                         Utilities.setWarning("La date du fichier: " + file.Name + " n'a pas pu être récupéré la date suivante sera utilisée: " + dateShooting);
                     }
+                    // Test if filename already have the date
+                    if (Path.GetFileName(sourcePath).Split('_')[0] == dateShooting)
+                    {
+                        insertDate = false;
+                    }
                     if (rename)
                     {
                         if(!renameFile)
@@ -50,7 +56,10 @@ namespace NewPicasa
                         fileName = newFileName + System.IO.Path.GetExtension(file.Name);
 
                         // Insert the date
-                        fileName = fileName.Insert(0, dateShooting + "_");
+                        if(insertDate)
+                        {
+                            fileName = fileName.Insert(0, dateShooting + "_");
+                        }
                         // Count nb duplicate file
                         nbDuplicate = findDuplicateFiles(destPath, fileName);
                         if (nbDuplicate > 0)
@@ -59,7 +68,10 @@ namespace NewPicasa
                             fileName = newFileName + "_" + nbDuplicate + System.IO.Path.GetExtension(file.Name);
 
                             // Insert the date
-                            fileName = fileName.Insert(0, dateShooting + "_");
+                            if (insertDate)
+                            {
+                                fileName = fileName.Insert(0, dateShooting + "_");
+                            }
                         }
                     }
                     else
@@ -183,7 +195,7 @@ namespace NewPicasa
 
             _error = "";
             // Test if extension is diferent to jgp
-            if (System.IO.Path.GetExtension(strFile) != ".jpg" && System.IO.Path.GetExtension(strFile) != ".jpeg")
+            if (Path.GetExtension(strFile).ToLower() != ".jpg" && Path.GetExtension(strFile).ToLower() != ".jpeg")
             {
                 result = false;
                 _error += "Le fichier '" + strFile + "' n'est pas un fichier jpg/jpeg, il ne sera pas pris en compte.";

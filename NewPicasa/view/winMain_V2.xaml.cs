@@ -17,7 +17,7 @@ namespace NewPicasa.view
     public partial class winMain_V2 : Window
     {
         string wg_imagePath = Utilities.getRegistryKeyValue();
-        string wg_currentPath = "";
+        string wg_currentPath = Utilities.getRegistryKeyValue();
         string wg_imageCurrentPath = "";
         private Thread threadImgList;
         private List<ImageDetails> wg_images = new List<ImageDetails>();
@@ -28,6 +28,13 @@ namespace NewPicasa.view
         public winMain_V2()
         {
             InitializeComponent();
+            if (!wg_activeThread)
+            {
+
+                threadImgList = new Thread(new ThreadStart(ThreadImage));
+                // Lancement du thread
+                threadImgList.Start();
+            }
             refreshStars();
         }
 
@@ -74,6 +81,7 @@ namespace NewPicasa.view
                 foreach (var file in files)
                 {
                     bool view = true;
+                    search = search.ToLower();
                     //tw.Write(Path.GetFileName(file));
                     DateTime dateStart = DateTime.Now;
                     if (search.Trim() != "")
@@ -83,15 +91,15 @@ namespace NewPicasa.view
                         ImageMetadata imageMetadata = new ImageMetadata(file);
                         string comment = imageMetadata.getComment();
                         string fileName = imageMetadata.getFileName();
-                        string subject = imageMetadata.getSubject();
-                        string title = imageMetadata.getTitle();
+                        //string subject = imageMetadata.getSubject();
+                        //string title = imageMetadata.getTitle();
                         string tags = imageMetadata.convertArrToString(imageMetadata.getTags(),' ');
                         string authors = imageMetadata.convertArrToString(imageMetadata.getAuthors(), ' ');
                         if (comment != null)
                         {
                             if(comment.Trim() != "")
                             {
-                                if (comment.Contains(search))
+                                if (comment.ToLower().Contains(search))
                                 {
                                     view = true;
                                 }
@@ -101,37 +109,37 @@ namespace NewPicasa.view
                         {
                             if (fileName.Trim() != "")
                             {
-                                if (fileName.Contains(search))
+                                if (fileName.ToLower().Contains(search))
                                 {
                                     view = true;
                                 }
                             }
                         }
-                        if (subject != null)
+                        /*if (subject != null)
                         {
                             if (subject.Trim() != "")
                             {
-                                if (subject.Contains(search))
+                                if (subject.ToLower().Contains(search))
                                 {
                                     view = true;
                                 }
                             }
-                        }
-                        if (title != null)
+                        }*/
+                        /*if (title != null)
                         {
                             if (title.Trim() != "")
                             {
-                                if (title.Contains(search))
+                                if (title.ToLower().Contains(search))
                                 {
                                     view = true;
                                 }
                             }
-                        }
+                        }*/
                         if (tags != null)
                         {
                             if (tags.Trim() != "")
                             {
-                                if (tags.Contains(search))
+                                if (tags.ToLower().Contains(search))
                                 {
                                     view = true;
                                 }
@@ -141,7 +149,7 @@ namespace NewPicasa.view
                         {
                             if (authors.Trim() != "")
                             {
-                                if (authors.Contains(search))
+                                if (authors.ToLower().Contains(search))
                                 {
                                     view = true;
                                 }
@@ -172,12 +180,12 @@ namespace NewPicasa.view
                         wg_images.Add(id);
                     }
                     DateTime dateEnd = DateTime.Now;
-                   // tw.WriteLine(" \t\t\t Time: " + (dateEnd - dateStart).TotalSeconds);
+                    //tw.WriteLine(" \t\t\t Time: " + (dateEnd - dateStart).TotalSeconds);
                 }
                 DateTime dateEndFull = DateTime.Now;
-               // tw.WriteLine("Fin du chargement durée total: " + (dateEndFull - dateStartFull).TotalSeconds);
-               // tw.WriteLine("");
-               // tw.WriteLine("");
+                //tw.WriteLine("Fin du chargement durée total: " + (dateEndFull - dateStartFull).TotalSeconds);
+                //tw.WriteLine("");
+                //tw.WriteLine("");
                 //tw.WriteLine("");
                 //tw.WriteLine("");
                 // test
@@ -192,11 +200,18 @@ namespace NewPicasa.view
                 string[] filesDirectory = Directory.GetFiles(path);
                 Utilities.copyFiles(filesDirectory, true, path, false, false);
                 // Refresh list
-                //f_RefreshListImage(wg_strCurrentPath);
+                if (!wg_activeThread)
+                {
+                    // Create new thread
+                    threadImgList = new Thread(new ThreadStart(ThreadImage));
+                    // Lancement du thread
+                    threadImgList.Start();
+                }
             }
             else
             {
                 // Error
+                MessageBox.Show("Le dossier '" + path + "' n'existe pas.");
             }
         }
 
@@ -211,6 +226,29 @@ namespace NewPicasa.view
                 search = txbSearch.Text.ToString();
             }));
             refreshListImage(wg_currentPath,search);
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                ImageList.ItemsSource = wg_images;
+                imgLoading.Visibility = Visibility.Hidden;
+                txbSearch.Text = "";
+            }));
+            wg_activeThread = false;
+            listEventClickNode.Clear();
+            Thread.CurrentThread.Abort();
+        }
+
+        public void ThreadRename()
+        {
+            string search = "";
+            wg_activeThread = true;
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                ImageList.ItemsSource = null;
+                imgLoading.Visibility = Visibility.Visible;
+                search = txbSearch.Text.ToString();
+            }));
+            renameAllFiles(wg_currentPath);
+            refreshListImage(wg_currentPath, search);
             this.Dispatcher.Invoke((Action)(() =>
             {
                 ImageList.ItemsSource = wg_images;
@@ -276,6 +314,21 @@ namespace NewPicasa.view
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             wg_imageMetadata.saveMetadata();
+            if(wg_imageMetadata.getError() != "")
+            {
+                MessageBox.Show(wg_imageMetadata.getError(), "Erreur");
+            }
+            else
+            {
+                if (wg_imageMetadata.getWarning() != "")
+                {
+                    MessageBox.Show(wg_imageMetadata.getWarning(), "Avertissement");
+                }
+                if (wg_imageMetadata.getInfo() != "")
+                {
+                    MessageBox.Show(wg_imageMetadata.getInfo(), "Information");
+                }
+            }
         }
 
         private void menuImport_Click(object sender, RoutedEventArgs e)
@@ -308,18 +361,29 @@ namespace NewPicasa.view
             txbDateTaken.Text = wg_imageMetadata.getDateTaken();
             txbTags.Text = wg_imageMetadata.convertArrToString(wg_imageMetadata.getTags());
             refreshStars(wg_imageMetadata.getRate());
+            // Display error
+            if (wg_imageMetadata.getError().Trim() != "")
+            {
+                MessageBox.Show(wg_imageMetadata.getError(), "Erreur");
+            }
+            else
+            {
+                // if no error display warning and info
+                if(wg_imageMetadata.getWarning().Trim() != "")
+                {
+                    MessageBox.Show(wg_imageMetadata.getWarning(), "Avertissement");
+                }
+                if (wg_imageMetadata.getInfo().Trim() != "")
+                {
+                    MessageBox.Show(wg_imageMetadata.getInfo(), "Informations");
+                }
+            }
         }
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
         {
             //f_SaveMetadata(wg_strImageCurrentPath);
-            if (!wg_activeThread)
-            {
-
-                threadImgList = new Thread(new ThreadStart(ThreadImage));
-                // Lancement du thread
-                threadImgList.Start();
-            }
+            
         }
 
         private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -349,6 +413,43 @@ namespace NewPicasa.view
         {
             winSaveImage winSaveImage = new winSaveImage();
             winSaveImage.ShowDialog();
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            menuRefresh_Click(sender, e);
+        }
+        private void menuRenameCurRep_Click(object sender, RoutedEventArgs e)
+        {
+            if (!wg_activeThread)
+            { 
+                threadImgList = new Thread(new ThreadStart(ThreadRename));
+                // Lancement du thread
+                threadImgList.Start();
+            }
+        }
+
+        private void txbSearch_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                //enter key is down
+                if (!wg_activeThread)
+                {
+                    menuRefresh_Click(sender, e);
+                }
+            }
+        }
+
+        private void menuRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            if (!wg_activeThread)
+            {
+
+                threadImgList = new Thread(new ThreadStart(ThreadImage));
+                // Lancement du thread
+                threadImgList.Start();
+            }
         }
     }
 }
