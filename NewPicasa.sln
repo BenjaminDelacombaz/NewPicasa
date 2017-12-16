@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewPicasa", "NewPicasa\NewP
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup\Setup.vdproj", "{85B38FCC-8E32-4B70-96EF-6F437A7AC81E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Install", "Install", "{5480E806-F811-4546-A92B-799F3965CAC7}"
+	ProjectSection(SolutionItems) = preProject
+		Setup\Setup\Release\NewPicasa_1.0.0.msi = Setup\Setup\Release\NewPicasa_1.0.0.msi
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

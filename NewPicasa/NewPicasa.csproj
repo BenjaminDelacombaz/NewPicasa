@@ -124,7 +124,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Install\NewPicasa_1.0.0.msi" />
     <None Include="other\debug.md" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
