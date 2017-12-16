@@ -16,6 +16,7 @@ namespace NewPicasa.view
     /// </summary>
     public partial class winMain_V2 : Window
     {
+        // Globals window
         string wg_imagePath = Utilities.getRegistryKeyValue();
         string wg_currentPath = Utilities.getRegistryKeyValue();
         string wg_imageCurrentPath = "";
@@ -24,6 +25,7 @@ namespace NewPicasa.view
         private bool wg_activeThread = false;
         private ImageMetadata wg_imageMetadata = null;
         private List<string> listEventClickNode = new List<string>();
+        private int wg_rateFilter = 0;
 
         public winMain_V2()
         {
@@ -32,7 +34,7 @@ namespace NewPicasa.view
             {
 
                 threadImgList = new Thread(new ThreadStart(ThreadImage));
-                // Lancement du thread
+                // Start thread
                 threadImgList.Start();
             }
             refreshStars();
@@ -65,44 +67,34 @@ namespace NewPicasa.view
             }
             return directoryNode;
         }
-        
-        private void refreshListImage(string path, string search)
-        {
-            string root = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string[] supportedExtensions = new[] { ".jpeg", ".jpg", ".tiff" };
-            var files = Directory.GetFiles(path, "*.*").Where(s => supportedExtensions.Contains(Path.GetExtension(s).ToLower()));
-            wg_images.Clear();
 
-            // Test
-            //string pathLog = @"C:\Users\Benjamin.Delacombaz\Desktop\log_newpicasa.txt";
-            //using (var tw = new StreamWriter(pathLog, true))
-            //{
-                //tw.WriteLine("Début Chargement image");
-                DateTime dateStartFull = DateTime.Now;
-                foreach (var file in files)
+        private bool checkFilterAndSearch(string filePath, string search, int rateFilter)
+        {
+            bool viewSearch = false;
+            bool viewRate = false;
+            search = search.ToLower();
+
+            if(search.Trim() != "" || rateFilter > 0)
+            {
+                ImageMetadata imageMetadata = new ImageMetadata(filePath);
+                string comment = imageMetadata.getComment();
+                string fileName = imageMetadata.getFileName();
+                string tags = imageMetadata.convertArrToString(imageMetadata.getTags(), ' ');
+                string authors = imageMetadata.convertArrToString(imageMetadata.getAuthors(), ' ');
+                int rate = imageMetadata.getRate();
+
+                if(search.Trim() != "")
                 {
-                    bool view = true;
-                    search = search.ToLower();
-                    //tw.Write(Path.GetFileName(file));
-                    //DateTime dateStart = DateTime.Now;
                     if (search.Trim() != "")
                     {
-                        view = false;
-                    
-                        ImageMetadata imageMetadata = new ImageMetadata(file);
-                        string comment = imageMetadata.getComment();
-                        string fileName = imageMetadata.getFileName();
-                        //string subject = imageMetadata.getSubject();
-                        //string title = imageMetadata.getTitle();
-                        string tags = imageMetadata.convertArrToString(imageMetadata.getTags(),' ');
-                        string authors = imageMetadata.convertArrToString(imageMetadata.getAuthors(), ' ');
+
                         if (comment != null)
                         {
                             if (comment.Trim() != "")
                             {
                                 if (comment.ToLower().Contains(search))
                                 {
-                                    view = true;
+                                    viewSearch = true;
                                 }
                             }
                         }
@@ -112,37 +104,17 @@ namespace NewPicasa.view
                             {
                                 if (fileName.ToLower().Contains(search))
                                 {
-                                    view = true;
+                                    viewSearch = true;
                                 }
                             }
                         }
-                        /*if (subject != null)
-                        {
-                            if (subject.Trim() != "")
-                            {
-                                if (subject.ToLower().Contains(search))
-                                {
-                                    view = true;
-                                }
-                            }
-                        }*/
-                        /*if (title != null)
-                        {
-                            if (title.Trim() != "")
-                            {
-                                if (title.ToLower().Contains(search))
-                                {
-                                    view = true;
-                                }
-                            }
-                        }*/
                         if (tags != null)
                         {
                             if (tags.Trim() != "")
                             {
                                 if (tags.ToLower().Contains(search))
                                 {
-                                    view = true;
+                                    viewSearch = true;
                                 }
                             }
                         }
@@ -152,46 +124,76 @@ namespace NewPicasa.view
                             {
                                 if (authors.ToLower().Contains(search))
                                 {
-                                    view = true;
+                                    viewSearch = true;
                                 }
                             }
                         }
-                        imageMetadata = null;
                     }
-                    if(view)
-                    {
-                        ImageDetails id = new ImageDetails()
-                        {
-                            Path = file,
-                            FileName = System.IO.Path.GetFileName(file),
-                            Extension = System.IO.Path.GetExtension(file),
-                        };
-
-                        BitmapImage img = new BitmapImage();
-                        img.BeginInit();
-                        img.CacheOption = BitmapCacheOption.OnLoad;
-                        img.UriSource = new Uri(file, UriKind.Absolute);
-                        img.EndInit();
-                        id.Width = img.PixelWidth;
-                        id.Height = img.PixelHeight;
-
-                        // I couldn't find file size in BitmapImage
-                        FileInfo fi = new FileInfo(file);
-                        id.Size = fi.Length;
-                        wg_images.Add(id);
-                    }
-                    //DateTime dateEnd = DateTime.Now;
-                    //tw.WriteLine(" \t\t\t Time: " + (dateEnd - dateStart).TotalSeconds);
                 }
-                //DateTime dateEndFull = DateTime.Now;
-                //tw.WriteLine("Fin du chargement durée total: " + (dateEndFull - dateStartFull).TotalSeconds);
-                //tw.WriteLine("");
-                //tw.WriteLine("");
-                //tw.WriteLine("");
-                //tw.WriteLine("");
-                // test
-                //tw.Close();
-            //}
+                else
+                {
+                    viewSearch = true;
+                }
+                if(rateFilter > 0)
+                {
+                    if(rate == wg_rateFilter)
+                    {
+                        viewRate = true;
+                    }
+                }
+                else
+                {
+                    viewRate = true;
+                }
+                imageMetadata = null;
+            }
+            else
+            {
+                viewSearch = true;
+                viewRate = true;
+            }
+            if(viewSearch && viewRate)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        
+        private void refreshListImage(string path, string search)
+        {
+            string root = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string[] supportedExtensions = new[] { ".jpeg", ".jpg", ".tiff" };
+            var files = Directory.GetFiles(path, "*.*").Where(s => supportedExtensions.Contains(Path.GetExtension(s).ToLower()));
+            wg_images.Clear();
+            foreach (var file in files)
+            {
+                if (checkFilterAndSearch(file,search,wg_rateFilter))
+                {
+                    ImageDetails id = new ImageDetails()
+                    {
+                        Path = file,
+                        FileName = System.IO.Path.GetFileName(file),
+                        Extension = System.IO.Path.GetExtension(file),
+                    };
+
+                    BitmapImage img = new BitmapImage();
+                    img.BeginInit();
+                    img.CacheOption = BitmapCacheOption.OnLoad;
+                    img.UriSource = new Uri(file, UriKind.Absolute);
+                    img.EndInit();
+                    id.Width = img.PixelWidth;
+                    id.Height = img.PixelHeight;
+
+                    // I couldn't find file size in BitmapImage
+                    FileInfo fi = new FileInfo(file);
+                    id.Size = fi.Length;
+                    wg_images.Add(id);
+                }
+            }
         }
 
         private void renameAllFiles(string path)
@@ -231,7 +233,7 @@ namespace NewPicasa.view
             {
                 ImageList.ItemsSource = wg_images;
                 imgLoading.Visibility = Visibility.Hidden;
-                txbSearch.Text = "";
+                //txbSearch.Text = "";
             }));
             wg_activeThread = false;
             listEventClickNode.Clear();
@@ -405,18 +407,18 @@ namespace NewPicasa.view
         private void clickStarsFilter(object sender, MouseButtonEventArgs e)
         {
             int nbStars = StarsListFilter.SelectedIndex + 1;
-            ImageDetails imageDetails = StarsListFilter.SelectedValue as ImageDetails;
-            StarsListFilter.SelectedIndex = nbStars;
-            ImageDetails imageDetailNext = StarsListFilter.SelectedValue as ImageDetails;
-            if (imageDetails.Path == @"..\image\img_etoile_j_16.png" && imageDetailNext.Path == @"..\image\img_etoile_b_16.png")
+            // if we click on the same star it's reset the filter
+            if(nbStars == wg_rateFilter)
             {
-                refreshStarsFilter(0);
+                wg_rateFilter = 0;
+                refreshStarsFilter(wg_rateFilter);
             }
             else
             {
+                wg_rateFilter = nbStars;
                 refreshStarsFilter(nbStars);
             }
-            StarsListFilter.SelectedIndex = nbStars - 1;
+            btnSearch_Click(sender, e);
         }
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -448,12 +450,6 @@ namespace NewPicasa.view
                     MessageBox.Show(wg_imageMetadata.getInfo(), "Informations");
                 }
             }
-        }
-
-        private void btnRename_Click(object sender, RoutedEventArgs e)
-        {
-            //f_SaveMetadata(wg_strImageCurrentPath);
-            
         }
 
         private void DirectoryNode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

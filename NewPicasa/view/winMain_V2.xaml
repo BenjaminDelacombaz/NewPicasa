@@ -72,7 +72,7 @@
         </ScrollViewer>
         <ScrollViewer Margin="667,54,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid HorizontalAlignment="Right" Width="406" Height="461">
-                <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="lblName" Content="Nom" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbName" Height="23" Margin="10,40,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
                 <Label x:Name="lblTag" Content="Tags (séparez par des ';')" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="369"/>
                 <TextBox x:Name="txbTags" Height="23" Margin="10,98,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbTags_LostFocus"/>
