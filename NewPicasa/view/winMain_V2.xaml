@@ -72,7 +72,7 @@
         </ScrollViewer>
         <ScrollViewer Margin="667,54,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid HorizontalAlignment="Right" Width="406" Height="461">
-                <Label x:Name="lblName" Content="Name" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="lblName" Content="Nom" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txbName" Height="23" Margin="10,40,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
                 <Label x:Name="lblTag" Content="Tags (séparez par des ';')" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="369"/>
                 <TextBox x:Name="txbTags" Height="23" Margin="10,98,27,0" TextWrapping="Wrap" VerticalAlignment="Top" LostFocus="txbTags_LostFocus"/>
@@ -102,7 +102,23 @@
                 <Button x:Name="btnSave" Content="Sauvegarder" HorizontalAlignment="Left" Margin="10,369,0,68" Width="87" Click="btnSave_Click"/>
             </Grid>
         </ScrollViewer>
-        <TextBox x:Name="txbSearch" Height="22" Margin="0,27,108,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="283" KeyUp="txbSearch_KeyUp"/>
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="672,27,239,473" Name="StarsListFilter" BorderThickness="0">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="16" Height="16" MouseLeftButtonUp="clickStarsFilter">
+                            <Image Source="{Binding Path}" />
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBox x:Name="txbSearch" Height="22" Margin="0,27,108,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="126" KeyUp="txbSearch_KeyUp"/>
         <Button x:Name="btnSearch" Content="Rechercher" HorizontalAlignment="Left" Height="22" Margin="987,27,0,0" VerticalAlignment="Top" Width="69" Click="btnSearch_Click"/>
     </Grid>
 </Window>
