@@ -27,30 +27,30 @@ When you have downloaded the .msi file from [Git](https://github.com/BenjaminDel
 Now you will have a security message if you are on Windows 10. If you are on Windows 7 ignore this step.
 Click on the "More info" and it will display
 <div align="center">
-  <img src="/img/alert.jpg"/><br><br>
+  <img src="../Documentation/img/alert.jpg"/><br><br>
 
-  <img src="/img/alertstep2.jpg"/><br><br>
+  <img src="../Documentation/img/alertstep2.jpg"/><br><br>
 
 </div>
 
 Next, follow this screen
 <div align="center">
   <img src="../Documentation/img/firststep.jpg"/><br><br>
-  <img src="/img/secondstep.jpg"/><br><br>
-  <img src="/img/thirdstep.jpg"/><br><br>
+  <img src="../Documentation/img/secondstep.jpg"/><br><br>
+  <img src="../Documentation/img/thirdstep.jpg"/><br><br>
 </div>
 
   Accept the User Account Control
 
 <div align="center">
-  <img src="/img/lastscreen.jpg"/><br><br>
+  <img src="../Documentation/img/lastscreen.jpg"/><br><br>
 </div>
 
 Now you can run you application
 
 <div align="center">
-  <img src="/img/launch.jpg"/><br><br>
-  <img src="/img/work.jpg"/><br><br>
+  <img src="../Documentation/img/launch.jpg"/><br><br>
+  <img src="../Documentation/img/work.jpg"/><br><br>
 </div>
 
 And it's work!
