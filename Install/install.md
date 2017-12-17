@@ -35,7 +35,7 @@ Click on the "More info" and it will display
 
 Next, follow this screen
 <div align="center">
-  <img src="/img/firststep.jpg"/><br><br>
+  <img src="../Documentation/img/firststep.jpg"/><br><br>
   <img src="/img/secondstep.jpg"/><br><br>
   <img src="/img/thirdstep.jpg"/><br><br>
 </div>
