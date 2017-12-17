@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NewPicasa"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="Accueil" Height="569.364" Width="1097.9" Icon="../image/icon.ico" FontFamily="Open Sans">
+        Title="NewPicasa" Height="569.364" Width="1097.9" Icon="../image/icon.ico" FontFamily="Open Sans">
     <Window.Resources>
         <local:UriToBitmapConverter x:Key="UriToBitmapConverter" />
     </Window.Resources>
@@ -102,7 +102,7 @@
                 <Button x:Name="btnSave" Content="Sauvegarder" HorizontalAlignment="Left" Margin="10,369,0,68" Width="87" Click="btnSave_Click"/>
             </Grid>
         </ScrollViewer>
-        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="672,27,239,473" Name="StarsListFilter" BorderThickness="0">
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,27,239,473" Name="StarsListFilter" BorderThickness="0" HorizontalAlignment="Right" Width="179">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" />
@@ -119,6 +119,6 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <TextBox x:Name="txbSearch" Height="22" Margin="0,27,108,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="126" KeyUp="txbSearch_KeyUp"/>
-        <Button x:Name="btnSearch" Content="Rechercher" HorizontalAlignment="Left" Height="22" Margin="987,27,0,0" VerticalAlignment="Top" Width="69" Click="btnSearch_Click"/>
+        <Button x:Name="btnSearch" Content="Rechercher" Height="22" Margin="0,27,34,0" VerticalAlignment="Top" Click="btnSearch_Click" HorizontalAlignment="Right" Width="69"/>
     </Grid>
 </Window>

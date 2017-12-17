@@ -79,19 +79,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\winMain.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="view\winAddPhoto.xaml.cs">
       <DependentUpon>winAddPhoto.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="view\winMain.xaml.cs">
-      <DependentUpon>winMain.xaml</DependentUpon>
     </Compile>
     <Page Include="view\winMain_V2.xaml">
       <SubType>Designer</SubType>
