@@ -188,7 +188,7 @@ We decided to store the user settings in Windows Registry cause it was the more 
 ### Tests
 #### Tests successful
 1. Launch application                                       -> success
-2. Import images from same disk (rename or not)             -> success
+2. Import images (rename or not)                            -> success
 3. Load images list                                         -> success  
 4. Filter and research                                      -> success
 5. Refresh                                                  -> success
@@ -200,7 +200,7 @@ We decided to store the user settings in Windows Registry cause it was the more 
 
 #### Tests Failed
 1. Launch application                                       -> success
-2. Import images from external disk                         -> Failed (Crash app)
+2. Import images from IPhone                                -> Failed (Crash app)
 3. Load images list                                         -> success  
 4. Filter and research                                      -> success
 5. Refresh                                                  -> success
