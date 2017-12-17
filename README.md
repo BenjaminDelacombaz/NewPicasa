@@ -184,3 +184,28 @@ Error handling is particularly complicated and we took a lot of time for make a 
 Store user settings is a little problem but very important.
 First, we have think it was good to put user settings in a '.ini' files. After a little bit of reading, we saw it's actually no more used.
 We decided to store the user settings in Windows Registry cause it was the more simple to use.
+
+### Tests
+#### Tests successful
+1. Launch application                                       -> success
+2. Import images from same disk (rename or not)             -> success
+3. Load images list                                         -> success  
+4. Filter and research                                      -> success
+5. Refresh                                                  -> success
+6. Rename images                                            -> success
+7. Edit metadatas                                           -> success
+8. Save                                                     -> success
+9. Change default images folder                             -> success
+10. Display error if edit metadatas without image selected  -> success
+
+#### Tests Failed
+1. Launch application                                       -> success
+2. Import images from external disk                         -> Failed (Crash app)
+3. Load images list                                         -> success  
+4. Filter and research                                      -> success
+5. Refresh                                                  -> success
+6.Rename images where images are already rename             -> Failed (add '\_1' at the end)
+7. Edit metadatas                                           -> success
+8. Save in an external disk                                 -> Failed (Crash app)
+9. Change default images folder                             -> success
+10. Display error if edit metadatas without image selected  -> success
