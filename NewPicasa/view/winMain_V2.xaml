@@ -102,7 +102,7 @@
                 <Button x:Name="btnSave" Content="Sauvegarder" HorizontalAlignment="Left" Margin="10,369,0,68" Width="87" Click="btnSave_Click"/>
             </Grid>
         </ScrollViewer>
-        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,27,239,473" Name="StarsListFilter" BorderThickness="0" HorizontalAlignment="Right" Width="179">
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,27,239,0" Name="StarsListFilter" BorderThickness="0" HorizontalAlignment="Right" Width="179" Height="38" VerticalAlignment="Top">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" />

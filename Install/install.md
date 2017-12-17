@@ -23,7 +23,7 @@ On this page, choose the __Download__ button.
 - To install the software later, choose the __Save__ button. (When you install, the computer must be connected to the Internet.)
 
 ## Installation NewPicasa
-When you have downloaded the .msi file from [Git](https://github.com/BenjaminDelacombaz/NewPicasa/tree/master/NewPicasa/Install) start it.
+When you have downloaded the .msi file from [Git](https://github.com/BenjaminDelacombaz/NewPicasa/tree/master/Install) start it.
 Now you will have a security message if you are on Windows 10. If you are on Windows 7 ignore this step.
 Click on the "More info" and it will display
 <div align="center">
