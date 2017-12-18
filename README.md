@@ -99,12 +99,17 @@ the tasks were :
 In the end, we deleted some task because we didn't have the time to do all. We encountered some problem and need to fix them.
 
 So, at the start, the planning look like this:
-<!--IMG planning initial-->
+
+<div align="center">
+  <img src="/Documentation/img/suivi.jpg" width="100%"/>
+</div>
 
 But when the project was ended we deleted these point because we take a lot of delay.
 Different problems where with the language used and other with the plannification.
 
-<!-- IMG planning final -->
+<div align="center">
+  <img src="/Documentation/img/suiviEnd.jpg" width="100%"/>
+</div>
 
 We have deleted these point :
 
