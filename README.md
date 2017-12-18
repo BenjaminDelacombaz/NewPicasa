@@ -209,7 +209,7 @@ We decided to store the user settings in Windows Registry cause it was the more 
 3. Load images list                                         -> success  
 4. Filter and research                                      -> success
 5. Refresh                                                  -> success
-6.Rename images where images are already rename             -> Failed (add '\_1' at the end)
+6. Rename images where images are already rename             -> Failed (add '\_1' at the end)
 7. Edit metadatas                                           -> success
 8. Save in an external disk                                 -> Failed (Crash app)
 9. Change default images folder                             -> success
