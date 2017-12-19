@@ -16,13 +16,33 @@
 For information to install the app, please check it to this link [:heart: :camera:](https://github.com/BenjaminDelacombaz/NewPicasa/blob/master/Install/install.md)
 
 ## Table of Contents
-1. [Architecture](#architecture)
+* [Architecture](#architecture)
   * [Organisation work](#organisation-work)
+  * [GitHub](#github)
+* [Problems encountered](#problems-encountered)
   * [Git](#git)
-2. [Problems encountered](#problems-encountered)
-3. [Analysis](#analysis)
-4. [Choices made](#choices-made)
-
+  * [Learn C#/WPF](#learn-cwpf)
+* [Analysis](#analysis)
+  * [Choices made](#choices-made)
+    * [C#/WPF](#c\#/wpf)
+    * [Modification from the contract](#modification-from-the-contract)
+* [The application](#the-application)
+  * [Class folder](#class-folder)
+  * [View folder](#view-folder)
+  * [Navigation](#navigation)
+  * [Use of classes](#use-of-classes)
+  * [Problems encountered](#problems-encountered)
+    * [Loading](#loading)
+    * [Memory](#memory)
+    * [Optimization](#optimization)
+    * [Images without metadatas](#images-without-metadatas)
+    * [Read and Write metadatas](#read-and-write-metadatas)
+    * [Error handling](#error-handling)
+    * [Store user settings](#store-user-settings)
+  * [Tests](#tests)
+    * [Tests successful](#tests-successful)
+    * [Tests failed](#tests-failed)
+    
 
 ## Architecture
 
@@ -36,7 +56,7 @@ We have a normally Visual Studio architecture, we start with a blank WPF project
 
 For work by pair, we add github in our Visual Studio.
 
-### Git
+### GitHub
 
 For this project, we use Github to work by pair. We have the branch Master where we put always the latest version build. We have one branch for different part of the application:
 
@@ -66,12 +86,12 @@ If the time allow it, we correct imediately the problem.
 
 If the time don't allow it, we finish the task with the bug and continue the project for finish him on the correct time but we write the task is completed to a percentage of made.
 
-## Choices made
-### C#/WPF
+### Choices made
+#### C#/WPF
 We chose the C# because the application had to be made for Windows and we thought it would be very simple to read and write the metadatas.
 We chose WPF cause it's more performant and we can customize styles.
 
-### Modification from the contract
+#### Modification from the contract
 
 At the start of the project, we made 17 task.
 
@@ -120,7 +140,7 @@ We have deleted these point :
 * Share images by email.
 * Add date when the photo was taken. We had discussed with the client and agreed it's not necessary to add or update the date.
 
-### The application
+## The application
 
 NewPicasa is made with C# and WPF. It's a photo management application using metadata to store various datas like comments, notes, tags.
 During the development we used 4 folders:
@@ -129,27 +149,27 @@ During the development we used 4 folders:
   * other: This is where all various documents like todo lists, informations are stored.
   * view: This is where all windows are stored
 
-#### Class folder
+### Class folder
 In the class folder, we have 4 classes:
   * ImageMetada: Stores image information such as name, size, and metadata
   * Utilities: In Utilities class we can find a list of static functions tools like convert array to string, files copy, check if file exist, etc...
   * ImageDetails: ImageDetails is used for all image list's in the application. This class allows to manage the binding with WPF
   * UriToBitmapConverter: This class is useful for the image list to use less memory.
 
-#### View folder
+### View folder
 In the view folder, we have 4 windows:
   * winAddPhoto: This window provide tools for import images in the application
   * winMain_V2: This is the main window. We have a treeview to navigate in image folders, a list of images and informations of the images.
   * winParameter: Here, we can edit the default images folder.
   * winSaveImage: From this window we can save the images folder to another folder.
 
-#### Navigation
+### Navigation
 For navigate in the application, we use a simple menu.
 <div align="center">
   <img src="/Documentation/img/Arch.png" width="100%"/>
 </div>
 
-#### Use of classes
+### Use of classes
   * ImageMetada: winMain_V2.
   * Utilities: winMain_V2, winAddPhoto, winParameter, winSavePhoto.
   * ImageDetails: winMain_V2.
@@ -203,7 +223,7 @@ We decided to store the user settings in Windows Registry cause it was the more 
 9. Change default images folder                             -> success
 10. Display error if edit metadatas without image selected  -> success
 
-#### Tests Failed
+#### Tests failed
 1. Launch application                                       -> success
 2. Import images from IPhone                                -> Failed (Crash app)
 3. Load images list                                         -> success  
