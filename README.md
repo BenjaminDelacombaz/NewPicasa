@@ -19,19 +19,19 @@ For information to install the app, please check it to this link [:heart: :camer
 * [Architecture](#architecture)
   * [Organisation work](#organisation-work)
   * [GitHub](#github)
-* [Problems encountered](#problems-encountered)
+* [Issues encountered in the project](#issues-encountered-in-the-project)
   * [Git](#git)
   * [Learn C#/WPF](#learn-cwpf)
 * [Analysis](#analysis)
   * [Choices made](#choices-made)
-    * [C#/WPF](#c\#/wpf)
+    * [C#/WPF](#cwpf)
     * [Modification from the contract](#modification-from-the-contract)
 * [The application](#the-application)
   * [Class folder](#class-folder)
   * [View folder](#view-folder)
   * [Navigation](#navigation)
   * [Use of classes](#use-of-classes)
-  * [Problems encountered](#problems-encountered)
+  * [Issues encountered in the application](#issues-encountered-in-the-application)
     * [Loading](#loading)
     * [Memory](#memory)
     * [Optimization](#optimization)
@@ -70,7 +70,7 @@ Git was perfect for two reasons:
 1. We can work on the same project on the same time and don't have any conflict with our version.
 2. We always have a backup of our file on Github, so if we have any problem with our hardware, it's easy to take the full project again.
 
-## Problems encountered
+## Issues encountered in the project
 
 ### Git
 At the beginning, we used Git very little and we didn't really know how it worked. We had to learn and understand how to use it well.
@@ -175,7 +175,7 @@ For navigate in the application, we use a simple menu.
   * ImageDetails: winMain_V2.
   * UriToBitmapConverter: winMain_V2.
 
-### Problems encountered
+### Issues encountered in the application
 #### Loading
 If we have a lot images to load, it can be take several minutes. If we load images list in the main process, the window gonna be freezed and the user can think the application has crash.
 That is why we decided to use a thread and a loading gif image.
