@@ -18,6 +18,7 @@ To apply the modification asked by the client, we must do a list of changes:
 8. Add a LostFocus event on the text box.
 9. In this event set the metadata weather with the content of the text box.
 10. Add the weather metadata in the "checkFilterAndSearch" function.
+11. Recreate the ".msi" installer and publish it on GitHub.
 
 But to apply this modifications, we encoured a problem because the ".jpg" files doesn't have a metadata for weather, so we need to take an other and use it to insert weather in. We think we will use the subject metadata for use weather informations but it will use this space so if we will add subject value later on the project we can't do it or we need to change the weather informations metadata place.
 
